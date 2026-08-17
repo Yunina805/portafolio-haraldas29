@@ -7,47 +7,54 @@
  * el enlace sale como una tarjeta gris sin imagen y parece roto — y mandar la
  * liga por WhatsApp es justo el caso de uso principal de este portafolio.
  *
- * Se ejecuta a mano y el resultado se versiona en public/: no hace falta
- * regenerarlo en cada compilación.
+ * Todo sale de src/assets/marca, así que no hay dos versiones del logo que se
+ * puedan desincronizar: si la marca cambia, se vuelve a correr esto y ya.
+ *
+ * Se ejecuta a mano y el resultado se versiona en public/.
  */
 import sharp from 'sharp';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
+const MARCA = join(RAIZ, 'src/assets/marca');
 const PUBLICO = join(RAIZ, 'public');
 
 // Los mismos valores de src/styles/global.css
-const VERDE = '#0f766e';
-const VERDE_CLARO = '#5eead4';
 const FONDO_OSCURO = '#0d1a17';
 const SUPERFICIE = '#182e28';
 const APAGADO = '#8fa8a0';
+const VERDE_CLARO = '#6ee7b7';
 
-/* --------------------------------------------------------------------------
-   FAVICON — la "H" va dibujada con rectángulos, no con texto: así se ve
-   idéntica en cualquier sistema y queda nítida a 16 px, donde una fuente
-   se empasta.
-   ------------------------------------------------------------------------ */
-const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="${VERDE}"/>
-  <g fill="#ffffff">
-    <rect x="18" y="17" width="8" height="30" rx="1.5"/>
-    <rect x="38" y="17" width="8" height="30" rx="1.5"/>
-    <rect x="18" y="28" width="28" height="8" rx="1.5"/>
-  </g>
-</svg>`;
+/** Devuelve el contenido de un SVG sin su etiqueta <svg> exterior. */
+function interior(svg) {
+  return svg
+    .replace(/^\s*<svg[^>]*>/s, '')
+    .replace(/<\/svg>\s*$/s, '')
+    .trim();
+}
+
+const favicon = await readFile(join(MARCA, 'allsan-icon.svg'), 'utf8');
+const logoOscuro = await readFile(join(MARCA, 'allsan-logo-dark.svg'), 'utf8');
 
 /* --------------------------------------------------------------------------
    OPEN GRAPH — 1200 × 630
+
+   El logo va arriba como membrete y el nombre debajo en grande: la marca
+   identifica, pero quien contrata contrata a una persona.
+
+   Aviso: el texto se dibuja con una fuente del sistema, no con Plus Jakarta
+   Sans. El renderizador de SVG sólo lee fuentes instaladas y Plus Jakarta
+   viene en woff2. El logo no tiene ese problema porque son trazos.
    ------------------------------------------------------------------------ */
 const PILA = 'Helvetica Neue, Helvetica, Arial, sans-serif';
 
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <radialGradient id="brillo" cx="15%" cy="8%" r="85%">
-      <stop offset="0%" stop-color="${VERDE_CLARO}" stop-opacity="0.22"/>
+      <stop offset="0%" stop-color="${VERDE_CLARO}" stop-opacity="0.20"/>
       <stop offset="55%" stop-color="${VERDE_CLARO}" stop-opacity="0.05"/>
       <stop offset="100%" stop-color="${VERDE_CLARO}" stop-opacity="0"/>
     </radialGradient>
@@ -56,29 +63,23 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <rect width="1200" height="630" fill="${FONDO_OSCURO}"/>
   <rect width="1200" height="630" fill="url(#brillo)"/>
 
-  <!-- Monograma + rótulo, la misma pareja que va en el encabezado del sitio -->
-  <rect x="80" y="72" width="76" height="76" rx="18" fill="${VERDE}"/>
-  <g fill="#ffffff">
-    <rect x="101" y="92" width="9" height="36" rx="2"/>
-    <rect x="126" y="92" width="9" height="36" rx="2"/>
-    <rect x="101" y="105" width="34" height="9" rx="2"/>
+  <!-- Logo de la marca, escalado desde su viewBox de 308x108 -->
+  <g transform="translate(80,64) scale(1.5)">
+    ${interior(logoOscuro)}
   </g>
-  <text x="180" y="120" font-family="${PILA}" font-size="23" font-weight="700"
-        fill="${VERDE_CLARO}" letter-spacing="4">DESARROLLADOR FULL-STACK</text>
 
-  <!-- Nombre -->
-  <text x="80" y="300" font-family="${PILA}" font-size="90" font-weight="800"
-        fill="#f1faf7" letter-spacing="-3.5">Harald Allerhand</text>
-  <text x="80" y="396" font-family="${PILA}" font-size="90" font-weight="800"
-        fill="${VERDE_CLARO}" letter-spacing="-3.5">Santaella</text>
+  <!-- La persona -->
+  <text x="80" y="336" font-family="${PILA}" font-size="84" font-weight="800"
+        fill="#f1faf7" letter-spacing="-3.2">Harald Allerhand</text>
+  <text x="80" y="426" font-family="${PILA}" font-size="84" font-weight="800"
+        fill="${VERDE_CLARO}" letter-spacing="-3.2">Santaella</text>
 
-  <!-- Dónde -->
-  <text x="80" y="464" font-family="${PILA}" font-size="29" font-weight="500"
-        fill="${APAGADO}">Oaxaca, México · En remoto para todo el país</text>
+  <text x="80" y="486" font-family="${PILA}" font-size="28" font-weight="500"
+        fill="${APAGADO}">Desarrollador full-stack · Oaxaca, México</text>
 
   <!-- Pie -->
-  <rect x="80" y="524" width="1040" height="1" fill="${SUPERFICIE}"/>
-  <text x="80" y="572" font-family="${PILA}" font-size="25" font-weight="600"
+  <rect x="80" y="534" width="1040" height="1" fill="${SUPERFICIE}"/>
+  <text x="80" y="578" font-family="${PILA}" font-size="24" font-weight="600"
         fill="${APAGADO}">Sistemas de gestión · Tiendas en línea · Cobros en línea · Integraciones</text>
 </svg>`;
 
@@ -87,7 +88,10 @@ await mkdir(PUBLICO, { recursive: true });
 await writeFile(join(PUBLICO, 'favicon.svg'), favicon);
 
 // PNG para Safari en iOS, que todavía no usa favicon SVG
-await sharp(Buffer.from(favicon)).resize(180, 180).png().toFile(join(PUBLICO, 'apple-touch-icon.png'));
+await sharp(Buffer.from(favicon))
+  .resize(180, 180)
+  .png()
+  .toFile(join(PUBLICO, 'apple-touch-icon.png'));
 
 // PNG de respaldo para navegadores viejos
 await sharp(Buffer.from(favicon)).resize(32, 32).png().toFile(join(PUBLICO, 'favicon-32.png'));

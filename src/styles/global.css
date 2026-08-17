@@ -2,7 +2,8 @@
    SISTEMA DE DISEÑO — Harald Allerhand Santaella
    ----------------------------------------------------------------------------
    Las superficies y la jerarquía de texto en claro vienen del ERP de Tu Visión
-   Telecable, probadas en producción. El acento es verde aqua, que es la marca.
+   Telecable, probadas en producción. El acento es el verde esmeralda de Allsan
+   Sistemas, tomado del logo.
 
    ESTE ARCHIVO CONTROLA TODA LA PALETA, en claro y en oscuro. Las plantillas
    nunca llevan un color literal: escriben bg-superficie, text-tinta, text-acento.
@@ -54,26 +55,26 @@
   --color-borde: #e5e5e5;
   --color-borde-fuerte: #d4d4d4;
 
-  /* --- Acento: verde aqua ------------------------------------------------
-     teal-700 es el único verde que sirve para los tres papeles a la vez:
-     como texto sobre el fondo (4.8:1), como fondo de botón con letra blanca
-     (5.5:1) y como botón distinguible del fondo (4.8:1). Los verdes más
-     brillantes fallan en al menos uno de los tres.                        */
-  --color-acento: #0f766e; /* enlaces, botones, rótulos         4.8:1 */
-  --color-acento-vivo: #115e59; /* hover                             6.7:1 */
+  /* --- Acento: el verde de Allsan ----------------------------------------
+     El verde de la marca es emerald-600 (#059669), y a ese hay que respetarlo
+     en el logo. Pero sobre el fondo de página da 3.3:1 — sirve para una
+     palabra grande, no para un enlace ni para la letra de un botón. Por eso
+     el acento son DOS verdes: uno que se lee y otro que se luce.          */
+  --color-acento: #047857; /* enlaces, botones, rótulos         4.9:1 */
+  --color-acento-vivo: #065f46; /* hover                             6.8:1 */
   --color-acento-tinta: #ffffff; /* letra encima del botón sólido     5.5:1 */
-  --color-acento-tenue: #f0fdfa; /* fondo de chip */
+  --color-acento-tenue: #ecfdf5; /* fondo de chip */
 
-  /* Verde brillante SÓLO decorativo: iconos grandes, líneas, adornos.
-     No pasa 4.5:1, así que aquí nunca va texto pequeño. */
-  --color-acento-brillante: #14b8a6;
+  /* El verde exacto de la marca. SÓLO para el logo, iconos grandes y adornos:
+     no pasa 4.5:1, así que aquí nunca va texto chico. */
+  --color-acento-brillante: #059669;
 
   /* --- Estados -----------------------------------------------------------
      "bien" es el acento: en un portafolio lo positivo y la marca son lo
      mismo ("en producción"). Si algún día se necesitan distintos, se separan
      aquí y en ningún otro lado.                                           */
-  --color-bien: #0f766e;
-  --color-bien-tenue: #f0fdfa;
+  --color-bien: #047857;
+  --color-bien-tenue: #ecfdf5;
   --color-mal: #b91c1c; /* red-700                           5.7:1 */
   --color-mal-tenue: #fef2f2;
   --color-aviso: #92400e; /* amber-800                         6.3:1 */
@@ -81,11 +82,11 @@
 
   /* --- Cromo ------------------------------------------------------------- */
   --color-barra: #cbd5e1; /* barra de desplazamiento */
-  --color-foco: #0f766e; /* anillo de foco de teclado */
+  --color-foco: #047857; /* anillo de foco de teclado */
 }
 
 /* ---------------------------------------------------------------------------
-   MODO OSCURO — negro verdoso + acento aqua brillante
+   MODO OSCURO — negro verdoso + esmeralda brillante
 
    Las superficies conservan la luminancia exacta de la columna slate del ERP
    (slate-900 → 800 → 700 → 600), sólo se corrió el tono hacia el verde. Por eso
@@ -108,22 +109,23 @@ html.dark {
   --color-borde: #24403a;
   --color-borde-fuerte: #35544c;
 
-  /* Aquí el verde sí puede brillar: sobre fondo oscuro pasa de sobra. */
-  --color-acento: #5eead4; /* 12.1:1 */
-  --color-acento-vivo: #99f6e4; /* hover — aclara, no oscurece */
-  --color-acento-tinta: #062018; /* letra oscura sobre botón claro    11.6:1 */
-  --color-acento-tenue: rgb(45 212 191 / 0.14);
-  --color-acento-brillante: #2dd4bf;
+  /* Aquí el verde sí puede brillar: sobre fondo oscuro pasa de sobra, y es
+     exactamente el que usa el logo en su versión oscura. */
+  --color-acento: #6ee7b7; /* 11.7:1 */
+  --color-acento-vivo: #a7f3d0; /* hover — aclara, no oscurece */
+  --color-acento-tinta: #062018; /* letra oscura sobre botón claro    11.2:1 */
+  --color-acento-tenue: rgb(16 185 129 / 0.14);
+  --color-acento-brillante: #34d399;
 
-  --color-bien: #5eead4;
-  --color-bien-tenue: rgb(45 212 191 / 0.14);
+  --color-bien: #6ee7b7;
+  --color-bien-tenue: rgb(16 185 129 / 0.14);
   --color-mal: #fca5a5; /*  9.4:1 */
   --color-mal-tenue: rgb(239 68 68 / 0.14);
   --color-aviso: #fcd34d; /* 12.4:1 */
   --color-aviso-tenue: rgb(245 158 11 / 0.14);
 
   --color-barra: #2a4740;
-  --color-foco: #5eead4;
+  --color-foco: #6ee7b7;
 }
 
 /* ---------------------------------------------------------------------------

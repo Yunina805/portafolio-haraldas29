@@ -1,6 +1,7 @@
 ---
 import AlternarTema from './AlternarTema.astro';
 import Icono from './Icono.astro';
+import LogoAllsan from './LogoAllsan.astro';
 import { NAVEGACION, SITIO } from '../consts';
 ---
 
@@ -9,20 +10,11 @@ import { NAVEGACION, SITIO } from '../consts';
          supports-[not(backdrop-filter:blur(0))]:bg-fondo"
 >
   <div class="contenedor flex h-16 items-center justify-between gap-4 sm:h-18">
-    {/* Sin foto, el monograma es la marca — y va en verde, que es el color. */}
-    <a
-      href="/"
-      class="group flex items-center gap-3"
-      aria-label={`${SITIO.nombre} — inicio`}
-    >
-      <span
-        class="grid size-9 place-items-center rounded-xl bg-acento text-[13px]
-               font-extrabold tracking-tight text-acento-tinta"
-        aria-hidden="true">{SITIO.monograma}</span
-      >
-      <span class="hidden text-sm font-extrabold tracking-tight text-tinta sm:block">
-        {SITIO.nombreCorto}
-      </span>
+    {/* El logo completo también en celular: a h-8 mide 91 px de ancho y cabe
+        de sobra. Meter además la variante de sólo icono duplicaría los trazos
+        en el HTML para esconder uno de los dos con CSS. */}
+    <a href="/" class="flex items-center" aria-label={`${SITIO.marca} — inicio`}>
+      <LogoAllsan clase="h-8 w-auto sm:h-9" titulo={null} />
     </a>
 
     <div class="flex items-center gap-2">

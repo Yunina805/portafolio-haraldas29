@@ -1,8 +1,11 @@
 /** Datos del sitio, en un solo lugar. */
 
 export const SITIO = {
+  // La persona firma la relación con el cliente; la marca firma el contrato,
+  // la factura y el documento de especificación. Las dos conviven a propósito.
   nombre: 'Harald Allerhand Santaella',
   nombreCorto: 'Harald Santaella',
+  marca: 'Allsan Sistemas',
   monograma: 'HA',
   oficio: 'Desarrollador full-stack',
   lema: 'Soluciones a la medida para tu negocio',

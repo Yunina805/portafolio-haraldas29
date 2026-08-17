@@ -1,0 +1,55 @@
+---
+/**
+ * Logo de Allsan Sistemas.
+ *
+ * Un solo archivo para los dos temas: la palabra "all" usa var(--color-tinta)
+ * y "san" usa var(--color-acento-brillante), así que el logo cambia con el
+ * sitio sin mantener una versión clara y otra oscura.
+ *
+ * El cuadro del icono conserva su degradado de marca tal cual —es la parte
+ * que no debe adaptarse a nada— y por eso funciona sobre cualquier fondo.
+ *
+ * Generado desde src/assets/marca/*.svg con la precisión de los trazos
+ * recortada a dos decimales. Si el logo cambia, se vuelve a generar; no se
+ * edita a mano.
+ */
+interface Props {
+  /** Sólo el cuadro con la A, sin la palabra. Para espacios muy chicos. */
+  soloIcono?: boolean;
+  clase?: string;
+  /** Texto para lectores de pantalla. Ponlo en null si al lado ya va el nombre. */
+  titulo?: string | null;
+}
+
+const { soloIcono = false, clase = '', titulo = 'Allsan Sistemas' } = Astro.props;
+---
+
+{
+  soloIcono ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      class={clase}
+      role={titulo ? 'img' : undefined}
+      aria-hidden={titulo ? undefined : 'true'}
+    >
+      {titulo && <title>{titulo}</title>}
+      <Fragment set:html={`<defs><linearGradient id="allsan-gi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="var(--color-acento-brillante)"/></linearGradient></defs>
+<rect x="0" y="0" width="512" height="512" rx="128" fill="url(#allsan-gi)"/><g fill="#ffffff" opacity="0.15"><circle cx="85.33" cy="85.33" r="6.93"/><circle cx="85.33" cy="170.67" r="6.93"/><circle cx="85.33" cy="256" r="6.93"/><circle cx="85.33" cy="341.33" r="6.93"/><circle cx="85.33" cy="426.67" r="6.93"/><circle cx="170.67" cy="85.33" r="6.93"/><circle cx="170.67" cy="170.67" r="6.93"/><circle cx="170.67" cy="256" r="6.93"/><circle cx="170.67" cy="341.33" r="6.93"/><circle cx="170.67" cy="426.67" r="6.93"/><circle cx="256" cy="85.33" r="6.93"/><circle cx="256" cy="170.67" r="6.93"/><circle cx="256" cy="256" r="6.93"/><circle cx="256" cy="341.33" r="6.93"/><circle cx="256" cy="426.67" r="6.93"/><circle cx="341.33" cy="85.33" r="6.93"/><circle cx="341.33" cy="170.67" r="6.93"/><circle cx="341.33" cy="256" r="6.93"/><circle cx="341.33" cy="341.33" r="6.93"/><circle cx="341.33" cy="426.67" r="6.93"/><circle cx="426.67" cy="85.33" r="6.93"/><circle cx="426.67" cy="170.67" r="6.93"/><circle cx="426.67" cy="256" r="6.93"/><circle cx="426.67" cy="341.33" r="6.93"/><circle cx="426.67" cy="426.67" r="6.93"/></g><path d="M128,389.33 L240,154.67 L352,389.33" stroke="#ffffff" stroke-width="42.67" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M171.2,298.67 L363.73,298.67" stroke="#ffffff" stroke-width="42.67" stroke-linecap="round" fill="none"/><circle cx="400" cy="298.67" r="26.67" fill="none" stroke="#ffffff" stroke-width="18.13"/>`} />
+    </svg>
+  ) : (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 308 108"
+      class={clase}
+      role={titulo ? 'img' : undefined}
+      aria-hidden={titulo ? undefined : 'true'}
+    >
+      {titulo && <title>{titulo}</title>}
+      <Fragment set:html={`<defs><linearGradient id="allsan-gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="var(--color-acento-brillante)"/></linearGradient></defs>
+<rect x="6" y="6" width="96" height="96" rx="24" fill="url(#allsan-gl)"/><g fill="#ffffff" opacity="0.15"><circle cx="22" cy="22" r="1.3"/><circle cx="22" cy="38" r="1.3"/><circle cx="22" cy="54" r="1.3"/><circle cx="22" cy="70" r="1.3"/><circle cx="22" cy="86" r="1.3"/><circle cx="38" cy="22" r="1.3"/><circle cx="38" cy="38" r="1.3"/><circle cx="38" cy="54" r="1.3"/><circle cx="38" cy="70" r="1.3"/><circle cx="38" cy="86" r="1.3"/><circle cx="54" cy="22" r="1.3"/><circle cx="54" cy="38" r="1.3"/><circle cx="54" cy="54" r="1.3"/><circle cx="54" cy="70" r="1.3"/><circle cx="54" cy="86" r="1.3"/><circle cx="70" cy="22" r="1.3"/><circle cx="70" cy="38" r="1.3"/><circle cx="70" cy="54" r="1.3"/><circle cx="70" cy="70" r="1.3"/><circle cx="70" cy="86" r="1.3"/><circle cx="86" cy="22" r="1.3"/><circle cx="86" cy="38" r="1.3"/><circle cx="86" cy="54" r="1.3"/><circle cx="86" cy="70" r="1.3"/><circle cx="86" cy="86" r="1.3"/></g><path d="M30,79 L51,35 L72,79" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M38.1,62 L74.2,62" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="81" cy="62" r="5" fill="none" stroke="#ffffff" stroke-width="3.4"/>
+<g transform="translate(128,65.86)"><path d="M14.34 0.77Q8.7 0.77 5.41 -1.92Q2.11 -4.61 2.11 -9.34Q2.11 -13.76 5.18 -16.64Q8.26 -19.52 14.53 -20.54L24.19 -22.08V-23.04Q24.19 -25.02 22.62 -26.37Q21.06 -27.71 18.37 -27.71Q15.81 -27.71 13.86 -26.3Q11.9 -24.9 11.01 -22.59L3.33 -26.24Q4.86 -30.59 9.06 -33.15Q13.25 -35.71 18.82 -35.71Q23.23 -35.71 26.62 -34.11Q30.02 -32.51 31.9 -29.66Q33.79 -26.82 33.79 -23.04V0H24.83V-3.26Q20.86 0.77 14.34 0.77ZM12.03 -9.66Q12.03 -8.06 13.25 -7.17Q14.46 -6.27 16.26 -6.27Q19.84 -6.27 22.02 -8.51Q24.19 -10.75 24.19 -13.95V-15.04L16.26 -13.63Q14.21 -13.25 13.12 -12.32Q12.03 -11.39 12.03 -9.66Z M39.87 0V-48.45H49.47V0Z M55.55 0V-48.45H65.15V0Z" fill="var(--color-tinta)"/><path d="M84.93 0.77Q79.17 0.77 74.91 -1.95Q70.66 -4.67 69.12 -9.28L76.16 -12.61Q77.5 -9.79 79.81 -8.19Q82.11 -6.59 84.93 -6.59Q89.15 -6.59 89.15 -9.73Q89.15 -11.84 85.7 -12.8L79.74 -14.46Q75.46 -15.68 73.15 -18.4Q70.85 -21.12 70.85 -24.83Q70.85 -28.1 72.51 -30.53Q74.18 -32.96 77.18 -34.34Q80.19 -35.71 84.1 -35.71Q89.22 -35.71 93.09 -33.31Q96.96 -30.91 98.56 -26.56L91.46 -23.23Q90.69 -25.41 88.67 -26.72Q86.66 -28.03 84.1 -28.03Q82.24 -28.03 81.18 -27.26Q80.13 -26.5 80.13 -25.15Q80.13 -23.1 83.9 -22.02L89.47 -20.35Q93.82 -19.07 96.13 -16.48Q98.43 -13.89 98.43 -10.11Q98.43 -5.25 94.72 -2.24Q91.01 0.77 84.93 0.77Z M114.05 0.77Q108.42 0.77 105.12 -1.92Q101.82 -4.61 101.82 -9.34Q101.82 -13.76 104.9 -16.64Q107.97 -19.52 114.24 -20.54L123.9 -22.08V-23.04Q123.9 -25.02 122.34 -26.37Q120.77 -27.71 118.08 -27.71Q115.52 -27.71 113.57 -26.3Q111.62 -24.9 110.72 -22.59L103.04 -26.24Q104.58 -30.59 108.77 -33.15Q112.96 -35.71 118.53 -35.71Q122.94 -35.71 126.34 -34.11Q129.73 -32.51 131.62 -29.66Q133.5 -26.82 133.5 -23.04V0H124.54V-3.26Q120.58 0.77 114.05 0.77ZM111.74 -9.66Q111.74 -8.06 112.96 -7.17Q114.18 -6.27 115.97 -6.27Q119.55 -6.27 121.73 -8.51Q123.9 -10.75 123.9 -13.95V-15.04L115.97 -13.63Q113.92 -13.25 112.83 -12.32Q111.74 -11.39 111.74 -9.66Z M139.58 0V-34.94H148.54V-30.66Q149.89 -33.22 152.45 -34.46Q155.01 -35.71 158.34 -35.71Q162.3 -35.71 165.28 -34.05Q168.26 -32.38 169.92 -29.41Q171.58 -26.43 171.58 -22.46V0H161.98V-20.42Q161.98 -23.42 160.19 -25.25Q158.4 -27.07 155.58 -27.07Q152.77 -27.07 150.98 -25.25Q149.18 -23.42 149.18 -20.42V0Z" fill="var(--color-acento-brillante)"/></g>
+<g transform="translate(128,90.59)"><path d="M5.22 0.19Q4.14 0.19 3.19 -0.21Q2.23 -0.6 1.54 -1.33Q0.85 -2.06 0.51 -3.05L2.48 -3.94Q2.91 -2.99 3.68 -2.45Q4.45 -1.91 5.38 -1.91Q6.11 -1.91 6.55 -2.24Q6.99 -2.57 6.99 -3.13Q6.99 -3.94 5.97 -4.28L3.7 -5.02Q0.93 -5.94 0.93 -8.29Q0.93 -9.32 1.43 -10.09Q1.94 -10.87 2.84 -11.3Q3.75 -11.73 4.93 -11.73Q6.49 -11.73 7.68 -10.95Q8.87 -10.17 9.35 -8.8L7.39 -7.92Q7.07 -8.73 6.42 -9.18Q5.77 -9.64 4.93 -9.64Q4.2 -9.64 3.75 -9.29Q3.3 -8.94 3.3 -8.39Q3.3 -7.56 4.36 -7.21L6.57 -6.49Q9.35 -5.6 9.35 -3.27Q9.35 -2.26 8.82 -1.48Q8.29 -0.7 7.37 -0.26Q6.45 0.19 5.22 0.19Z M24.89 0V-11.55H27.29V0Z M47.37 0.19Q46.29 0.19 45.33 -0.21Q44.38 -0.6 43.69 -1.33Q43 -2.06 42.66 -3.05L44.63 -3.94Q45.06 -2.99 45.83 -2.45Q46.6 -1.91 47.53 -1.91Q48.26 -1.91 48.7 -2.24Q49.14 -2.57 49.14 -3.13Q49.14 -3.94 48.12 -4.28L45.85 -5.02Q43.08 -5.94 43.08 -8.29Q43.08 -9.32 43.58 -10.09Q44.09 -10.87 44.99 -11.3Q45.9 -11.73 47.08 -11.73Q48.64 -11.73 49.83 -10.95Q51.02 -10.17 51.5 -8.8L49.54 -7.92Q49.22 -8.73 48.57 -9.18Q47.92 -9.64 47.08 -9.64Q46.35 -9.64 45.9 -9.29Q45.45 -8.94 45.45 -8.39Q45.45 -7.56 46.5 -7.21L48.72 -6.49Q51.5 -5.6 51.5 -3.27Q51.5 -2.26 50.97 -1.48Q50.44 -0.7 49.52 -0.26Q48.6 0.19 47.37 0.19Z M69.11 0V-9.46H66.18V-11.55H74.4V-9.46H71.52V0Z M89.43 0V-11.55H97.19V-9.46H91.83V-6.84H96.88V-4.74H91.83V-2.09H97.19V0Z M112.4 0V-11.55H114.72L118.49 -6.54L122.16 -11.55H124.49V0H122.08V-7.44L118.6 -2.94H118.29L114.8 -7.61V0Z M139.51 0 143.42 -11.55H146.61L150.52 0H147.9L147.13 -2.36H142.89L142.12 0ZM143.56 -4.45H146.46L145.02 -8.9Z M169.59 0.19Q168.51 0.19 167.56 -0.21Q166.6 -0.6 165.91 -1.33Q165.22 -2.06 164.88 -3.05L166.85 -3.94Q167.29 -2.99 168.05 -2.45Q168.82 -1.91 169.75 -1.91Q170.48 -1.91 170.92 -2.24Q171.36 -2.57 171.36 -3.13Q171.36 -3.94 170.34 -4.28L168.08 -5.02Q165.3 -5.94 165.3 -8.29Q165.3 -9.32 165.81 -10.09Q166.31 -10.87 167.22 -11.3Q168.12 -11.73 169.3 -11.73Q170.87 -11.73 172.05 -10.95Q173.24 -10.17 173.72 -8.8L171.76 -7.92Q171.44 -8.73 170.79 -9.18Q170.14 -9.64 169.3 -9.64Q168.57 -9.64 168.12 -9.29Q167.67 -8.94 167.67 -8.39Q167.67 -7.56 168.73 -7.21L170.94 -6.49Q173.72 -5.6 173.72 -3.27Q173.72 -2.26 173.19 -1.48Q172.66 -0.7 171.74 -0.26Q170.82 0.19 169.59 0.19Z" fill="var(--color-acento-brillante)"/></g>`} />
+    </svg>
+  )
+}
