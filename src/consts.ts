@@ -36,9 +36,9 @@ export const COMPROMISOS = {
   soporte: '4 meses de soporte incluido',
 } as const;
 
-// Con la barra al inicio para que también funcionen desde /sistema.
+// Con la barra al inicio para que también funcionen desde otras páginas.
 export const NAVEGACION = [
-  { texto: 'Proyectos', href: '/#proyectos' },
+  { texto: 'Proyectos', href: '/proyectos' },
   { texto: 'Qué construyo', href: '/#servicios' },
   { texto: 'Cómo trabajo', href: '/#proceso' },
   { texto: 'Contacto', href: '/#contacto' },
@@ -176,8 +176,13 @@ export const TECNOLOGIAS = [
 /**
  * Proyectos.
  *
- * Las capturas y las páginas de caso de estudio entran en la Fase 3. Las
- * tarjetas ya funcionan sin imagen para poder publicar el sitio antes.
+ * TODOS los repositorios son privados: son sistemas en operación con datos de
+ * clientes reales. Se presentan por lo que hacen y por su tamaño, no con enlace
+ * al código. Sin capturas por ahora.
+ *
+ * `papel` es el campo más delicado de este archivo. Describe lo que hizo
+ * Harald, no lo que hace el sistema: es la diferencia entre un portafolio
+ * verificable y uno que se cae en la primera pregunta.
  */
 export const PROYECTOS = [
   {
@@ -186,6 +191,8 @@ export const PROYECTOS = [
     titulo: 'ERP completo para un proveedor de TV e internet',
     // El encuadre correcto: es la empresa donde trabaja, no un encargo externo.
     papel: 'Desarrollo y opero el ERP de la empresa',
+    // El de la portada. Los demás sólo salen en /proyectos.
+    portada: true,
     resumen:
       'Sistema de gestión integral para un proveedor de internet: todo el ciclo ' +
       'del cliente —contratación, cobro mensual, reportes, suspensión, ' +
@@ -204,15 +211,110 @@ export const PROYECTOS = [
       'Corta y reconecta el servicio de un cliente hablándole por API a routers Mikrotik y a la OLT, con auditoría de cada acción y reintentos.',
       'Topología GPON con presupuesto óptico y un diagrama de cómo viaja la luz desde la central hasta la casa del cliente.',
       'Cobros, cajas por sucursal y cuentas por pagar con multi-moneda: todo en transacciones y con doble control.',
+      'Control de accesos por rol derivado del árbol del menú, con permisos página por página.',
       'Migración del sistema anterior, incluida la reparación de la codificación corrupta que traían los datos viejos.',
     ],
-    repo: null, // privado: es de la empresa
+    enlaceVivo: null,
+  },
+  {
+    slug: 'erp-abib',
+    nombre: 'Abib',
+    titulo: 'ERP de un operador móvil',
+    // ⚠️ CONFIRMAR: el sistema opera desde 2021 y Harald lleva 3 años
+    // desarrollando, así que no lo construyó desde cero. Decir qué hizo él.
+    papel: 'Desarrollo y mantengo el sistema',
+    portada: false,
+    resumen:
+      'El sistema central del negocio de telefonía: activación de líneas, ' +
+      'portabilidad, red de distribuidores con sus comisiones, facturación ' +
+      'electrónica, cobros por varias pasarelas y conciliación del dinero. Es el ' +
+      'sistema más grande del grupo.',
+    periodo: 'En operación desde 2021',
+    estado: 'En producción',
+    stack: ['Laravel', 'PHP', 'Blade', 'MySQL'],
+    cifras: [
+      { valor: '111', etiqueta: 'modelos' },
+      { valor: '456', etiqueta: 'vistas' },
+      { valor: '155', etiqueta: 'migraciones' },
+      { valor: '39', etiqueta: 'controladores' },
+    ],
+    destacados: [
+      'Cuatro pasarelas de pago conviviendo en el mismo sistema: Mercado Pago, Openpay, Kushki y STP para transferencias SPEI.',
+      'Facturación electrónica con Facturama: emisión de CFDI ante el SAT.',
+      'Integración con Altan Redes para SMS, validación de IMEI y MSISDN, y todo el proceso de portabilidad con su conciliación.',
+      'Validación de identidad contra RENAPO y Nubarium para CURP e identificaciones oficiales.',
+      'Webhooks entrantes y salientes para mantener sincronizados los sistemas de terceros.',
+    ],
+    enlaceVivo: null,
+  },
+  {
+    slug: 'internet-del-bienestar',
+    nombre: 'Internet del Bienestar',
+    titulo: 'Plataforma pública y red de distribuidores',
+    // ⚠️ CONFIRMAR: opera desde diciembre de 2023. ¿Lo construiste tú o
+    // entraste después? De eso depende cómo se redacta.
+    papel: 'Desarrollo y mantengo el sistema',
+    portada: false,
+    resumen:
+      'Por fuera, el cliente compra su SIM, verifica que su equipo sea ' +
+      'compatible, se da de alta, recarga y paga. Por dentro, opera una red de ' +
+      'distribuidores y subdistribuidores con inventario de SIMs, saldos, ' +
+      'órdenes y envíos.',
+    periodo: 'En operación desde dic 2023',
+    estado: 'En producción',
+    stack: ['Laravel', 'Livewire', 'Blade', 'MySQL'],
+    cifras: [
+      { valor: '56', etiqueta: 'componentes Livewire' },
+      { valor: '145', etiqueta: 'vistas' },
+      { valor: '36', etiqueta: 'modelos' },
+    ],
+    destacados: [
+      'Alta con identidad validada contra Nubarium: INE, pasaporte mexicano y pasaporte de extranjero.',
+      'Compatibilidad del equipo por IMEI antes de vender la línea, que es lo que evita la devolución.',
+      'Red de distribución de dos niveles con saldos, historial de movimientos, órdenes y envíos.',
+      'Cobros en línea con Mercado Pago y carrito de compra propio.',
+      'Vinculación, desvinculación y portabilidad de líneas, con roles y permisos por perfil.',
+    ],
+    enlaceVivo: null,
+  },
+  {
+    slug: 'portal-abib',
+    nombre: 'Abib',
+    titulo: 'Rediseño completo del portal de autoservicio',
+    // Este papel sí es exacto y verificable, y por eso es el que más pesa.
+    papel: 'Desarrollé el rediseño — 22 de los 32 commits de la rama',
+    portada: false,
+    resumen:
+      'El portal donde el cliente de una empresa de telefonía contrata, recarga, ' +
+      'paga, factura y administra sus líneas. La página existía desde 2021 y era ' +
+      'muy sencilla; en 2026 se rediseñó por completo y ese rediseño lo desarrollé yo.',
+    periodo: 'mar 2026 → jun 2026',
+    estado: 'En línea',
+    stack: ['Angular 15', 'TypeScript', 'SCSS'],
+    cifras: [
+      { valor: '97', etiqueta: 'archivos tocados' },
+      { valor: '+26,300', etiqueta: 'líneas agregadas' },
+      { valor: '−14,400', etiqueta: 'líneas retiradas' },
+      { valor: '22/32', etiqueta: 'commits de la rama' },
+    ],
+    destacados: [
+      'Cobros en línea con Mercado Pago y Openpay: recargas y compra de paquetes con tarjeta.',
+      'Vinculación de líneas por CURP, con reCAPTCHA en la consulta pública.',
+      'Perfil verificado del cliente con INE, CURP y fotografía.',
+      'Facturación con marcado de folios ya facturados y mensajes de error claros.',
+      'Recargas con vigencia por paquete y selección de red para eSIM.',
+      'Preguntas frecuentes con video, carrusel de promociones y menú lateral responsivo.',
+    ],
+    // El sitio está publicado: es la prueba más fuerte del portafolio.
+    // Si prefieres no enlazarlo, se pone en null y desaparece el botón.
+    enlaceVivo: 'https://abib.com.mx',
   },
   {
     slug: 'rifas-qr',
     nombre: 'Sistema de Rifas con QR',
     titulo: 'Control de boletos de punta a punta',
-    papel: 'Proyecto propio',
+    papel: 'Proyecto propio, de principio a fin',
+    portada: false,
     resumen:
       'Plataforma para organizar rifas y controlar la venta física de boletos: ' +
       'se generan por lotes, se imprimen en PDF con su código QR y cada boleto ' +
@@ -226,6 +328,6 @@ export const PROYECTOS = [
       'Impresión masiva en PDF de los boletos de un lote, cada uno con su QR único.',
       'Vendedores con boletos asignados, venta, liberación y corte diario del dinero.',
     ],
-    repo: 'https://github.com/Yunina805/rifas-qr-sistema',
+    enlaceVivo: null,
   },
 ] as const;

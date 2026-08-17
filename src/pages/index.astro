@@ -7,6 +7,7 @@ import Chip from '../components/Chip.astro';
 import Icono from '../components/Icono.astro';
 import Rotulo from '../components/Rotulo.astro';
 import Revelar from '../components/Revelar.astro';
+import TarjetaProyecto from '../components/TarjetaProyecto.astro';
 import {
   CIFRAS,
   COMPROMISOS,
@@ -18,6 +19,9 @@ import {
 } from '../consts';
 
 const wa = `https://wa.me/${SITIO.whatsapp}`;
+
+// El de portada se marca en consts.ts, no se elige aquí por posición.
+const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
 ---
 
 <Base titulo="">
@@ -46,7 +50,7 @@ const wa = `https://wa.me/${SITIO.whatsapp}`;
 
     <Revelar retraso={240}>
       <div class="mt-10 flex flex-wrap items-center gap-3">
-        <Boton href="#proyectos" tamano="lg" icono="arrow-right-line" iconoAlFinal>
+        <Boton href="/proyectos" tamano="lg" icono="arrow-right-line" iconoAlFinal>
           Ver proyectos
         </Boton>
         <Boton href={wa} tamano="lg" variante="contorno" icono="whatsapp-line" externo>
@@ -88,92 +92,29 @@ const wa = `https://wa.me/${SITIO.whatsapp}`;
     </Revelar>
   </section>
 
-  <!-- ====================================================== PROYECTOS -->
+  {/* ===================================================== PROYECTOS
+      Sólo el más grande. El resto vive en /proyectos, para que la portada
+      no se convierta en un catálogo antes de haber convencido a nadie. */}
   <Seccion
     id="proyectos"
     rotulo="Proyectos"
-    titulo="Dos sistemas, uno de ellos operando todos los días"
-    entrada="Las capturas de pantalla entran pronto. Mientras tanto, esto es lo que hace cada sistema y con qué está construido."
+    titulo="El sistema más grande que he construido"
+    entrada="Un ERP completo para un proveedor de internet, en producción y creciendo. Lo desarrollé solo y lo opero todos los días."
   >
-    <div class="space-y-8">
-      {
-        PROYECTOS.map((p, i) => (
-          <Revelar retraso={i * 100}>
-            <Tarjeta relleno="lg">
-              <div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
-                {/* Columna de datos */}
-                <div class="lg:col-span-4">
-                  <div class="flex flex-wrap items-center gap-2">
-                    <Chip
-                      tono={p.estado === 'En producción' ? 'bien' : 'neutro'}
-                      icono={p.estado === 'En producción' ? 'checkbox-circle-line' : 'check-line'}
-                    >
-                      {p.estado}
-                    </Chip>
-                    <span class="text-xs text-tenue">{p.periodo}</span>
-                  </div>
+    <Revelar>
+      <TarjetaProyecto proyecto={destacado} compacto />
+    </Revelar>
 
-                  {p.cifras.length > 0 && (
-                    <dl class="mt-8 grid grid-cols-2 gap-x-4 gap-y-6">
-                      {p.cifras.map((c) => (
-                        <div>
-                          <dt class="text-2xl font-extrabold tracking-tight text-tinta">
-                            {c.valor}
-                          </dt>
-                          <dd class="mt-1 text-xs text-tenue">{c.etiqueta}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-
-                  <div class="mt-8 flex flex-wrap gap-2">
-                    {p.stack.map((t) => (
-                      <Chip>{t}</Chip>
-                    ))}
-                  </div>
-
-                  <div class="mt-8">
-                    {p.repo ? (
-                      <Boton href={p.repo} variante="contorno" icono="github-fill" externo>
-                        Ver el código
-                      </Boton>
-                    ) : (
-                      <p class="flex items-center gap-2 text-xs text-tenue">
-                        <Icono nombre="lock-line" clase="size-4 shrink-0" />
-                        Repositorio privado — es de la empresa
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Columna narrativa */}
-                <div class="lg:col-span-8">
-                  <p class="rotulo">{p.nombre}</p>
-                  <h3 class="mt-3 text-2xl font-extrabold tracking-tight text-tinta sm:text-3xl">
-                    {p.titulo}
-                  </h3>
-                  <p class="mt-2 text-sm font-semibold text-acento">{p.papel}</p>
-
-                  <p class="mt-6 text-[15px] leading-relaxed text-cuerpo">{p.resumen}</p>
-
-                  <ul class="mt-8 space-y-4">
-                    {p.destacados.map((d) => (
-                      <li class="flex gap-3">
-                        <Icono
-                          nombre="corner-down-right-line"
-                          clase="mt-0.5 size-4 shrink-0 text-acento"
-                        />
-                        <span class="text-[15px] leading-relaxed text-apagado">{d}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </Tarjeta>
-          </Revelar>
-        ))
-      }
-    </div>
+    <Revelar retraso={80}>
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <Boton href="/proyectos" tamano="lg" icono="arrow-right-line" iconoAlFinal>
+          Ver los {PROYECTOS.length} proyectos
+        </Boton>
+        <p class="text-sm text-tenue">
+          ERP de telefonía, portales de autoservicio, redes de distribuidores y más.
+        </p>
+      </div>
+    </Revelar>
   </Seccion>
 
   <!-- ====================================================== SERVICIOS -->

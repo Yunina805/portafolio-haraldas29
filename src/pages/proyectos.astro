@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import Seccion from '../components/Seccion.astro';
+import Boton from '../components/Boton.astro';
+import Icono from '../components/Icono.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Revelar from '../components/Revelar.astro';
+import TarjetaProyecto from '../components/TarjetaProyecto.astro';
+import { COMPROMISOS, PROYECTOS, SITIO } from '../consts';
+
+const wa = `https://wa.me/${SITIO.whatsapp}`;
+
+// Los agregados salen de los datos, no a mano: si mañana entra un proyecto
+// nuevo, estos números se corrigen solos.
+const enProduccion = PROYECTOS.filter(
+  (p) => p.estado === 'En producción' || p.estado === 'En línea'
+).length;
+
+const resumen = [
+  { valor: String(PROYECTOS.length), etiqueta: 'sistemas construidos' },
+  { valor: String(enProduccion), etiqueta: 'operando hoy' },
+  { valor: '2', etiqueta: 'ERP completos' },
+  { valor: '4', etiqueta: 'pasarelas de pago integradas' },
+];
+---
+
+<Base
+  titulo="Proyectos"
+  descripcion="Sistemas de gestión, portales de autoservicio y plataformas de venta que he construido y opero: ERP para proveedores de internet y telefonía, redes de distribuidores, cobros en línea e integraciones."
+>
+  {/* ------------------------------------------------ ENCABEZADO */}
+  <section class="contenedor pt-16 pb-4 sm:pt-24">
+    <Revelar>
+      <Rotulo>Proyectos</Rotulo>
+    </Revelar>
+
+    <Revelar retraso={80}>
+      <h1
+        class="mt-6 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
+               text-tinta sm:text-6xl"
+      >
+        Lo que he construido
+      </h1>
+    </Revelar>
+
+    <Revelar retraso={160}>
+      <p class="mt-8 max-w-2xl text-lg leading-relaxed text-cuerpo">
+        Sistemas reales, con clientes reales usándolos todos los días. Ninguno es
+        un ejercicio ni una demo: son negocios que dependen de que funcionen.
+      </p>
+    </Revelar>
+
+    <Revelar retraso={220}>
+      <p class="mt-5 flex max-w-2xl items-start gap-2.5 text-[15px] leading-relaxed text-apagado">
+        <Icono nombre="lock-line" clase="mt-1 size-4 shrink-0 text-acento" />
+        <span>
+          El código de todos es privado, porque todos guardan datos de personas
+          reales — clientes, contratos, cobros, identificaciones. Por eso están
+          contados por lo que hacen y por su tamaño, y no con un enlace al
+          repositorio.
+        </span>
+      </p>
+    </Revelar>
+
+    <Revelar retraso={300}>
+      <dl class="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-borde pt-10 lg:grid-cols-4">
+        {
+          resumen.map((r) => (
+            <div>
+              <dt class="text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+                {r.valor}
+              </dt>
+              <dd class="mt-2 text-sm text-apagado">{r.etiqueta}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Revelar>
+  </section>
+
+  {/* -------------------------------------------------- PROYECTOS */}
+  <Seccion aire="normal">
+    <div class="space-y-8">
+      {
+        PROYECTOS.map((p, i) => (
+          <Revelar retraso={i === 0 ? 0 : 80}>
+            <TarjetaProyecto proyecto={p} />
+          </Revelar>
+        ))
+      }
+    </div>
+  </Seccion>
+
+  {/* --------------------------------------------------- CONTACTO */}
+  <Seccion aire="poco">
+    <Revelar>
+      <div
+        class="overflow-hidden rounded-2xl border border-borde bg-superficie
+               px-8 py-14 text-center shadow-sm sm:px-12 sm:py-16"
+      >
+        <h2 class="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+          ¿Lo tuyo se parece a alguno de estos?
+        </h2>
+        <p class="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-apagado">
+          Cuéntame qué necesitas y te digo si puedo resolverlo.
+          {' '}{COMPROMISOS.respuesta}.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Boton href={wa} tamano="lg" icono="whatsapp-line" externo>
+            Escríbeme por WhatsApp
+          </Boton>
+          <Boton href="/#servicios" tamano="lg" variante="contorno" icono="arrow-left-line">
+            Volver al inicio
+          </Boton>
+        </div>
+      </div>
+    </Revelar>
+  </Seccion>
+</Base>
