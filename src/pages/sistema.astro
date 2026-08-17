@@ -21,18 +21,36 @@ const superficies = [
 ];
 
 const textos = [
-  { token: 'text-tinta', uso: 'Títulos', clase: 'text-tinta', ratio: '15.4 / 17.1' },
-  { token: 'text-tinta-suave', uso: 'Títulos secundarios', clase: 'text-tinta-suave', ratio: '12.2 / 14.5' },
-  { token: 'text-cuerpo', uso: 'Cuerpo de texto', clase: 'text-cuerpo', ratio: '9.2 / 12.0' },
+  { token: 'text-tinta', uso: 'Títulos', clase: 'text-tinta', ratio: '15.4 / 16.8' },
+  { token: 'text-tinta-suave', uso: 'Títulos secundarios', clase: 'text-tinta-suave', ratio: '12.2 / 14.3' },
+  { token: 'text-cuerpo', uso: 'Cuerpo de texto', clase: 'text-cuerpo', ratio: '9.2 / 11.6' },
   { token: 'text-apagado', uso: 'Etiquetas, subtexto', clase: 'text-apagado', ratio: '5.9 / 7.0' },
-  { token: 'text-tenue', uso: 'Metadatos, terciario', clase: 'text-tenue', ratio: '5.3 / 5.9' },
+  { token: 'text-tenue', uso: 'Metadatos, terciario', clase: 'text-tenue', ratio: '5.3 / 5.7' },
 ];
 
 const acentos = [
-  { token: 'acento', uso: 'Enlaces y acción principal', fondo: 'bg-acento', texto: 'text-acento' },
-  { token: 'bien', uso: 'Éxito, confirmado', fondo: 'bg-bien', texto: 'text-bien' },
-  { token: 'mal', uso: 'Error', fondo: 'bg-mal', texto: 'text-mal' },
-  { token: 'aviso', uso: 'Advertencia', fondo: 'bg-aviso', texto: 'text-aviso' },
+  {
+    token: 'acento',
+    uso: 'Enlaces, botones, rótulos. También es el "bien": en un portafolio, lo positivo y la marca son lo mismo.',
+    fondo: 'bg-acento',
+    texto: 'text-acento',
+    ratio: '4.8 / 12.1',
+  },
+  {
+    token: 'acento-brillante',
+    uso: 'Sólo decorativo: iconos grandes, líneas, adornos. En claro no pasa 4.5:1, así que aquí nunca va texto chico.',
+    fondo: 'bg-acento-brillante',
+    texto: 'text-acento-brillante',
+    ratio: '3.3 / 9.6',
+  },
+  { token: 'mal', uso: 'Error de verdad.', fondo: 'bg-mal', texto: 'text-mal', ratio: '5.7 / 9.4' },
+  {
+    token: 'aviso',
+    uso: 'Advertencia, en curso.',
+    fondo: 'bg-aviso',
+    texto: 'text-aviso',
+    ratio: '6.3 / 12.4',
+  },
 ];
 
 const escala = [
@@ -108,8 +126,11 @@ const iconos = [
       <!-- ACENTO Y ESTADOS -->
       <div>
         <h3 class="text-xl font-bold tracking-tight text-tinta">Acento y estados</h3>
-        <p class="mt-2 text-sm text-apagado">
-          La convención del ERP: emerald = bien · red = error · amber = advertencia.
+        <p class="mt-2 max-w-2xl text-sm text-apagado">
+          El acento es verde aqua. En claro tiene que ser un verde profundo
+          (teal-700) porque es el único que sirve como enlace, como fondo de
+          botón con letra blanca y como botón distinguible del fondo. En oscuro
+          sí puede brillar.
         </p>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {
@@ -118,6 +139,9 @@ const iconos = [
                 <div class={`h-12 rounded-lg ${a.fondo}`} />
                 <p class={`mt-4 text-sm font-bold ${a.texto}`}>Texto en {a.token}</p>
                 <p class="mt-1 text-xs text-tenue">{a.uso}</p>
+                <p class="mt-2 font-mono text-[10px] text-tenue tabular-nums">
+                  claro {a.ratio.split(' / ')[0]}:1 · oscuro {a.ratio.split(' / ')[1]}:1
+                </p>
               </Tarjeta>
             ))
           }
@@ -175,7 +199,9 @@ const iconos = [
             <Chip tono="acento" icono="star-line">Destacado</Chip>
             <Chip tono="bien" icono="check-line">En producción</Chip>
             <Chip tono="aviso" icono="time-line">En desarrollo</Chip>
-            <Chip tono="mal" icono="lock-line">Repositorio privado</Chip>
+            <!-- Un repositorio privado no es un error: va en neutro, no en rojo. -->
+            <Chip icono="lock-line">Repositorio privado</Chip>
+            <Chip tono="mal" icono="error-warning-line">Error de verdad</Chip>
           </div>
         </Tarjeta>
       </div>

@@ -1,12 +1,19 @@
 /* ============================================================================
    SISTEMA DE DISEÑO — Harald Allerhand Santaella
    ----------------------------------------------------------------------------
-   Los valores vienen del ERP de Tu Visión Telecable, probados en producción.
-   Aquí se expresan como tokens semánticos: ESTE ARCHIVO CONTROLA TODA LA PALETA,
-   en claro y en oscuro. Las plantillas nunca llevan un color literal.
+   Las superficies y la jerarquía de texto en claro vienen del ERP de Tu Visión
+   Telecable, probadas en producción. El acento es verde aqua, que es la marca.
 
-   Para cambiar el sitio entero de color, se toca sólo el bloque @theme (claro)
-   y el bloque html.dark (oscuro). Nada más.
+   ESTE ARCHIVO CONTROLA TODA LA PALETA, en claro y en oscuro. Las plantillas
+   nunca llevan un color literal: escriben bg-superficie, text-tinta, text-acento.
+
+   Los dos temas son deliberadamente distintos:
+     · CLARO   → neutros grises del ERP, sin tocar. El verde entra sólo como
+                 acento: botones, enlaces, rótulos, foco.
+     · OSCURO  → los neutros se corren de slate (azulado) a un negro verdoso,
+                 con la MISMA luminancia. El tema entero se siente verde, no
+                 sólo los botones. Para volver a slate, se cambian los cuatro
+                 valores de superficie del bloque html.dark y nada más.
 
    Los contrastes anotados están medidos (WCAG 2.1) contra el fondo de página.
    AA para texto normal exige 4.5:1; ningún token de texto baja de ahí.
@@ -21,7 +28,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
-   MODO CLARO — los valores base
+   MODO CLARO — neutros del ERP + acento verde
    -------------------------------------------------------------------------- */
 @theme {
   /* El eje variable de Plus Jakarta Sans va de 200 a 800:
@@ -47,15 +54,26 @@
   --color-borde: #e5e5e5;
   --color-borde-fuerte: #d4d4d4;
 
-  /* --- Acento ------------------------------------------------------------ */
-  --color-acento: #4f46e5; /* enlaces y botones                 5.6:1 */
-  --color-acento-vivo: #4338ca; /* hover                             7.0:1 */
-  --color-acento-tinta: #ffffff; /* texto encima del botón sólido     6.3:1 */
-  --color-acento-tenue: #eef2ff; /* fondo de chip */
+  /* --- Acento: verde aqua ------------------------------------------------
+     teal-700 es el único verde que sirve para los tres papeles a la vez:
+     como texto sobre el fondo (4.8:1), como fondo de botón con letra blanca
+     (5.5:1) y como botón distinguible del fondo (4.8:1). Los verdes más
+     brillantes fallan en al menos uno de los tres.                        */
+  --color-acento: #0f766e; /* enlaces, botones, rótulos         4.8:1 */
+  --color-acento-vivo: #115e59; /* hover                             6.7:1 */
+  --color-acento-tinta: #ffffff; /* letra encima del botón sólido     5.5:1 */
+  --color-acento-tenue: #f0fdfa; /* fondo de chip */
 
-  /* --- Estados ----------------------------------------------------------- */
-  --color-bien: #047857; /* emerald-700                       4.9:1 */
-  --color-bien-tenue: #ecfdf5;
+  /* Verde brillante SÓLO decorativo: iconos grandes, líneas, adornos.
+     No pasa 4.5:1, así que aquí nunca va texto pequeño. */
+  --color-acento-brillante: #14b8a6;
+
+  /* --- Estados -----------------------------------------------------------
+     "bien" es el acento: en un portafolio lo positivo y la marca son lo
+     mismo ("en producción"). Si algún día se necesitan distintos, se separan
+     aquí y en ningún otro lado.                                           */
+  --color-bien: #0f766e;
+  --color-bien-tenue: #f0fdfa;
   --color-mal: #b91c1c; /* red-700                           5.7:1 */
   --color-mal-tenue: #fef2f2;
   --color-aviso: #92400e; /* amber-800                         6.3:1 */
@@ -63,45 +81,49 @@
 
   /* --- Cromo ------------------------------------------------------------- */
   --color-barra: #cbd5e1; /* barra de desplazamiento */
-  --color-foco: #4f46e5; /* anillo de foco de teclado */
+  --color-foco: #0f766e; /* anillo de foco de teclado */
 }
 
 /* ---------------------------------------------------------------------------
-   MODO OSCURO — columna vertebral slate-900 → slate-800 → slate-700
-   Sólo se redefinen las variables: cada utilidad (bg-superficie, text-tinta…)
-   las lee por var(), así que el sitio entero cambia con este bloque.
+   MODO OSCURO — negro verdoso + acento aqua brillante
+
+   Las superficies conservan la luminancia exacta de la columna slate del ERP
+   (slate-900 → 800 → 700 → 600), sólo se corrió el tono hacia el verde. Por eso
+   todos los contrastes del sistema siguen valiendo igual que antes.
    -------------------------------------------------------------------------- */
 html.dark {
   color-scheme: dark;
 
-  --color-fondo: #0f172a;
-  --color-superficie: #1e293b;
-  --color-realce: #334155;
-  --color-realce-fuerte: #475569;
+  --color-fondo: #0d1a17; /* era slate-900 #0f172a — misma luminancia */
+  --color-superficie: #182e28; /* era slate-800 #1e293b */
+  --color-realce: #2a4740; /* era slate-700 #334155 */
+  --color-realce-fuerte: #3d5f56; /* era slate-600 #475569 */
 
-  --color-tinta: #f8fafc; /* 17.1:1 */
-  --color-tinta-suave: #e2e8f0; /* 14.5:1 */
-  --color-cuerpo: #cbd5e1; /* 12.0:1 */
-  --color-apagado: #94a3b8; /*  7.0:1 */
-  --color-tenue: #8595ab; /*  5.9:1 — slate-500 daba 3.8:1, no alcanzaba */
+  --color-tinta: #f1faf7; /* 16.8:1 */
+  --color-tinta-suave: #dbe9e4; /* 14.3:1 */
+  --color-cuerpo: #c2d4ce; /* 11.6:1 */
+  --color-apagado: #8fa8a0; /*  7.0:1 */
+  --color-tenue: #7f978f; /*  5.7:1 */
 
-  --color-borde: #334155;
-  --color-borde-fuerte: #475569;
+  --color-borde: #24403a;
+  --color-borde-fuerte: #35544c;
 
-  --color-acento: #a5b4fc; /*  9.0:1 */
-  --color-acento-vivo: #c7d2fe;
-  --color-acento-tinta: #0f172a; /* texto oscuro sobre botón claro     9.0:1 */
-  --color-acento-tenue: rgb(99 102 241 / 0.14);
+  /* Aquí el verde sí puede brillar: sobre fondo oscuro pasa de sobra. */
+  --color-acento: #5eead4; /* 12.1:1 */
+  --color-acento-vivo: #99f6e4; /* hover — aclara, no oscurece */
+  --color-acento-tinta: #062018; /* letra oscura sobre botón claro    11.6:1 */
+  --color-acento-tenue: rgb(45 212 191 / 0.14);
+  --color-acento-brillante: #2dd4bf;
 
-  --color-bien: #6ee7b7; /* 11.7:1 */
-  --color-bien-tenue: rgb(16 185 129 / 0.14);
+  --color-bien: #5eead4;
+  --color-bien-tenue: rgb(45 212 191 / 0.14);
   --color-mal: #fca5a5; /*  9.4:1 */
   --color-mal-tenue: rgb(239 68 68 / 0.14);
   --color-aviso: #fcd34d; /* 12.4:1 */
   --color-aviso-tenue: rgb(245 158 11 / 0.14);
 
-  --color-barra: #334155;
-  --color-foco: #a5b4fc;
+  --color-barra: #2a4740;
+  --color-foco: #5eead4;
 }
 
 /* ---------------------------------------------------------------------------

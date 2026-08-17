@@ -30,7 +30,8 @@ import Icono from './Icono.astro';
   const metaColor = document.getElementById('color-tema');
   const delSistema = window.matchMedia('(prefers-color-scheme: dark)');
 
-  const FONDO = { claro: '#f0f1f3', oscuro: '#0f172a' };
+  // Deben coincidir con --color-fondo de global.css, en cada tema.
+  const FONDO = { claro: '#f0f1f3', oscuro: '#0d1a17' };
 
   function pintar(oscuro: boolean) {
     raiz.classList.toggle('dark', oscuro);
