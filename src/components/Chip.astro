@@ -1,0 +1,36 @@
+---
+/**
+ * Chip — etiqueta pequeña: tecnologías, estado de un proyecto, categorías.
+ * Los tonos siguen la convención del ERP: emerald = bien · red = error ·
+ * amber = advertencia.
+ */
+import Icono from './Icono.astro';
+
+interface Props {
+  tono?: 'neutro' | 'acento' | 'bien' | 'mal' | 'aviso';
+  icono?: string;
+  clase?: string;
+}
+
+const { tono = 'neutro', icono, clase = '' } = Astro.props;
+
+const tonos = {
+  neutro: 'bg-realce text-apagado border-borde',
+  acento: 'bg-acento-tenue text-acento border-transparent',
+  bien: 'bg-bien-tenue text-bien border-transparent',
+  mal: 'bg-mal-tenue text-mal border-transparent',
+  aviso: 'bg-aviso-tenue text-aviso border-transparent',
+};
+
+const clases = [
+  'inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1',
+  'text-xs font-bold whitespace-nowrap',
+  tonos[tono],
+  clase,
+].join(' ');
+---
+
+<span class={clases}>
+  {icono && <Icono nombre={icono} clase="size-3.5 shrink-0" />}
+  <slot />
+</span>

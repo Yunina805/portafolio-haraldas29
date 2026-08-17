@@ -1,0 +1,45 @@
+---
+/**
+ * Revelar — aparece al entrar en pantalla.
+ *
+ * Dos reglas que casi nadie respeta y aquí sí:
+ *  1. Si el visitante pidió movimiento reducido en su sistema, no se anima nada.
+ *  2. Si el JavaScript no corre, el contenido se ve igual. Nunca se oculta algo
+ *     que dependa de un script para volver a aparecer.
+ *
+ * `retraso` escalona los elementos de una lista (0, 80, 160…) para que entren
+ * en cascada en vez de todos de golpe.
+ */
+interface Props {
+  retraso?: number;
+  clase?: string;
+}
+
+const { retraso = 0, clase = '' } = Astro.props;
+---
+
+<div class={['revelar', clase].join(' ')} style={retraso ? `transition-delay:${retraso}ms` : undefined}>
+  <slot />
+</div>
+
+<script>
+  const objetivos = document.querySelectorAll<HTMLElement>('.revelar');
+  const quietito = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (quietito || !('IntersectionObserver' in window)) {
+    objetivos.forEach((el) => el.classList.add('visible'));
+  } else {
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) continue;
+          entrada.target.classList.add('visible');
+          observador.unobserve(entrada.target);
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+    );
+
+    objetivos.forEach((el) => observador.observe(el));
+  }
+</script>

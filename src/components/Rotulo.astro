@@ -1,0 +1,16 @@
+---
+/**
+ * Rótulo (eyebrow) — la etiqueta chica arriba del título de cada sección.
+ * Es el préstamo directo del ERP y es lo que hace que una sección se vea cara.
+ * El tamaño exacto se controla en la clase .rotulo de global.css.
+ */
+interface Props {
+  clase?: string;
+}
+
+const { clase = '' } = Astro.props;
+---
+
+<p class={['rotulo', clase].join(' ')}>
+  <slot />
+</p>

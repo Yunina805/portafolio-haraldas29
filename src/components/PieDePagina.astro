@@ -1,0 +1,66 @@
+---
+import Icono from './Icono.astro';
+import { SITIO } from '../consts';
+
+const anio = new Date().getFullYear();
+
+// Sólo se muestran los contactos que ya tienen dato. Un enlace vacío o un
+// "próximamente" hace más daño que no tener la sección.
+const contactos = [
+  SITIO.correo && {
+    texto: SITIO.correo,
+    href: `mailto:${SITIO.correo}`,
+    icono: 'mail-line',
+    externo: false,
+  },
+  SITIO.whatsapp && {
+    texto: 'WhatsApp',
+    href: `https://wa.me/${SITIO.whatsapp}`,
+    icono: 'whatsapp-line',
+    externo: true,
+  },
+  SITIO.github && {
+    texto: 'GitHub',
+    href: SITIO.github,
+    icono: 'github-fill',
+    externo: true,
+  },
+].filter(Boolean) as { texto: string; href: string; icono: string; externo: boolean }[];
+---
+
+<footer class="border-t border-borde bg-superficie">
+  <div class="contenedor py-12 sm:py-16">
+    <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <p class="text-sm font-extrabold tracking-tight text-tinta">{SITIO.nombre}</p>
+        <p class="mt-1.5 text-sm text-tenue">
+          {SITIO.oficio}{SITIO.ciudad && ` · ${SITIO.ciudad}`}
+        </p>
+      </div>
+
+      {
+        contactos.length > 0 && (
+          <ul class="flex flex-wrap items-center gap-x-5 gap-y-3">
+            {contactos.map((c) => (
+              <li>
+                <a
+                  href={c.href}
+                  target={c.externo ? '_blank' : undefined}
+                  rel={c.externo ? 'noopener noreferrer' : undefined}
+                  class="inline-flex items-center gap-2 text-sm font-semibold text-apagado hover:text-tinta"
+                >
+                  <Icono nombre={c.icono} clase="size-[18px]" />
+                  {c.texto}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <p class="mt-10 border-t border-borde pt-6 text-xs text-tenue">
+      © {anio} {SITIO.nombre}. Sitio construido con Astro y Tailwind CSS.
+    </p>
+  </div>
+</footer>

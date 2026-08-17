@@ -1,0 +1,233 @@
+---
+/**
+ * Muestrario del sistema de diseño.
+ *
+ * Página interna, no indexable: sirve para ver todas las piezas juntas y para
+ * detectar de un vistazo si algo se rompe al cambiar la paleta. Cuando agregues
+ * un componente nuevo, agrégalo también aquí.
+ */
+import Base from '../layouts/Base.astro';
+import Seccion from '../components/Seccion.astro';
+import Tarjeta from '../components/Tarjeta.astro';
+import Boton from '../components/Boton.astro';
+import Chip from '../components/Chip.astro';
+import Icono from '../components/Icono.astro';
+
+const superficies = [
+  { token: 'bg-fondo', uso: 'Fondo de página', clase: 'bg-fondo' },
+  { token: 'bg-superficie', uso: 'Tarjetas, encabezado', clase: 'bg-superficie' },
+  { token: 'bg-realce', uso: 'Hover, resalte leve', clase: 'bg-realce' },
+  { token: 'bg-realce-fuerte', uso: 'Resalte marcado', clase: 'bg-realce-fuerte' },
+];
+
+const textos = [
+  { token: 'text-tinta', uso: 'Títulos', clase: 'text-tinta', ratio: '15.4 / 17.1' },
+  { token: 'text-tinta-suave', uso: 'Títulos secundarios', clase: 'text-tinta-suave', ratio: '12.2 / 14.5' },
+  { token: 'text-cuerpo', uso: 'Cuerpo de texto', clase: 'text-cuerpo', ratio: '9.2 / 12.0' },
+  { token: 'text-apagado', uso: 'Etiquetas, subtexto', clase: 'text-apagado', ratio: '5.9 / 7.0' },
+  { token: 'text-tenue', uso: 'Metadatos, terciario', clase: 'text-tenue', ratio: '5.3 / 5.9' },
+];
+
+const acentos = [
+  { token: 'acento', uso: 'Enlaces y acción principal', fondo: 'bg-acento', texto: 'text-acento' },
+  { token: 'bien', uso: 'Éxito, confirmado', fondo: 'bg-bien', texto: 'text-bien' },
+  { token: 'mal', uso: 'Error', fondo: 'bg-mal', texto: 'text-mal' },
+  { token: 'aviso', uso: 'Advertencia', fondo: 'bg-aviso', texto: 'text-aviso' },
+];
+
+const escala = [
+  { nombre: 'Título de portada', clase: 'text-5xl sm:text-7xl font-extrabold tracking-tighter', muestra: 'Harald' },
+  { nombre: 'Título de sección', clase: 'text-3xl sm:text-4xl font-extrabold tracking-tight', muestra: 'Qué puedo construir' },
+  { nombre: 'Subtítulo', clase: 'text-xl font-bold tracking-tight', muestra: 'Integración con equipos de red' },
+  { nombre: 'Entrada', clase: 'text-lg text-cuerpo', muestra: 'Entiendo cómo opera tu negocio antes de programar.' },
+  { nombre: 'Cuerpo', clase: 'text-[15px] text-cuerpo leading-relaxed', muestra: 'El sistema corta y reconecta el servicio hablándole por API a routers Mikrotik.' },
+  { nombre: 'Metadato', clase: 'text-sm text-tenue', muestra: 'feb-2026 → hoy · 217 commits' },
+  { nombre: 'Rótulo', clase: 'rotulo', muestra: 'Proyecto en producción' },
+];
+
+const iconos = [
+  'code-s-slash-line', 'database-2-line', 'router-line', 'bank-card-line',
+  'qr-code-line', 'file-pdf-2-line', 'shopping-bag-3-line', 'exchange-line',
+  'shield-check-line', 'speed-up-line', 'mail-line', 'whatsapp-line',
+  'github-fill', 'arrow-right-line', 'sun-line', 'moon-line',
+];
+---
+
+<Base titulo="Muestrario del sistema" sinIndexar>
+  <Seccion
+    rotulo="Referencia interna"
+    titulo="Muestrario del sistema de diseño"
+    entrada="Todas las piezas juntas. Cambia un token en global.css y esta página te dice al instante qué se rompió — en claro y en oscuro."
+    aire="poco"
+  >
+    <div class="space-y-20">
+      <!-- SUPERFICIES -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Superficies</h3>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            superficies.map((s) => (
+              <div class="overflow-hidden rounded-xl border border-borde">
+                <div class={`h-20 ${s.clase}`} />
+                <div class="border-t border-borde bg-superficie p-4">
+                  <p class="font-mono text-xs font-bold text-tinta">{s.token}</p>
+                  <p class="mt-1 text-xs text-tenue">{s.uso}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- TEXTO -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Jerarquía de texto</h3>
+        <p class="mt-2 text-sm text-apagado">
+          El contraste está medido contra el fondo de página, en claro y en oscuro.
+          Ninguno baja de 4.5:1, que es el mínimo AA para texto normal.
+        </p>
+        <Tarjeta clase="mt-6" relleno="ninguno">
+          <ul class="divide-y divide-borde">
+            {
+              textos.map((t) => (
+                <li class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 p-5">
+                  <span class={`text-[15px] font-semibold ${t.clase}`}>
+                    Cada cliente opera distinto
+                  </span>
+                  <span class="flex items-baseline gap-4">
+                    <code class="font-mono text-xs text-apagado">{t.token}</code>
+                    <span class="text-xs text-tenue tabular-nums">{t.ratio}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </Tarjeta>
+      </div>
+
+      <!-- ACENTO Y ESTADOS -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Acento y estados</h3>
+        <p class="mt-2 text-sm text-apagado">
+          La convención del ERP: emerald = bien · red = error · amber = advertencia.
+        </p>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            acentos.map((a) => (
+              <Tarjeta relleno="sm">
+                <div class={`h-12 rounded-lg ${a.fondo}`} />
+                <p class={`mt-4 text-sm font-bold ${a.texto}`}>Texto en {a.token}</p>
+                <p class="mt-1 text-xs text-tenue">{a.uso}</p>
+              </Tarjeta>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- TIPOGRAFÍA -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Escala tipográfica</h3>
+        <p class="mt-2 text-sm text-apagado">
+          Plus Jakarta Sans, autoalojada. El eje variable llega a 800, así que
+          <code class="font-mono text-xs">font-black</code> se dibuja como
+          <code class="font-mono text-xs">font-extrabold</code>: es lo más pesado que trae la fuente.
+        </p>
+        <Tarjeta clase="mt-6" relleno="ninguno">
+          <ul class="divide-y divide-borde">
+            {
+              escala.map((e) => (
+                <li class="p-6">
+                  <p class="rotulo mb-3 !text-tenue">{e.nombre}</p>
+                  <p class={`${e.clase} text-tinta`}>{e.muestra}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </Tarjeta>
+      </div>
+
+      <!-- BOTONES -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Botones</h3>
+        <Tarjeta clase="mt-6" relleno="lg">
+          <div class="flex flex-wrap items-center gap-3">
+            <Boton tamano="lg" icono="arrow-right-line" iconoAlFinal>Acción principal</Boton>
+            <Boton tamano="lg" variante="contorno" icono="download-2-line">Secundaria</Boton>
+            <Boton tamano="lg" variante="fantasma">Terciaria</Boton>
+          </div>
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <Boton icono="mail-line">Tamaño md</Boton>
+            <Boton variante="contorno" icono="github-fill">Ver repositorio</Boton>
+            <Boton variante="fantasma" icono="external-link-line">Abrir</Boton>
+          </div>
+        </Tarjeta>
+      </div>
+
+      <!-- CHIPS -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Chips</h3>
+        <Tarjeta clase="mt-6" relleno="lg">
+          <div class="flex flex-wrap gap-2">
+            <Chip>Laravel 12</Chip>
+            <Chip>Livewire 3</Chip>
+            <Chip>Tailwind</Chip>
+            <Chip>MySQL</Chip>
+            <Chip tono="acento" icono="star-line">Destacado</Chip>
+            <Chip tono="bien" icono="check-line">En producción</Chip>
+            <Chip tono="aviso" icono="time-line">En desarrollo</Chip>
+            <Chip tono="mal" icono="lock-line">Repositorio privado</Chip>
+          </div>
+        </Tarjeta>
+      </div>
+
+      <!-- TARJETAS -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Tarjetas</h3>
+        <div class="mt-6 grid gap-6 md:grid-cols-2">
+          <Tarjeta relleno="lg">
+            <Icono nombre="server-line" clase="size-7 text-acento" />
+            <h4 class="mt-5 text-lg font-bold tracking-tight text-tinta">Tarjeta fija</h4>
+            <p class="mt-2 text-[15px] leading-relaxed text-apagado">
+              Sin enlace: no se levanta ni cambia al pasar el mouse.
+            </p>
+          </Tarjeta>
+
+          <Tarjeta enlace="/sistema" relleno="lg">
+            <Icono nombre="cursor-line" clase="size-7 text-acento" />
+            <h4 class="mt-5 flex items-center gap-2 text-lg font-bold tracking-tight text-tinta">
+              Tarjeta clicable
+              <Icono
+                nombre="arrow-right-line"
+                clase="size-4 text-tenue transition-transform group-hover:translate-x-1"
+              />
+            </h4>
+            <p class="mt-2 text-[15px] leading-relaxed text-apagado">
+              Con enlace: se levanta y marca el borde. Así serán las tarjetas de proyecto.
+            </p>
+          </Tarjeta>
+        </div>
+      </div>
+
+      <!-- ICONOS -->
+      <div>
+        <h3 class="text-xl font-bold tracking-tight text-tinta">Iconos</h3>
+        <p class="mt-2 text-sm text-apagado">
+          Remix Icon, pegado como SVG en el HTML. Sólo entran al sitio los que usas:
+          no hay fuente de iconos ni petición a un CDN.
+        </p>
+        <Tarjeta clase="mt-6" relleno="lg">
+          <div class="grid grid-cols-4 gap-6 sm:grid-cols-8">
+            {
+              iconos.map((n) => (
+                <div class="flex flex-col items-center gap-2 text-center">
+                  <Icono nombre={n} clase="size-6 text-tinta" />
+                  <code class="font-mono text-[10px] leading-tight break-all text-tenue">{n}</code>
+                </div>
+              ))
+            }
+          </div>
+        </Tarjeta>
+      </div>
+    </div>
+  </Seccion>
+</Base>

@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import Encabezado from '../components/Encabezado.astro';
+import PieDePagina from '../components/PieDePagina.astro';
+import { SITIO } from '../consts';
+
+interface Props {
+  titulo: string;
+  descripcion?: string;
+  /** Oculta la página de buscadores. Útil para el muestrario del sistema. */
+  sinIndexar?: boolean;
+}
+
+const { titulo, descripcion = SITIO.descripcion, sinIndexar = false } = Astro.props;
+
+const tituloCompleto = titulo ? `${titulo} · ${SITIO.nombreCorto}` : SITIO.nombre;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es-MX" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="author" content={SITIO.nombre} />
+    <link rel="canonical" href={canonica} />
+    {sinIndexar && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Color de la barra del navegador en celular. El script de abajo lo ajusta
+         al tema real antes de que se vea nada. -->
+    <meta name="theme-color" id="color-tema" content="#f0f1f3" />
+
+    <!-- TODO(Fase 2): favicon propio y tarjeta Open Graph.
+         Sin og:image, la liga compartida por WhatsApp sale sin imagen. -->
+
+    <!--
+      Tema antes de pintar. Va aquí, en el <head> y sin type="module", para que
+      corra de forma síncrona: si esto se ejecutara al final del documento,
+      quien tiene modo oscuro vería un destello blanco en cada carga.
+
+      También marca <html class="js">, que es lo que permite que las animaciones
+      de aparición sólo escondan contenido cuando hay JavaScript para revelarlo.
+    -->
+    <script is:inline>
+      (() => {
+        const raiz = document.documentElement;
+        raiz.classList.add('js');
+
+        const guardado = localStorage.getItem('tema');
+        const oscuro = guardado
+          ? guardado === 'oscuro'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        raiz.classList.toggle('dark', oscuro);
+        document
+          .getElementById('color-tema')
+          ?.setAttribute('content', oscuro ? '#0f172a' : '#f0f1f3');
+      })();
+    </script>
+  </head>
+
+  <body class="min-h-dvh bg-fondo font-sans text-cuerpo antialiased">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100
+             focus:rounded-xl focus:bg-acento focus:px-4 focus:py-2.5 focus:text-sm
+             focus:font-bold focus:text-acento-tinta"
+    >
+      Saltar al contenido
+    </a>
+
+    <Encabezado />
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <PieDePagina />
+  </body>
+</html>

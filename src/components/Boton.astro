@@ -1,0 +1,61 @@
+---
+/**
+ * Botón — se dibuja como <a> si le pasas href, y como <button> si no.
+ * Variantes: solido (la acción principal) · contorno · fantasma.
+ */
+import Icono from './Icono.astro';
+
+interface Props {
+  href?: string;
+  tipo?: 'button' | 'submit';
+  variante?: 'solido' | 'contorno' | 'fantasma';
+  tamano?: 'md' | 'lg';
+  icono?: string;
+  iconoAlFinal?: boolean;
+  clase?: string;
+  externo?: boolean;
+}
+
+const {
+  href,
+  tipo = 'button',
+  variante = 'solido',
+  tamano = 'md',
+  icono,
+  iconoAlFinal = false,
+  clase = '',
+  externo = false,
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 rounded-xl font-bold ' +
+  'whitespace-nowrap cursor-pointer select-none';
+
+const variantes = {
+  solido: 'bg-acento text-acento-tinta hover:bg-acento-vivo shadow-sm',
+  contorno:
+    'border border-borde-fuerte bg-superficie text-tinta hover:bg-realce hover:border-tenue',
+  fantasma: 'text-apagado hover:text-tinta hover:bg-realce',
+};
+
+const tamanos = {
+  md: 'h-11 px-5 text-sm',
+  lg: 'h-13 px-7 text-[15px]',
+};
+
+const clases = [base, variantes[variante], tamanos[tamano], clase].join(' ');
+const Etiqueta = href ? 'a' : 'button';
+const tamanoIcono = tamano === 'lg' ? 'size-5' : 'size-[18px]';
+---
+
+<Etiqueta
+  class={clases}
+  href={href}
+  type={href ? undefined : tipo}
+  target={externo ? '_blank' : undefined}
+  rel={externo ? 'noopener noreferrer' : undefined}
+>
+  {icono && !iconoAlFinal && <Icono nombre={icono} clase={`${tamanoIcono} shrink-0`} />}
+  <slot />
+  {icono && iconoAlFinal && <Icono nombre={icono} clase={`${tamanoIcono} shrink-0`} />}
+</Etiqueta>

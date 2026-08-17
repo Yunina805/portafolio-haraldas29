@@ -1,0 +1,31 @@
+# build
+dist/
+.astro/
+
+# dependencias
+node_modules/
+
+# entorno — nunca subir llaves ni credenciales
+.env
+.env.*
+!.env.example
+
+# Notas internas. Este repositorio es público y sirve de muestra de código:
+# el brief lleva estrategia personal y datos del cliente, y no va aquí.
+PORTAFOLIO-PERSONAL.md
+
+# Capturas sin censurar. Sólo entran a /public las ya revisadas.
+capturas-crudas/
+
+# sistema operativo
+.DS_Store
+Thumbs.db
+
+# editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# logs
+*.log
+npm-debug.log*

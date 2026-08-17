@@ -1,0 +1,114 @@
+---
+import AlternarTema from './AlternarTema.astro';
+import Icono from './Icono.astro';
+import { NAVEGACION, SITIO } from '../consts';
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-borde bg-fondo/80 backdrop-blur-lg
+         supports-[not(backdrop-filter:blur(0))]:bg-fondo"
+>
+  <div class="contenedor flex h-16 items-center justify-between gap-4 sm:h-18">
+    <!-- Monograma. Mientras no haya foto, esta es la marca. -->
+    <a
+      href="/"
+      class="group flex items-center gap-3"
+      aria-label={`${SITIO.nombre} — inicio`}
+    >
+      <span
+        class="grid size-9 place-items-center rounded-xl bg-tinta text-[13px]
+               font-extrabold tracking-tight text-fondo"
+        aria-hidden="true">{SITIO.monograma}</span
+      >
+      <span class="hidden text-sm font-extrabold tracking-tight text-tinta sm:block">
+        {SITIO.nombreCorto}
+      </span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <nav class="hidden md:block" aria-label="Principal">
+        <ul class="flex items-center gap-1">
+          {
+            NAVEGACION.map((enlace) => (
+              <li>
+                <a
+                  href={enlace.href}
+                  class="rounded-lg px-3 py-2 text-sm font-semibold text-apagado
+                         hover:bg-realce hover:text-tinta"
+                >
+                  {enlace.texto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <span class="mx-1 hidden h-6 w-px bg-borde md:block" aria-hidden="true"></span>
+
+      <AlternarTema />
+
+      <button
+        id="abrir-menu"
+        type="button"
+        class="grid size-10 place-items-center rounded-xl border border-borde bg-superficie
+               text-apagado hover:bg-realce hover:text-tinta cursor-pointer md:hidden"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="menu-movil"
+      >
+        <Icono nombre="menu-line" clase="size-[18px]" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil -->
+  <nav
+    id="menu-movil"
+    class="hidden border-t border-borde bg-superficie md:hidden"
+    aria-label="Principal (móvil)"
+  >
+    <ul class="contenedor flex flex-col gap-1 py-4">
+      {
+        NAVEGACION.map((enlace) => (
+          <li>
+            <a
+              href={enlace.href}
+              class="block rounded-lg px-3 py-3 text-[15px] font-semibold text-cuerpo
+                     hover:bg-realce hover:text-tinta"
+            >
+              {enlace.texto}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const boton = document.getElementById('abrir-menu');
+  const menu = document.getElementById('menu-movil');
+
+  function cerrar() {
+    menu?.classList.add('hidden');
+    boton?.setAttribute('aria-expanded', 'false');
+    boton?.setAttribute('aria-label', 'Abrir menú');
+  }
+
+  boton?.addEventListener('click', () => {
+    const abierto = boton.getAttribute('aria-expanded') === 'true';
+    if (abierto) return cerrar();
+    menu?.classList.remove('hidden');
+    boton.setAttribute('aria-expanded', 'true');
+    boton.setAttribute('aria-label', 'Cerrar menú');
+  });
+
+  // Al tocar un enlace o pulsar Escape, el menú se va.
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) cerrar();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+  });
+</script>

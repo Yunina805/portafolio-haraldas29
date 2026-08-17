@@ -1,0 +1,53 @@
+---
+/**
+ * Interruptor de tema claro / oscuro.
+ *
+ * El estado inicial lo decide el script del <head> de Base.astro, que corre
+ * antes de pintar para que no haya destello blanco. Aquí sólo se cambia.
+ *
+ * Guardamos la elección en localStorage. Mientras el visitante no toque el
+ * interruptor, el sitio sigue la preferencia de su sistema operativo — incluso
+ * si la cambia con la página abierta.
+ */
+import Icono from './Icono.astro';
+---
+
+<button
+  id="alternar-tema"
+  type="button"
+  class="grid size-10 place-items-center rounded-xl border border-borde bg-superficie
+         text-apagado hover:bg-realce hover:text-tinta cursor-pointer"
+  aria-label="Cambiar entre modo claro y oscuro"
+  aria-pressed="false"
+>
+  <Icono nombre="moon-line" clase="size-[18px] solo-claro" />
+  <Icono nombre="sun-line" clase="size-[18px] solo-oscuro" />
+</button>
+
+<script>
+  const boton = document.getElementById('alternar-tema');
+  const raiz = document.documentElement;
+  const metaColor = document.getElementById('color-tema');
+  const delSistema = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const FONDO = { claro: '#f0f1f3', oscuro: '#0f172a' };
+
+  function pintar(oscuro: boolean) {
+    raiz.classList.toggle('dark', oscuro);
+    metaColor?.setAttribute('content', oscuro ? FONDO.oscuro : FONDO.claro);
+    boton?.setAttribute('aria-pressed', String(oscuro));
+  }
+
+  pintar(raiz.classList.contains('dark'));
+
+  boton?.addEventListener('click', () => {
+    const oscuro = !raiz.classList.contains('dark');
+    localStorage.setItem('tema', oscuro ? 'oscuro' : 'claro');
+    pintar(oscuro);
+  });
+
+  // Si nunca eligió a mano, seguimos al sistema aunque cambie en caliente.
+  delSistema.addEventListener('change', (e) => {
+    if (!localStorage.getItem('tema')) pintar(e.matches);
+  });
+</script>

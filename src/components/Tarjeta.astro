@@ -1,0 +1,36 @@
+---
+/**
+ * Tarjeta base del sistema: bg-superficie · borde · rounded-xl · shadow-sm.
+ * En claro queda blanca sobre el fondo gris y por eso resalta; en oscuro
+ * queda slate-800 sobre slate-900 y el efecto es el mismo.
+ *
+ * `enlace` la convierte en una tarjeta clicable con levantada al pasar el mouse.
+ */
+interface Props {
+  enlace?: string;
+  relleno?: 'sm' | 'md' | 'lg' | 'ninguno';
+  clase?: string;
+}
+
+const { enlace, relleno = 'md', clase = '' } = Astro.props;
+
+const rellenos = {
+  ninguno: '',
+  sm: 'p-4',
+  md: 'p-6',
+  lg: 'p-8 sm:p-10',
+};
+
+const base = 'block rounded-xl border border-borde bg-superficie shadow-sm';
+const interactiva = enlace
+  ? 'group hover:border-borde-fuerte hover:shadow-md hover:-translate-y-0.5 ' +
+    'transition-[transform,box-shadow,border-color] duration-200'
+  : '';
+
+const clases = [base, rellenos[relleno], interactiva, clase].join(' ');
+const Etiqueta = enlace ? 'a' : 'div';
+---
+
+<Etiqueta class={clases} href={enlace}>
+  <slot />
+</Etiqueta>

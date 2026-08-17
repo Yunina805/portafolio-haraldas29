@@ -1,0 +1,257 @@
+/* ============================================================================
+   SISTEMA DE DISEÑO — Harald Allerhand Santaella
+   ----------------------------------------------------------------------------
+   Los valores vienen del ERP de Tu Visión Telecable, probados en producción.
+   Aquí se expresan como tokens semánticos: ESTE ARCHIVO CONTROLA TODA LA PALETA,
+   en claro y en oscuro. Las plantillas nunca llevan un color literal.
+
+   Para cambiar el sitio entero de color, se toca sólo el bloque @theme (claro)
+   y el bloque html.dark (oscuro). Nada más.
+
+   Los contrastes anotados están medidos (WCAG 2.1) contra el fondo de página.
+   AA para texto normal exige 4.5:1; ningún token de texto baja de ahí.
+   ========================================================================== */
+
+@import 'tailwindcss';
+@import '@fontsource-variable/plus-jakarta-sans';
+
+/* La clase .dark vive en <html>; el script del <head> la pone antes de pintar.
+   Casi no hace falta usar dark: en las plantillas —los tokens ya cambian solos—
+   pero existe para lo que no es color (mostrar/ocultar, sombras). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   MODO CLARO — los valores base
+   -------------------------------------------------------------------------- */
+@theme {
+  /* El eje variable de Plus Jakarta Sans va de 200 a 800:
+     font-black (900) se dibuja como 800, que es lo más pesado que existe. */
+  --font-sans:
+    'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+
+  /* --- Superficies ------------------------------------------------------- */
+  --color-fondo: #f0f1f3; /* fondo de página — gris neutralizado, sin tinte azul */
+  --color-superficie: #ffffff; /* tarjetas — blanco puro, por eso resaltan */
+  --color-realce: #f0f0f0; /* resalte leve, hover de fila */
+  --color-realce-fuerte: #e0e0e0; /* resalte marcado */
+
+  /* --- Texto ------------------------------------------------------------- */
+  --color-tinta: #1a1a1a; /* títulos                          15.4:1 */
+  --color-tinta-suave: #2d2d2d; /* títulos secundarios              12.2:1 */
+  --color-cuerpo: #404040; /* cuerpo                            9.2:1 */
+  --color-apagado: #5c5c5c; /* etiquetas, subtexto               5.9:1 */
+  --color-tenue: #636363; /* terciario, metadatos              5.3:1 */
+
+  /* --- Bordes ------------------------------------------------------------ */
+  --color-borde: #e5e5e5;
+  --color-borde-fuerte: #d4d4d4;
+
+  /* --- Acento ------------------------------------------------------------ */
+  --color-acento: #4f46e5; /* enlaces y botones                 5.6:1 */
+  --color-acento-vivo: #4338ca; /* hover                             7.0:1 */
+  --color-acento-tinta: #ffffff; /* texto encima del botón sólido     6.3:1 */
+  --color-acento-tenue: #eef2ff; /* fondo de chip */
+
+  /* --- Estados ----------------------------------------------------------- */
+  --color-bien: #047857; /* emerald-700                       4.9:1 */
+  --color-bien-tenue: #ecfdf5;
+  --color-mal: #b91c1c; /* red-700                           5.7:1 */
+  --color-mal-tenue: #fef2f2;
+  --color-aviso: #92400e; /* amber-800                         6.3:1 */
+  --color-aviso-tenue: #fffbeb;
+
+  /* --- Cromo ------------------------------------------------------------- */
+  --color-barra: #cbd5e1; /* barra de desplazamiento */
+  --color-foco: #4f46e5; /* anillo de foco de teclado */
+}
+
+/* ---------------------------------------------------------------------------
+   MODO OSCURO — columna vertebral slate-900 → slate-800 → slate-700
+   Sólo se redefinen las variables: cada utilidad (bg-superficie, text-tinta…)
+   las lee por var(), así que el sitio entero cambia con este bloque.
+   -------------------------------------------------------------------------- */
+html.dark {
+  color-scheme: dark;
+
+  --color-fondo: #0f172a;
+  --color-superficie: #1e293b;
+  --color-realce: #334155;
+  --color-realce-fuerte: #475569;
+
+  --color-tinta: #f8fafc; /* 17.1:1 */
+  --color-tinta-suave: #e2e8f0; /* 14.5:1 */
+  --color-cuerpo: #cbd5e1; /* 12.0:1 */
+  --color-apagado: #94a3b8; /*  7.0:1 */
+  --color-tenue: #8595ab; /*  5.9:1 — slate-500 daba 3.8:1, no alcanzaba */
+
+  --color-borde: #334155;
+  --color-borde-fuerte: #475569;
+
+  --color-acento: #a5b4fc; /*  9.0:1 */
+  --color-acento-vivo: #c7d2fe;
+  --color-acento-tinta: #0f172a; /* texto oscuro sobre botón claro     9.0:1 */
+  --color-acento-tenue: rgb(99 102 241 / 0.14);
+
+  --color-bien: #6ee7b7; /* 11.7:1 */
+  --color-bien-tenue: rgb(16 185 129 / 0.14);
+  --color-mal: #fca5a5; /*  9.4:1 */
+  --color-mal-tenue: rgb(239 68 68 / 0.14);
+  --color-aviso: #fcd34d; /* 12.4:1 */
+  --color-aviso-tenue: rgb(245 158 11 / 0.14);
+
+  --color-barra: #334155;
+  --color-foco: #a5b4fc;
+}
+
+/* ---------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-barra) transparent;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    text-wrap: pretty;
+  }
+
+  /* Los títulos no deben partir dejando una palabra huérfana en la última línea */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* Foco visible sólo para quien navega con teclado, nunca al hacer clic */
+  :focus-visible {
+    outline: 2px solid var(--color-foco);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-acento);
+    color: var(--color-acento-tinta);
+  }
+
+  /* El ancla no queda pegada al borde superior al saltar a una sección */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-barra);
+    border-radius: 9999px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   TRANSICIÓN GLOBAL — 150 ms sobre color, y nada más.
+   Excluida de las animaciones: si un spinner hereda el suavizado se ve lento.
+   -------------------------------------------------------------------------- */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke,
+      outline-color, text-decoration-color;
+    transition-duration: 150ms;
+    transition-timing-function: ease;
+  }
+
+  .animate-spin,
+  .animate-ping,
+  .animate-pulse,
+  .animate-bounce,
+  [x-cloak] {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   COMPONENTES — las piezas que se repiten
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* Contenedor: un solo ancho máximo para todo el sitio */
+  .contenedor {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .contenedor {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Rótulo (eyebrow) — el detalle que hace que una sección se vea cara.
+     El brief pedía 9 px; a 11 px sigue siendo un rótulo y se lee en celular.
+     Si lo quieres más chico, es este único número. */
+  .rotulo {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-acento);
+  }
+
+  /* Visibilidad por tema, para lo que no es color (iconos del interruptor) */
+  .solo-claro {
+    display: block;
+  }
+  .solo-oscuro {
+    display: none;
+  }
+  html.dark .solo-claro {
+    display: none;
+  }
+  html.dark .solo-oscuro {
+    display: block;
+  }
+
+  /* Aparecer al hacer scroll. Sin JS el contenido se ve siempre: la clase .js
+     la pone el script del <head>, así que si el script no corre no se oculta. */
+  .revelar {
+    transition:
+      opacity 600ms ease,
+      transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.js .revelar:not(.visible) {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   MOVIMIENTO REDUCIDO — se respeta la preferencia del sistema
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  html.js .revelar:not(.visible) {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,59 @@
+---
+/**
+ * Icono — Remix Icon como SVG en línea.
+ *
+ * En el ERP los iconos entran por CDN, y ahí está bien. Aquí no: el woff2
+ * completo de Remix pesa más de 100 KB por 3,229 iconos, y este sitio usa
+ * quince. Este componente lee el set en tiempo de compilación y pega en el HTML
+ * sólo el icono que pediste. Cero peticiones, cero fuente de iconos, cero CDN.
+ *
+ * Los nombres son los mismos de remixicon.com, sin el prefijo `ri-`:
+ *   <i class="ri-sun-line"></i>   →   <Icono nombre="sun-line" />
+ *
+ * Un icono sin `titulo` es decorativo y se le esconde al lector de pantalla.
+ * Si el icono ES la información (un botón sin texto), pásale `titulo`.
+ */
+import datos from '@iconify-json/ri/icons.json';
+
+interface Props {
+  nombre: string;
+  clase?: string;
+  titulo?: string;
+}
+
+const { nombre, clase = 'size-5', titulo } = Astro.props;
+
+const set = datos as unknown as {
+  icons: Record<string, { body: string; width?: number; height?: number }>;
+  aliases?: Record<string, { parent: string }>;
+  width: number;
+  height: number;
+};
+
+const clave = nombre.replace(/^ri[:-]/, '');
+const alias = set.aliases?.[clave]?.parent;
+const icono = set.icons[clave] ?? (alias ? set.icons[alias] : undefined);
+
+if (!icono) {
+  throw new Error(
+    `Icono desconocido: "${nombre}". Busca el nombre exacto en https://remixicon.com ` +
+      `y pásalo sin el prefijo ri- (ejemplo: "arrow-right-line").`
+  );
+}
+
+const ancho = icono.width ?? set.width;
+const alto = icono.height ?? set.height;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${ancho} ${alto}`}
+  class={clase}
+  fill="currentColor"
+  role={titulo ? 'img' : undefined}
+  aria-hidden={titulo ? undefined : 'true'}
+  focusable="false"
+>
+  {titulo && <title>{titulo}</title>}
+  <Fragment set:html={icono.body} />
+</svg>

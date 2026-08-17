@@ -1,0 +1,100 @@
+---
+/**
+ * Portada — PROVISIONAL (Fase 1).
+ *
+ * Todavía no es la portada real: eso es Fase 2, cuando estén tus datos de
+ * contacto, tu ciudad y el texto definitivo. Lo que sí es real es la
+ * TIPOGRAFÍA, que es la decisión que hay que juzgar ahora: sin foto, el nombre
+ * grande y las cifras son lo que sostienen la primera pantalla.
+ */
+import Base from '../layouts/Base.astro';
+import Boton from '../components/Boton.astro';
+import Chip from '../components/Chip.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Revelar from '../components/Revelar.astro';
+import { CIFRAS, SITIO } from '../consts';
+---
+
+<Base titulo="" sinIndexar>
+  <section class="contenedor pt-16 pb-20 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
+    <Revelar>
+      <Rotulo>{SITIO.oficio}</Rotulo>
+    </Revelar>
+
+    <Revelar retraso={80}>
+      <h1
+        class="mt-6 text-5xl leading-[0.95] font-extrabold tracking-tighter text-tinta
+               sm:text-7xl lg:text-8xl"
+      >
+        Harald<br />
+        <span class="text-tenue">Allerhand</span>
+      </h1>
+    </Revelar>
+
+    <Revelar retraso={160}>
+      <p class="mt-8 max-w-xl text-lg leading-relaxed text-cuerpo sm:text-xl">
+        No vendo plantillas. Entiendo cómo opera tu negocio y construyo el
+        sistema que necesita — desde una tienda en línea hasta el ERP de un
+        proveedor de internet.
+      </p>
+    </Revelar>
+
+    <Revelar retraso={240}>
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        <Boton href="#proyectos" tamano="lg" icono="arrow-right-line" iconoAlFinal>
+          Ver proyectos
+        </Boton>
+        <Boton href="#contacto" tamano="lg" variante="contorno" icono="chat-1-line">
+          Contactar
+        </Boton>
+      </div>
+    </Revelar>
+
+    <!-- Las cifras van arriba, donde iría la cara. Sin foto, la prueba
+         verificable es lo que genera la confianza en la primera pantalla. -->
+    <Revelar retraso={320}>
+      <dl class="mt-20 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-borde pt-10 lg:grid-cols-4">
+        {
+          CIFRAS.map((c) => (
+            <div>
+              <dt class="text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+                {c.valor}
+                {c.unidad && <span class="ml-1.5 text-base font-bold text-tenue">{c.unidad}</span>}
+              </dt>
+              <dd class="mt-2 text-sm text-apagado">{c.detalle}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Revelar>
+  </section>
+
+  <!-- Nota de obra: se borra en la Fase 2 -->
+  <section class="contenedor pb-24">
+    <Revelar>
+      <div class="rounded-2xl border border-dashed border-borde-fuerte bg-superficie p-8 sm:p-10">
+        <div class="flex flex-wrap items-center gap-3">
+          <Chip tono="aviso" icono="tools-line">Fase 1 — cimientos</Chip>
+          <Chip tono="bien" icono="check-line">Sistema de diseño listo</Chip>
+        </div>
+
+        <h2 class="mt-6 text-2xl font-extrabold tracking-tight text-tinta">
+          Esto todavía no es la portada
+        </h2>
+        <p class="mt-3 max-w-2xl text-[15px] leading-relaxed text-apagado">
+          Los cimientos ya están: tipografía, paleta clara y oscura, componentes
+          base y el interruptor de tema. Las secciones de proyectos, servicios,
+          proceso y contacto entran en las fases 2 y 3, cuando lleguen tus datos
+          y las capturas. Mientras tanto, el muestrario tiene todas las piezas
+          del sistema juntas para revisarlas.
+        </p>
+
+        <div class="mt-8">
+          <Boton href="/sistema" variante="contorno" icono="palette-line">
+            Ver el muestrario del sistema
+          </Boton>
+        </div>
+      </div>
+    </Revelar>
+  </section>
+</Base>

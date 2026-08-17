@@ -1,0 +1,58 @@
+---
+/**
+ * Sección — el ritmo vertical del sitio.
+ *
+ * El aire es lo que separa un portafolio profesional de uno amateur, así que
+ * el espaciado vive aquí y no se decide sección por sección. Si algún día el
+ * sitio se siente apretado, se sube en este archivo y cambia en todas partes.
+ */
+import Rotulo from './Rotulo.astro';
+
+interface Props {
+  id?: string;
+  rotulo?: string;
+  titulo?: string;
+  entrada?: string;
+  aire?: 'normal' | 'poco' | 'mucho';
+  centrado?: boolean;
+  clase?: string;
+}
+
+const {
+  id,
+  rotulo,
+  titulo,
+  entrada,
+  aire = 'normal',
+  centrado = false,
+  clase = '',
+} = Astro.props;
+
+const aires = {
+  poco: 'py-14 sm:py-20',
+  normal: 'py-20 sm:py-28 lg:py-32',
+  mucho: 'py-28 sm:py-36 lg:py-44',
+};
+---
+
+<section id={id} class={[aires[aire], clase].join(' ')}>
+  <div class="contenedor">
+    {
+      (rotulo || titulo || entrada) && (
+        <header class={centrado ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
+          {rotulo && <Rotulo>{rotulo}</Rotulo>}
+          {titulo && (
+            <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+              {titulo}
+            </h2>
+          )}
+          {entrada && <p class="mt-4 text-[15px] leading-relaxed text-apagado">{entrada}</p>}
+        </header>
+      )
+    }
+
+    <div class={rotulo || titulo || entrada ? 'mt-12 sm:mt-16' : ''}>
+      <slot />
+    </div>
+  </div>
+</section>
