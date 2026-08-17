@@ -1,0 +1,269 @@
+---
+import Base from '../../layouts/Base.astro';
+import Boton from '../../components/Boton.astro';
+import Chip from '../../components/Chip.astro';
+import Icono from '../../components/Icono.astro';
+import Rotulo from '../../components/Rotulo.astro';
+import { PROYECTOS, SITIO } from '../../consts';
+
+export function getStaticPaths() {
+  return PROYECTOS.map((proyecto) => ({
+    params: { slug: proyecto.slug },
+    props: { proyecto },
+  }));
+}
+
+const { proyecto: p } = Astro.props;
+const wa = `https://wa.me/${SITIO.whatsapp}`;
+const enProduccion = p.estado === 'En producción' || p.estado === 'En línea';
+
+// Sólo se dibujan las pestañas que tienen contenido: Rifas no tiene
+// integraciones y no debe salirle una pestaña vacía.
+const pestanas = [
+  { id: 'resuelve', etiqueta: 'Qué resuelve', icono: 'lightbulb-flash-line', hay: true },
+  { id: 'construido', etiqueta: 'Cómo lo construí', icono: 'stack-line', hay: true },
+  {
+    id: 'integraciones',
+    etiqueta: 'Integraciones',
+    icono: 'links-line',
+    hay: p.integraciones.length > 0,
+  },
+  { id: 'numeros', etiqueta: 'Números', icono: 'bar-chart-box-line', hay: p.cifras.length > 0 },
+].filter((t) => t.hay);
+---
+
+<Base titulo={p.titulo} descripcion={`${p.titulo}. ${p.resumen}`}>
+  <article class="contenedor pt-10 pb-20 sm:pt-14 sm:pb-28">
+    {/* ------------------------------------------------ ENCABEZADO */}
+    <a
+      href="/proyectos"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-apagado hover:text-tinta"
+    >
+      <Icono nombre="arrow-left-line" clase="size-4" />
+      Todos los proyectos
+    </a>
+
+    <header class="mt-10">
+      <div class="flex flex-wrap items-center gap-2">
+        <Chip
+          tono={enProduccion ? 'bien' : 'neutro'}
+          icono={enProduccion ? 'checkbox-circle-line' : 'check-line'}
+        >
+          {p.estado}
+        </Chip>
+        <span class="text-xs text-tenue">{p.periodo}</span>
+      </div>
+
+      <Rotulo class="mt-6">{p.nombre}</Rotulo>
+
+      <h1
+        class="mt-4 max-w-4xl text-3xl leading-[1.1] font-extrabold tracking-tighter
+               text-tinta sm:text-5xl"
+      >
+        {p.titulo}
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-cuerpo">{p.gancho}</p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        {
+          p.enlaceVivo && (
+            <Boton href={p.enlaceVivo} icono="external-link-line" externo>
+              Ver el sitio en vivo
+            </Boton>
+          )
+        }
+        <p class="flex items-center gap-2 text-xs text-tenue">
+          <Icono nombre="lock-line" clase="size-3.5 shrink-0" />
+          Código privado — sistema en operación con datos reales
+        </p>
+      </div>
+    </header>
+
+    {/* --------------------------------------------------- PESTAÑAS */}
+    <div class="mt-16" data-pestanas>
+      <div
+        class="flex gap-1 overflow-x-auto rounded-xl border border-borde bg-superficie p-1.5"
+        role="tablist"
+        aria-label="Secciones del proyecto"
+      >
+        {
+          pestanas.map((t, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${t.id}`}
+              aria-controls={`panel-${t.id}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              class="flex shrink-0 cursor-pointer items-center gap-2 rounded-lg px-4 py-2.5
+                     text-sm font-bold whitespace-nowrap text-apagado hover:bg-realce
+                     hover:text-tinta aria-selected:bg-acento aria-selected:text-acento-tinta
+                     aria-selected:hover:bg-acento"
+            >
+              <Icono nombre={t.icono} clase="size-4 shrink-0" />
+              {t.etiqueta}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="mt-8">
+        {/* --- Qué resuelve --- */}
+        <section role="tabpanel" id="panel-resuelve" aria-labelledby="tab-resuelve">
+          <h2 class="titulo-panel text-xl font-bold tracking-tight text-tinta">Qué resuelve</h2>
+
+          <p class="max-w-3xl text-[17px] leading-relaxed text-cuerpo">{p.resumen}</p>
+
+          <ul class="mt-10 grid gap-5 md:grid-cols-2">
+            {
+              p.destacados.map((d) => (
+                <li class="flex gap-3 rounded-xl border border-borde bg-superficie p-5">
+                  <Icono nombre="check-line" clase="mt-0.5 size-4 shrink-0 text-acento" />
+                  <span class="text-[15px] leading-relaxed text-apagado">{d}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {/* --- Cómo lo construí --- */}
+        <section role="tabpanel" id="panel-construido" aria-labelledby="tab-construido">
+          <h2 class="titulo-panel text-xl font-bold tracking-tight text-tinta">
+            Cómo lo construí
+          </h2>
+
+          <ul class="flex flex-wrap gap-3">
+            {
+              p.stack.map((t) => (
+                <li class="flex items-center gap-2.5 rounded-xl border border-borde bg-superficie px-4 py-3">
+                  <Icono nombre={t.icono} clase="size-5 shrink-0 text-acento" />
+                  <span class="text-sm font-bold text-tinta">{t.nombre}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="mt-10 rounded-2xl border border-borde bg-superficie p-8 sm:p-10">
+            <Rotulo>Por qué este stack y no otro</Rotulo>
+            <p class="mt-5 max-w-3xl text-[17px] leading-relaxed text-cuerpo">{p.porQue}</p>
+          </div>
+        </section>
+
+        {/* --- Integraciones --- */}
+        {
+          p.integraciones.length > 0 && (
+            <section role="tabpanel" id="panel-integraciones" aria-labelledby="tab-integraciones">
+              <h2 class="titulo-panel text-xl font-bold tracking-tight text-tinta">
+                Integraciones
+              </h2>
+
+              <p class="max-w-3xl text-[15px] leading-relaxed text-apagado">
+                Sistemas de terceros con los que este proyecto habla en producción.
+              </p>
+
+              <ul class="mt-8 grid gap-4 md:grid-cols-2">
+                {p.integraciones.map((i) => (
+                  <li class="rounded-xl border border-borde bg-superficie p-6">
+                    <div class="flex items-center gap-2.5">
+                      <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-acento-tenue">
+                        <Icono nombre="plug-line" clase="size-4 text-acento" />
+                      </span>
+                      <h3 class="text-base font-bold tracking-tight text-tinta">{i.nombre}</h3>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-apagado">{i.detalle}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {/* --- Números --- */}
+        {
+          p.cifras.length > 0 && (
+            <section role="tabpanel" id="panel-numeros" aria-labelledby="tab-numeros">
+              <h2 class="titulo-panel text-xl font-bold tracking-tight text-tinta">Números</h2>
+
+              <dl class="grid grid-cols-2 gap-6 lg:grid-cols-3">
+                {p.cifras.map((c) => (
+                  <div class="rounded-xl border border-borde bg-superficie p-6">
+                    <dt class="text-3xl font-extrabold tracking-tight text-tinta">{c.valor}</dt>
+                    <dd class="mt-2 text-sm text-apagado">{c.etiqueta}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )
+        }
+      </div>
+    </div>
+
+    {/* -------------------------------------------------- CONTACTO */}
+    <div class="mt-20 rounded-2xl border border-borde bg-superficie px-8 py-12 text-center sm:px-12">
+      <h2 class="mx-auto max-w-xl text-2xl font-extrabold tracking-tight text-tinta sm:text-3xl">
+        ¿Necesitas algo parecido?
+      </h2>
+      <p class="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-apagado">
+        Cuéntame cómo opera tu negocio y te digo si puedo resolverlo.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Boton href={wa} tamano="lg" icono="whatsapp-line" externo>
+          Escríbeme por WhatsApp
+        </Boton>
+        <Boton href="/proyectos" tamano="lg" variante="contorno" icono="arrow-left-line">
+          Ver los otros proyectos
+        </Boton>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<script>
+  /**
+   * Pestañas accesibles.
+   *
+   * El servidor manda TODOS los paneles visibles. Este script es el que
+   * esconde los que no tocan — así, si el JavaScript no corre, la página
+   * sigue teniendo todo su contenido, sólo que apilado con sus títulos.
+   * Nunca se esconde algo que dependa de un script para volver.
+   */
+  function montarPestanas() {
+    for (const grupo of document.querySelectorAll<HTMLElement>('[data-pestanas]')) {
+      const tabs = [...grupo.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+      const paneles = [...grupo.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+      if (!tabs.length) continue;
+
+      const activar = (i: number, mover = false) => {
+        tabs.forEach((t, j) => {
+          t.setAttribute('aria-selected', String(j === i));
+          t.tabIndex = j === i ? 0 : -1;
+        });
+        paneles.forEach((panel, j) => {
+          panel.hidden = j !== i;
+        });
+        if (mover) tabs[i].focus();
+      };
+
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => activar(i));
+        tab.addEventListener('keydown', (e) => {
+          const salto = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+          if (salto) {
+            e.preventDefault();
+            activar((i + salto + tabs.length) % tabs.length, true);
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            activar(0, true);
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            activar(tabs.length - 1, true);
+          }
+        });
+      });
+
+      activar(0);
+    }
+  }
+
+  document.addEventListener('astro:page-load', montarPestanas);
+</script>

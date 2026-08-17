@@ -243,6 +243,29 @@ html.dark {
     display: block;
   }
 
+  /* Pestañas de la página de proyecto.
+     El servidor manda todos los paneles visibles y con su título; el script es
+     el que esconde los que no tocan. Si el JavaScript no corre, se ven las
+     cuatro secciones apiladas —con contenido completo— y se esconde la barra
+     de pestañas, porque unas pestañas que no responden son peor que ninguna. */
+  .titulo-panel {
+    margin-bottom: 1rem;
+  }
+  html.js .titulo-panel {
+    display: none;
+  }
+
+  html:not(.js) [role='tablist'] {
+    display: none;
+  }
+
+  [role='tabpanel'] + [role='tabpanel'] {
+    margin-top: 3.5rem;
+  }
+  html.js [role='tabpanel'] + [role='tabpanel'] {
+    margin-top: 0;
+  }
+
   /* Aparecer al hacer scroll. Sin JS el contenido se ve siempre: la clase .js
      la pone el script del <head>, así que si el script no corre no se oculta. */
   .revelar {

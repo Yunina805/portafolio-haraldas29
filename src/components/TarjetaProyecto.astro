@@ -1,107 +1,111 @@
 ---
 /**
- * Tarjeta de proyecto — la misma en la portada y en /proyectos.
+ * Tarjeta de proyecto para la rejilla.
  *
- * Todos los repositorios son privados: son sistemas en operación con datos de
- * clientes reales. En vez de esconder eso, se dice de frente — que un sistema
- * esté cerrado porque tiene datos de gente adentro habla bien, no mal.
+ * `destacada` la hace ancha y le da más aire: es lo que rompe la monotonía de
+ * cinco tarjetas idénticas apiladas. La jerarquía la decide quién la usa, no
+ * la posición en el arreglo.
  */
-import Tarjeta from './Tarjeta.astro';
 import Chip from './Chip.astro';
-import Boton from './Boton.astro';
 import Icono from './Icono.astro';
 
 interface Proyecto {
+  slug: string;
   nombre: string;
   titulo: string;
-  papel: string;
-  resumen: string;
+  gancho: string;
   periodo: string;
   estado: string;
-  stack: readonly string[];
-  cifras: readonly { valor: string; etiqueta: string }[];
-  destacados: readonly string[];
-  enlaceVivo: string | null;
+  cifraTitular: { valor: string; etiqueta: string };
+  resumen: string;
+  stack: readonly { nombre: string; icono: string }[];
 }
 
 interface Props {
   proyecto: Proyecto;
-  /** Recorta los puntos destacados. Se usa en la portada, donde sobra detalle. */
-  compacto?: boolean;
+  destacada?: boolean;
 }
 
-const { proyecto: p, compacto = false } = Astro.props;
-
-const destacados = compacto ? p.destacados.slice(0, 3) : p.destacados;
+const { proyecto: p, destacada = false } = Astro.props;
 const enProduccion = p.estado === 'En producción' || p.estado === 'En línea';
 ---
 
-<Tarjeta relleno="lg">
-  <div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
-    {/* Columna de datos */}
-    <div class="lg:col-span-4">
-      <div class="flex flex-wrap items-center gap-2">
-        <Chip
-          tono={enProduccion ? 'bien' : 'neutro'}
-          icono={enProduccion ? 'checkbox-circle-line' : 'check-line'}
-        >
-          {p.estado}
-        </Chip>
-        <span class="text-xs text-tenue">{p.periodo}</span>
-      </div>
-
-      {
-        p.cifras.length > 0 && (
-          <dl class="mt-8 grid grid-cols-2 gap-x-4 gap-y-6">
-            {p.cifras.map((c) => (
-              <div>
-                <dt class="text-2xl font-extrabold tracking-tight text-tinta">{c.valor}</dt>
-                <dd class="mt-1 text-xs text-tenue">{c.etiqueta}</dd>
-              </div>
-            ))}
-          </dl>
-        )
-      }
-
-      <div class="mt-8 flex flex-wrap gap-2">
-        {p.stack.map((t) => <Chip>{t}</Chip>)}
-      </div>
-
-      <div class="mt-8 space-y-4">
-        {
-          p.enlaceVivo && (
-            <Boton href={p.enlaceVivo} variante="contorno" icono="external-link-line" externo>
-              Ver el sitio en vivo
-            </Boton>
-          )
-        }
-        <p class="flex items-start gap-2 text-xs leading-relaxed text-tenue">
-          <Icono nombre="lock-line" clase="mt-0.5 size-3.5 shrink-0" />
-          Código privado — es un sistema en operación con datos reales
-        </p>
-      </div>
-    </div>
-
-    {/* Columna narrativa */}
-    <div class="lg:col-span-8">
-      <p class="rotulo">{p.nombre}</p>
-      <h3 class="mt-3 text-2xl font-extrabold tracking-tight text-tinta sm:text-3xl">
-        {p.titulo}
-      </h3>
-      <p class="mt-2 text-sm font-semibold text-acento">{p.papel}</p>
-
-      <p class="mt-6 text-[15px] leading-relaxed text-cuerpo">{p.resumen}</p>
-
-      <ul class="mt-8 space-y-4">
-        {
-          destacados.map((d) => (
-            <li class="flex gap-3">
-              <Icono nombre="corner-down-right-line" clase="mt-0.5 size-4 shrink-0 text-acento" />
-              <span class="text-[15px] leading-relaxed text-apagado">{d}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
+<a
+  href={`/proyectos/${p.slug}`}
+  class:list={[
+    'group relative flex h-full flex-col rounded-2xl border border-borde bg-superficie',
+    'shadow-sm transition-[transform,box-shadow,border-color] duration-200',
+    'hover:-translate-y-1 hover:border-acento hover:shadow-lg',
+    destacada ? 'p-8 sm:p-10' : 'p-7',
+  ]}
+>
+  <div class="flex flex-wrap items-center gap-2">
+    <Chip
+      tono={enProduccion ? 'bien' : 'neutro'}
+      icono={enProduccion ? 'checkbox-circle-line' : 'check-line'}
+    >
+      {p.estado}
+    </Chip>
+    <span class="text-xs text-tenue">{p.periodo}</span>
   </div>
-</Tarjeta>
+
+  <p class="rotulo mt-6">{p.nombre}</p>
+
+  <h3
+    class:list={[
+      'mt-3 font-extrabold tracking-tight text-tinta',
+      destacada ? 'text-2xl sm:text-3xl' : 'text-xl',
+    ]}
+  >
+    {p.titulo}
+  </h3>
+
+  <p
+    class:list={[
+      'mt-3 leading-relaxed text-apagado',
+      destacada ? 'max-w-xl text-[15px]' : 'text-sm',
+    ]}
+  >
+    {destacada ? p.resumen : p.gancho}
+  </p>
+
+  {/* Los logos son lo que le da textura a una tarjeta que si no es puro texto */}
+  <ul class="mt-7 flex flex-wrap items-center gap-2.5">
+    {
+      p.stack.map((t) => (
+        <li
+          class="flex items-center gap-1.5 rounded-lg border border-borde bg-realce px-2.5 py-1.5"
+          title={t.nombre}
+        >
+          <Icono nombre={t.icono} clase="size-3.5 shrink-0 text-apagado" />
+          <span class="text-[11px] font-bold text-apagado">{t.nombre}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  {/* Empuja el pie hacia abajo para que todas las tarjetas terminen parejas */}
+  <div class="grow"></div>
+
+  <div class="mt-8 flex items-end justify-between gap-4 border-t border-borde pt-6">
+    <div>
+      <p
+        class:list={[
+          'font-extrabold tracking-tight text-tinta',
+          destacada ? 'text-3xl' : 'text-2xl',
+        ]}
+      >
+        {p.cifraTitular.valor}
+      </p>
+      <p class="mt-1 text-xs text-tenue">{p.cifraTitular.etiqueta}</p>
+    </div>
+
+    <span class="flex items-center gap-1.5 text-sm font-bold text-acento">
+      Ver detalle
+      <Icono
+        nombre="arrow-right-line"
+        clase="size-4 transition-transform duration-200 group-hover:translate-x-1"
+      />
+    </span>
+  </div>
+</a>

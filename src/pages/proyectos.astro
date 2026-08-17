@@ -10,23 +10,30 @@ import { COMPROMISOS, PROYECTOS, SITIO } from '../consts';
 
 const wa = `https://wa.me/${SITIO.whatsapp}`;
 
+const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
+const resto = PROYECTOS.filter((p) => p !== destacado);
+
 // Los agregados salen de los datos, no a mano: si mañana entra un proyecto
 // nuevo, estos números se corrigen solos.
 const enProduccion = PROYECTOS.filter(
   (p) => p.estado === 'En producción' || p.estado === 'En línea'
 ).length;
 
+const integracionesUnicas = new Set(
+  PROYECTOS.flatMap((p) => p.integraciones.map((i) => i.nombre))
+).size;
+
 const resumen = [
   { valor: String(PROYECTOS.length), etiqueta: 'sistemas construidos' },
   { valor: String(enProduccion), etiqueta: 'operando hoy' },
+  { valor: String(integracionesUnicas), etiqueta: 'servicios integrados' },
   { valor: '2', etiqueta: 'ERP completos' },
-  { valor: '4', etiqueta: 'pasarelas de pago integradas' },
 ];
 ---
 
 <Base
   titulo="Proyectos"
-  descripcion="Sistemas de gestión, portales de autoservicio y plataformas de venta que he construido y opero: ERP para proveedores de internet y telefonía, redes de distribuidores, cobros en línea e integraciones."
+  descripcion="Sistemas de gestión, portales de autoservicio y plataformas de venta: ERP para proveedores de internet y telefonía, redes de distribuidores, cobros en línea e integraciones."
 >
   {/* ------------------------------------------------ ENCABEZADO */}
   <section class="contenedor pt-16 pb-4 sm:pt-24">
@@ -45,8 +52,8 @@ const resumen = [
 
     <Revelar retraso={160}>
       <p class="mt-8 max-w-2xl text-lg leading-relaxed text-cuerpo">
-        Sistemas reales, con clientes reales usándolos todos los días. Ninguno es
-        un ejercicio ni una demo: son negocios que dependen de que funcionen.
+        Sistemas reales, con gente real usándolos todos los días. Ninguno es un
+        ejercicio ni una demo: son negocios que dependen de que funcionen.
       </p>
     </Revelar>
 
@@ -56,8 +63,7 @@ const resumen = [
         <span>
           El código de todos es privado, porque todos guardan datos de personas
           reales — clientes, contratos, cobros, identificaciones. Por eso están
-          contados por lo que hacen y por su tamaño, y no con un enlace al
-          repositorio.
+          contados por lo que hacen, cómo están construidos y con qué hablan.
         </span>
       </p>
     </Revelar>
@@ -78,12 +84,21 @@ const resumen = [
     </Revelar>
   </section>
 
-  {/* -------------------------------------------------- PROYECTOS */}
+  {/* ---------------------------------------------------- REJILLA
+      El grande ocupa las dos columnas y los otros cuatro van en 2×2.
+      Esa diferencia de peso es lo que evita que la página se lea como
+      una lista de inventario. */}
   <Seccion aire="normal">
-    <div class="space-y-8">
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div class="lg:col-span-2">
+        <Revelar>
+          <TarjetaProyecto proyecto={destacado} destacada />
+        </Revelar>
+      </div>
+
       {
-        PROYECTOS.map((p, i) => (
-          <Revelar retraso={i === 0 ? 0 : 80}>
+        resto.map((p, i) => (
+          <Revelar retraso={(i % 2) * 80}>
             <TarjetaProyecto proyecto={p} />
           </Revelar>
         ))
@@ -102,8 +117,7 @@ const resumen = [
           ¿Lo tuyo se parece a alguno de estos?
         </h2>
         <p class="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-apagado">
-          Cuéntame qué necesitas y te digo si puedo resolverlo.
-          {' '}{COMPROMISOS.respuesta}.
+          Cuéntame qué necesitas y te digo si puedo resolverlo. {COMPROMISOS.respuesta}.
         </p>
 
         <div class="mt-10 flex flex-wrap items-center justify-center gap-3">

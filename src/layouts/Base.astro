@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Encabezado from '../components/Encabezado.astro';
 import PieDePagina from '../components/PieDePagina.astro';
@@ -94,20 +95,35 @@ const fichaPersona = {
     */}
     <script is:inline>
       (() => {
-        const raiz = document.documentElement;
-        raiz.classList.add('js');
+        function aplicarTema() {
+          const raiz = document.documentElement;
+          raiz.classList.add('js');
 
-        const guardado = localStorage.getItem('tema');
-        const oscuro = guardado
-          ? guardado === 'oscuro'
-          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const guardado = localStorage.getItem('tema');
+          const oscuro = guardado
+            ? guardado === 'oscuro'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        raiz.classList.toggle('dark', oscuro);
-        document
-          .getElementById('color-tema')
-          ?.setAttribute('content', oscuro ? '#0d1a17' : '#f0f1f3');
+          raiz.classList.toggle('dark', oscuro);
+          document
+            .getElementById('color-tema')
+            ?.setAttribute('content', oscuro ? '#0d1a17' : '#f0f1f3');
+        }
+
+        aplicarTema();
+
+        // Al navegar entre páginas, Astro reemplaza el <html> con el del
+        // documento nuevo —que no trae la clase dark— y el sitio parpadearía
+        // a blanco en cada clic. Esto lo vuelve a poner justo después del
+        // cambio, antes de que el navegador pinte.
+        if (!window.__temaEnganchado) {
+          window.__temaEnganchado = true;
+          document.addEventListener('astro:after-swap', aplicarTema);
+        }
       })();
     </script>
+
+    <ClientRouter />
   </head>
 
   <body class="min-h-dvh bg-fondo font-sans text-cuerpo antialiased">

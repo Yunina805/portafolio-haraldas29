@@ -25,30 +25,42 @@ import Icono from './Icono.astro';
 </button>
 
 <script>
-  const boton = document.getElementById('alternar-tema');
-  const raiz = document.documentElement;
-  const metaColor = document.getElementById('color-tema');
-  const delSistema = window.matchMedia('(prefers-color-scheme: dark)');
-
   // Deben coincidir con --color-fondo de global.css, en cada tema.
   const FONDO = { claro: '#f0f1f3', oscuro: '#0d1a17' };
+  const raiz = document.documentElement;
 
   function pintar(oscuro: boolean) {
     raiz.classList.toggle('dark', oscuro);
-    metaColor?.setAttribute('content', oscuro ? FONDO.oscuro : FONDO.claro);
-    boton?.setAttribute('aria-pressed', String(oscuro));
+    document
+      .getElementById('color-tema')
+      ?.setAttribute('content', oscuro ? FONDO.oscuro : FONDO.claro);
+    document.getElementById('alternar-tema')?.setAttribute('aria-pressed', String(oscuro));
   }
 
-  pintar(raiz.classList.contains('dark'));
+  // Al navegar, el botón es un elemento nuevo y se queda sin escucha, así que
+  // hay que volver a engancharlo. astro:page-load se dispara en la primera
+  // carga y después de cada cambio de página.
+  function montar() {
+    const boton = document.getElementById('alternar-tema');
+    if (!boton) return;
 
-  boton?.addEventListener('click', () => {
-    const oscuro = !raiz.classList.contains('dark');
-    localStorage.setItem('tema', oscuro ? 'oscuro' : 'claro');
-    pintar(oscuro);
-  });
+    pintar(raiz.classList.contains('dark'));
+
+    boton.addEventListener('click', () => {
+      const oscuro = !raiz.classList.contains('dark');
+      localStorage.setItem('tema', oscuro ? 'oscuro' : 'claro');
+      pintar(oscuro);
+    });
+  }
+
+  document.addEventListener('astro:page-load', montar);
 
   // Si nunca eligió a mano, seguimos al sistema aunque cambie en caliente.
-  delSistema.addEventListener('change', (e) => {
-    if (!localStorage.getItem('tema')) pintar(e.matches);
-  });
+  // Esto vive en window y se registra una sola vez para toda la sesión.
+  if (!(window as any).__sistemaEnganchado) {
+    (window as any).__sistemaEnganchado = true;
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('tema')) pintar(e.matches);
+    });
+  }
 </script>

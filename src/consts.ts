@@ -178,34 +178,31 @@ export const TECNOLOGIAS = [
  *
  * Todos son sistemas propios y todos tienen el repositorio privado: guardan
  * datos de personas reales. Se presentan por lo que hacen y por su tamaño, no
- * con enlace al código. Sin capturas por ahora.
+ * con enlace al código.
  *
- * `papel` dice qué hizo Harald; `resumen` dice qué hace el sistema. Son cosas
- * distintas y conviene que sigan separadas.
+ * `porQue` es el campo que más trabaja de este archivo. Casi cualquier
+ * portafolio lista tecnologías; casi ninguno explica por qué esas y no otras
+ * para ese proyecto en concreto. Eso es lo que distingue a alguien que eligió
+ * de alguien que sólo usó lo que sabía.
  */
 export const PROYECTOS = [
   {
     slug: 'tu-vision-telecable',
     nombre: 'Tu Visión Telecable',
     titulo: 'ERP completo para un proveedor de TV e internet',
-    // El encuadre correcto: es la empresa donde trabaja, no un encargo externo.
-    papel: 'Desarrollo y opero el ERP de la empresa',
-    // El de la portada. Los demás sólo salen en /proyectos.
+    gancho: 'Todo el ciclo del cliente de un ISP y la operación interna de la empresa.',
     portada: true,
-    resumen:
-      'Sistema de gestión integral para un proveedor de internet: todo el ciclo ' +
-      'del cliente —contratación, cobro mensual, reportes, suspensión, ' +
-      'reconexión y cancelación— más la operación interna de la empresa: red, ' +
-      'recursos humanos, finanzas por sucursal y catálogos.',
     periodo: 'feb 2026 → hoy',
     estado: 'En producción',
-    stack: ['Laravel 12', 'Livewire 3', 'Tailwind 3', 'Alpine.js', 'MySQL', 'Vite'],
-    cifras: [
-      { valor: '58,000', etiqueta: 'líneas de PHP' },
-      { valor: '144', etiqueta: 'componentes Livewire' },
-      { valor: '231', etiqueta: 'vistas' },
-      { valor: '105', etiqueta: 'modelos' },
-    ],
+    cifraTitular: { valor: '58,000', etiqueta: 'líneas de PHP' },
+
+    resumen:
+      'Sistema de gestión integral para un proveedor de internet: todo el ciclo ' +
+      'del cliente —contratación, cobro mensual, reportes de servicio, ' +
+      'suspensión, reconexión, cancelación y recuperación de equipo— más la ' +
+      'operación interna de la empresa: infraestructura de red, recursos ' +
+      'humanos, finanzas por sucursal y catálogos.',
+
     destacados: [
       'Corta y reconecta el servicio de un cliente hablándole por API a routers Mikrotik y a la OLT, con auditoría de cada acción y reintentos.',
       'Topología GPON con presupuesto óptico y un diagrama de cómo viaja la luz desde la central hasta la casa del cliente.',
@@ -213,115 +210,254 @@ export const PROYECTOS = [
       'Control de accesos por rol derivado del árbol del menú, con permisos página por página.',
       'Migración del sistema anterior, incluida la reparación de la codificación corrupta que traían los datos viejos.',
     ],
+
+    stack: [
+      { nombre: 'Laravel 12', icono: 'si:laravel' },
+      { nombre: 'Livewire 3', icono: 'si:livewire' },
+      { nombre: 'Tailwind CSS', icono: 'si:tailwindcss' },
+      { nombre: 'Alpine.js', icono: 'si:alpinedotjs' },
+      { nombre: 'MySQL', icono: 'si:mysql' },
+      { nombre: 'Vite', icono: 'si:vite' },
+    ],
+
+    porQue:
+      'Un ERP lo usa la misma gente ocho horas al día. Lo que importa no es que ' +
+      'se vea moderno: es que responda rápido y que guardar algo no te obligue a ' +
+      'recargar la página. Livewire da exactamente eso sin montar una API aparte ' +
+      'ni un frontend separado — el servidor manda HTML y la pantalla se ' +
+      'actualiza sola. Con 231 vistas, mantener además una aplicación de ' +
+      'JavaScript en paralelo habría duplicado el trabajo sin darle nada al ' +
+      'usuario. Alpine cubre lo poco que sí tiene que pasar en el navegador, y ' +
+      'nada más.',
+
+    integraciones: [
+      { nombre: 'Mikrotik / RouterOS', detalle: 'Corte y reconexión del servicio por API, con auditoría y reintentos.' },
+      { nombre: 'OLT (GPON)', detalle: 'Lectura de la red óptica y presupuesto de luz por cliente.' },
+    ],
+
+    cifras: [
+      { valor: '58,000', etiqueta: 'líneas de PHP' },
+      { valor: '144', etiqueta: 'componentes Livewire' },
+      { valor: '231', etiqueta: 'vistas' },
+      { valor: '105', etiqueta: 'modelos' },
+      { valor: '192', etiqueta: 'migraciones' },
+      { valor: '142', etiqueta: 'rutas' },
+    ],
+
     enlaceVivo: null,
   },
+
   {
     slug: 'erp-abib',
     nombre: 'Abib',
     titulo: 'ERP de un operador móvil',
-    papel: 'Lo construí y lo mantengo',
+    gancho: 'Activaciones, portabilidad, distribuidores y conciliación del dinero.',
     portada: false,
+    periodo: 'En operación desde 2021',
+    estado: 'En producción',
+    cifraTitular: { valor: '456', etiqueta: 'vistas' },
+
     resumen:
-      'El sistema central del negocio de telefonía: activación de líneas, ' +
+      'El sistema central de un negocio de telefonía: activación de líneas, ' +
       'portabilidad, red de distribuidores con sus comisiones, facturación ' +
       'electrónica, cobros por varias pasarelas y conciliación del dinero. Es el ' +
       'sistema más grande del grupo.',
-    periodo: 'En operación desde 2021',
-    estado: 'En producción',
-    stack: ['Laravel', 'PHP', 'Blade', 'MySQL'],
+
+    destacados: [
+      'Activaciones e historial de línea, asignaciones y cobertura.',
+      'Red de distribuidores con comisiones y notas de comisión.',
+      'Caja, efectivo y cheques, con conciliación de pagos.',
+      'eSIM, equipos, quejas y diagnósticos, y procesos automatizados.',
+    ],
+
+    stack: [
+      { nombre: 'Laravel', icono: 'si:laravel' },
+      { nombre: 'PHP', icono: 'si:php' },
+      { nombre: 'Blade', icono: 'si:laravel' },
+      { nombre: 'MySQL', icono: 'si:mysql' },
+    ],
+
+    porQue:
+      'Este sistema mueve dinero real todos los días: cuatro pasarelas de pago, ' +
+      'facturación ante el SAT y conciliación de lo cobrado. Ahí la prioridad no ' +
+      'es la novedad, es que nada se rompa y que otra persona pueda entenderlo ' +
+      'cuando le toque. Blade y Laravel son lo más estable y lo más fácil de ' +
+      'mantener a largo plazo, y las transacciones de la base de datos son las ' +
+      'que garantizan que un cobro no se registre dos veces ni se pierda a la ' +
+      'mitad. Un sistema de cobros no necesita ser moderno; necesita ser correcto.',
+
+    integraciones: [
+      { nombre: 'Mercado Pago', detalle: 'Cobros con tarjeta de crédito y débito.' },
+      { nombre: 'Openpay', detalle: 'Segunda pasarela de cobro con tarjeta.' },
+      { nombre: 'Kushki', detalle: 'Tercera pasarela, para ampliar cobertura de emisores.' },
+      { nombre: 'STP', detalle: 'Transferencias SPEI y conciliación automática de depósitos.' },
+      { nombre: 'Facturama', detalle: 'Facturación electrónica: emisión de CFDI ante el SAT.' },
+      { nombre: 'Altan Redes', detalle: 'SMS y notificaciones sobre la red móvil.' },
+      { nombre: 'RENAPO', detalle: 'Validación de CURP contra el registro nacional.' },
+      { nombre: 'Nubarium', detalle: 'Validación de identificaciones oficiales.' },
+      { nombre: 'Webhooks', detalle: 'Entrantes y salientes, para sincronizar sistemas de terceros.' },
+    ],
+
     cifras: [
       { valor: '111', etiqueta: 'modelos' },
       { valor: '456', etiqueta: 'vistas' },
       { valor: '155', etiqueta: 'migraciones' },
       { valor: '39', etiqueta: 'controladores' },
     ],
-    destacados: [
-      'Cuatro pasarelas de pago conviviendo en el mismo sistema: Mercado Pago, Openpay, Kushki y STP para transferencias SPEI.',
-      'Facturación electrónica con Facturama: emisión de CFDI ante el SAT.',
-      'Integración con Altan Redes para SMS, validación de IMEI y MSISDN, y todo el proceso de portabilidad con su conciliación.',
-      'Validación de identidad contra RENAPO y Nubarium para CURP e identificaciones oficiales.',
-      'Webhooks entrantes y salientes para mantener sincronizados los sistemas de terceros.',
-    ],
+
     enlaceVivo: null,
   },
+
   {
     slug: 'internet-del-bienestar',
     nombre: 'Internet del Bienestar',
     titulo: 'Plataforma pública y red de distribuidores',
-    papel: 'Lo construí y lo mantengo',
+    gancho: 'El cliente compra su SIM desde el celular; atrás opera una red de dos niveles.',
     portada: false,
+    periodo: 'En operación desde dic 2023',
+    estado: 'En producción',
+    cifraTitular: { valor: '56', etiqueta: 'componentes Livewire' },
+
     resumen:
       'Por fuera, el cliente compra su SIM, verifica que su equipo sea ' +
       'compatible, se da de alta, recarga y paga. Por dentro, opera una red de ' +
       'distribuidores y subdistribuidores con inventario de SIMs, saldos, ' +
       'órdenes y envíos.',
-    periodo: 'En operación desde dic 2023',
-    estado: 'En producción',
-    stack: ['Laravel', 'Livewire', 'Blade', 'MySQL'],
+
+    destacados: [
+      'Alta con identidad validada: INE, pasaporte mexicano y pasaporte de extranjero.',
+      'Compatibilidad del equipo por IMEI antes de vender la línea, que es lo que evita la devolución.',
+      'Red de distribución de dos niveles con saldos, historial de movimientos, órdenes y envíos.',
+      'Vinculación, desvinculación y portabilidad de líneas.',
+      'Roles y permisos para separar lo que ve cada perfil.',
+    ],
+
+    stack: [
+      { nombre: 'Laravel', icono: 'si:laravel' },
+      { nombre: 'Livewire', icono: 'si:livewire' },
+      { nombre: 'Blade', icono: 'si:laravel' },
+      { nombre: 'MySQL', icono: 'si:mysql' },
+    ],
+
+    porQue:
+      'Aquí conviven dos públicos con necesidades opuestas. El cliente entra una ' +
+      'vez desde su celular, muchas veces con mala señal: esa parte tiene que ' +
+      'cargar ligero y salir rápido, y para eso Blade es difícil de superar. El ' +
+      'distribuidor, en cambio, vive dentro del panel administrando inventario y ' +
+      'saldos, y ahí sí hace falta interacción constante — ese es el trabajo de ' +
+      'Livewire. Meterlos en el mismo proyecto, cada uno con la herramienta que ' +
+      'le toca, evita mantener dos aplicaciones separadas para un solo negocio.',
+
+    integraciones: [
+      { nombre: 'Nubarium', detalle: 'Validación de INE y pasaportes contra la fuente oficial.' },
+      { nombre: 'Mercado Pago', detalle: 'Cobros en línea, con carrito de compra propio.' },
+      { nombre: 'Validación de IMEI', detalle: 'Comprueba la compatibilidad del equipo antes de la venta.' },
+    ],
+
     cifras: [
       { valor: '56', etiqueta: 'componentes Livewire' },
       { valor: '145', etiqueta: 'vistas' },
       { valor: '36', etiqueta: 'modelos' },
     ],
-    destacados: [
-      'Alta con identidad validada contra Nubarium: INE, pasaporte mexicano y pasaporte de extranjero.',
-      'Compatibilidad del equipo por IMEI antes de vender la línea, que es lo que evita la devolución.',
-      'Red de distribución de dos niveles con saldos, historial de movimientos, órdenes y envíos.',
-      'Cobros en línea con Mercado Pago y carrito de compra propio.',
-      'Vinculación, desvinculación y portabilidad de líneas, con roles y permisos por perfil.',
-    ],
+
     enlaceVivo: null,
   },
+
   {
     slug: 'portal-abib',
     nombre: 'Abib',
     titulo: 'Rediseño completo del portal de autoservicio',
-    papel: 'Desarrollé el rediseño completo',
+    gancho: 'Un portal de 2021 rehecho por completo, sin detener el negocio.',
     portada: false,
+    periodo: 'mar 2026 → jun 2026',
+    estado: 'En línea',
+    cifraTitular: { valor: '+26,300', etiqueta: 'líneas agregadas' },
+
     resumen:
       'El portal donde el cliente de una empresa de telefonía contrata, recarga, ' +
       'paga, factura y administra sus líneas. La página existía desde 2021 y era ' +
-      'muy sencilla; en 2026 se rediseñó por completo y ese rediseño lo desarrollé yo.',
-    periodo: 'mar 2026 → jun 2026',
-    estado: 'En línea',
-    stack: ['Angular 15', 'TypeScript', 'SCSS'],
+      'muy sencilla; en 2026 se rehizo por completo.',
+
+    destacados: [
+      'Cobros en línea con Mercado Pago y Openpay: recargas y compra de paquetes con tarjeta.',
+      'Vinculación de líneas por CURP, con reCAPTCHA en la consulta pública.',
+      'Perfil verificado del cliente con INE, CURP y fotografía.',
+      'Facturación, con los folios ya facturados marcados y mensajes de error claros.',
+      'Recargas con vigencia por paquete y selección de red para eSIM.',
+      'Preguntas frecuentes con video, carrusel de promociones y menú lateral responsivo.',
+    ],
+
+    stack: [
+      { nombre: 'Angular 15', icono: 'si:angular' },
+      { nombre: 'TypeScript', icono: 'si:typescript' },
+      { nombre: 'SCSS', icono: 'si:sass' },
+    ],
+
+    porQue:
+      'El portal ya existía en Angular desde 2021, así que la decisión real era ' +
+      'rehacerlo desde cero en otra tecnología o evolucionarlo. Evolucionarlo era ' +
+      'lo correcto: el negocio no puede quedarse sin portal mientras alguien ' +
+      'reescribe seis meses. Y TypeScript es justo lo que hace viable meterle ' +
+      'mano a 97 archivos de un código que no escribiste tú — el compilador te ' +
+      'avisa de lo que rompiste antes de que lo descubra un cliente. En un ' +
+      'rediseño sobre código ajeno, eso no es comodidad: es la red de seguridad.',
+
+    integraciones: [
+      { nombre: 'Mercado Pago', detalle: 'Recargas y compra de paquetes con tarjeta.' },
+      { nombre: 'Openpay', detalle: 'Segunda opción de cobro con tarjeta.' },
+      { nombre: 'reCAPTCHA', detalle: 'Protege la consulta pública de líneas por CURP.' },
+    ],
+
     cifras: [
       { valor: '97', etiqueta: 'archivos tocados' },
       { valor: '+26,300', etiqueta: 'líneas agregadas' },
       { valor: '−14,400', etiqueta: 'líneas retiradas' },
       { valor: '2021', etiqueta: 'año del portal original' },
     ],
-    destacados: [
-      'Cobros en línea con Mercado Pago y Openpay: recargas y compra de paquetes con tarjeta.',
-      'Vinculación de líneas por CURP, con reCAPTCHA en la consulta pública.',
-      'Perfil verificado del cliente con INE, CURP y fotografía.',
-      'Facturación con marcado de folios ya facturados y mensajes de error claros.',
-      'Recargas con vigencia por paquete y selección de red para eSIM.',
-      'Preguntas frecuentes con video, carrusel de promociones y menú lateral responsivo.',
-    ],
-    // El sitio está publicado: es la prueba más fuerte del portafolio.
-    // Si prefieres no enlazarlo, se pone en null y desaparece el botón.
+
     enlaceVivo: 'https://abib.com.mx',
   },
+
   {
     slug: 'rifas-qr',
     nombre: 'Sistema de Rifas con QR',
     titulo: 'Control de boletos de punta a punta',
-    papel: 'Proyecto propio, de principio a fin',
+    gancho: 'Boletos impresos con QR que cualquiera puede verificar con la cámara.',
     portada: false,
+    periodo: 'feb 2026 → mar 2026',
+    estado: 'Terminado',
+    cifraTitular: { valor: 'QR', etiqueta: 'verificación pública' },
+
     resumen:
       'Plataforma para organizar rifas y controlar la venta física de boletos: ' +
       'se generan por lotes, se imprimen en PDF con su código QR y cada boleto ' +
       'se valida escaneándolo. Incluye red de vendedores y corte diario.',
-    periodo: 'feb 2026 → mar 2026',
-    estado: 'Terminado',
-    stack: ['Laravel', 'Blade', 'Tailwind', 'MySQL', 'simple-qrcode', 'dompdf'],
-    cifras: [],
+
     destacados: [
       'Verificación pública: cualquiera escanea el QR de un boleto y confirma en el momento si es legítimo, sin tener cuenta en el sistema.',
       'Impresión masiva en PDF de los boletos de un lote, cada uno con su QR único.',
       'Vendedores con boletos asignados, venta, liberación y corte diario del dinero.',
     ],
+
+    stack: [
+      { nombre: 'Laravel', icono: 'si:laravel' },
+      { nombre: 'Blade', icono: 'si:laravel' },
+      { nombre: 'Tailwind CSS', icono: 'si:tailwindcss' },
+      { nombre: 'MySQL', icono: 'si:mysql' },
+    ],
+
+    porQue:
+      'El problema no era la interfaz, era la confianza: quien compra un boleto ' +
+      'en la calle necesita poder comprobar en tres segundos que no le vendieron ' +
+      'una copia. Por eso todo el peso está en el servidor y la página de ' +
+      'verificación es una sola vista pública, sin sesión y sin instalar nada — ' +
+      'abre con la cámara del celular y responde al instante. dompdf arma los ' +
+      'boletos por lote y simple-qrcode le mete a cada uno su código único.',
+
+    integraciones: [],
+
+    cifras: [],
+
     enlaceVivo: null,
   },
 ] as const;

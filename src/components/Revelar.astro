@@ -23,12 +23,15 @@ const { retraso = 0, clase = '' } = Astro.props;
 </div>
 
 <script>
-  const objetivos = document.querySelectorAll<HTMLElement>('.revelar');
-  const quietito = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function montar() {
+    const objetivos = document.querySelectorAll<HTMLElement>('.revelar:not(.visible)');
+    const quietito = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (quietito || !('IntersectionObserver' in window)) {
-    objetivos.forEach((el) => el.classList.add('visible'));
-  } else {
+    if (quietito || !('IntersectionObserver' in window)) {
+      objetivos.forEach((el) => el.classList.add('visible'));
+      return;
+    }
+
     const observador = new IntersectionObserver(
       (entradas) => {
         for (const entrada of entradas) {
@@ -42,4 +45,7 @@ const { retraso = 0, clase = '' } = Astro.props;
 
     objetivos.forEach((el) => observador.observe(el));
   }
+
+  // Después de navegar, los elementos son nuevos y hay que volver a observarlos.
+  document.addEventListener('astro:page-load', montar);
 </script>
