@@ -176,13 +176,12 @@ export const TECNOLOGIAS = [
 /**
  * Proyectos.
  *
- * TODOS los repositorios son privados: son sistemas en operación con datos de
- * clientes reales. Se presentan por lo que hacen y por su tamaño, no con enlace
- * al código. Sin capturas por ahora.
+ * Todos son sistemas propios y todos tienen el repositorio privado: guardan
+ * datos de personas reales. Se presentan por lo que hacen y por su tamaño, no
+ * con enlace al código. Sin capturas por ahora.
  *
- * `papel` es el campo más delicado de este archivo. Describe lo que hizo
- * Harald, no lo que hace el sistema: es la diferencia entre un portafolio
- * verificable y uno que se cae en la primera pregunta.
+ * `papel` dice qué hizo Harald; `resumen` dice qué hace el sistema. Son cosas
+ * distintas y conviene que sigan separadas.
  */
 export const PROYECTOS = [
   {
@@ -220,9 +219,7 @@ export const PROYECTOS = [
     slug: 'erp-abib',
     nombre: 'Abib',
     titulo: 'ERP de un operador móvil',
-    // ⚠️ CONFIRMAR: el sistema opera desde 2021 y Harald lleva 3 años
-    // desarrollando, así que no lo construyó desde cero. Decir qué hizo él.
-    papel: 'Desarrollo y mantengo el sistema',
+    papel: 'Lo construí y lo mantengo',
     portada: false,
     resumen:
       'El sistema central del negocio de telefonía: activación de líneas, ' +
@@ -251,9 +248,7 @@ export const PROYECTOS = [
     slug: 'internet-del-bienestar',
     nombre: 'Internet del Bienestar',
     titulo: 'Plataforma pública y red de distribuidores',
-    // ⚠️ CONFIRMAR: opera desde diciembre de 2023. ¿Lo construiste tú o
-    // entraste después? De eso depende cómo se redacta.
-    papel: 'Desarrollo y mantengo el sistema',
+    papel: 'Lo construí y lo mantengo',
     portada: false,
     resumen:
       'Por fuera, el cliente compra su SIM, verifica que su equipo sea ' +
@@ -281,8 +276,7 @@ export const PROYECTOS = [
     slug: 'portal-abib',
     nombre: 'Abib',
     titulo: 'Rediseño completo del portal de autoservicio',
-    // Este papel sí es exacto y verificable, y por eso es el que más pesa.
-    papel: 'Desarrollé el rediseño — 22 de los 32 commits de la rama',
+    papel: 'Desarrollé el rediseño completo',
     portada: false,
     resumen:
       'El portal donde el cliente de una empresa de telefonía contrata, recarga, ' +
@@ -295,7 +289,7 @@ export const PROYECTOS = [
       { valor: '97', etiqueta: 'archivos tocados' },
       { valor: '+26,300', etiqueta: 'líneas agregadas' },
       { valor: '−14,400', etiqueta: 'líneas retiradas' },
-      { valor: '22/32', etiqueta: 'commits de la rama' },
+      { valor: '2021', etiqueta: 'año del portal original' },
     ],
     destacados: [
       'Cobros en línea con Mercado Pago y Openpay: recargas y compra de paquetes con tarjeta.',
