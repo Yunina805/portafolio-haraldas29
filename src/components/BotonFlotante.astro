@@ -1,0 +1,133 @@
+---
+/**
+ * Botón flotante de contacto.
+ *
+ * Acompaña al visitante en todo el sitio: por larga que sea la página, la
+ * forma de escribirte siempre está a un toque. Al abrirlo salen dos caminos —
+ * WhatsApp para quien quiere resolver ya, y el centro de contacto para quien
+ * prefiere leer antes de escribir.
+ *
+ * En /contacto no se dibuja: ahí ya estás donde te llevaría. La decisión se
+ * toma al compilar, no con JavaScript, para que no aparezca y desaparezca.
+ */
+import Icono from './Icono.astro';
+import { SITIO } from '../consts';
+
+const wa = `https://wa.me/${SITIO.whatsapp}`;
+const enContacto = Astro.url.pathname.replace(/\/$/, '') === '/contacto';
+---
+
+{
+  !enContacto && (
+    <div
+      id="flotante"
+      class="fixed right-5 bottom-5 z-50 flex flex-col items-end gap-3 sm:right-7 sm:bottom-7"
+      style="padding-bottom:env(safe-area-inset-bottom)"
+    >
+      {/* Las opciones nacen ocultas; las abre el botón de abajo. */}
+      <div id="flotante-opciones" class="flex flex-col items-end gap-2.5" hidden>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-2.5 rounded-xl border border-borde bg-superficie py-3 pr-4 pl-3.5
+                 text-sm font-bold text-tinta shadow-lg hover:border-acento hover:bg-realce"
+        >
+          <Icono nombre="whatsapp-line" clase="size-5 shrink-0 text-acento" />
+          Escríbeme por WhatsApp
+        </a>
+
+        <a
+          href="/contacto"
+          class="flex items-center gap-2.5 rounded-xl border border-borde bg-superficie py-3 pr-4 pl-3.5
+                 text-sm font-bold text-tinta shadow-lg hover:border-acento hover:bg-realce"
+        >
+          <Icono nombre="customer-service-2-line" clase="size-5 shrink-0 text-acento" />
+          Centro de contacto
+        </a>
+      </div>
+
+      <button
+        id="flotante-boton"
+        type="button"
+        class="grid size-14 cursor-pointer place-items-center rounded-2xl bg-acento text-acento-tinta
+               shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95"
+        aria-label="Abrir opciones de contacto"
+        aria-expanded="false"
+        aria-controls="flotante-opciones"
+      >
+        <span data-icono="cerrado" class="grid place-items-center">
+          <Icono nombre="chat-1-line" clase="size-6" />
+        </span>
+        <span data-icono="abierto" class="grid place-items-center" hidden>
+          <Icono nombre="close-line" clase="size-6" />
+        </span>
+      </button>
+    </div>
+  )
+}
+
+<style>
+  /* Las opciones entran empujadas desde abajo. Se apaga con movimiento reducido. */
+  #flotante-opciones > * {
+    animation: subir 220ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  #flotante-opciones > *:nth-child(2) {
+    animation-delay: 45ms;
+  }
+
+  @keyframes subir {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #flotante-opciones > * {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  function montarFlotante() {
+    const caja = document.getElementById('flotante');
+    const boton = document.getElementById('flotante-boton');
+    const opciones = document.getElementById('flotante-opciones');
+    if (!caja || !boton || !opciones) return;
+
+    const iconoCerrado = boton.querySelector<HTMLElement>('[data-icono="cerrado"]');
+    const iconoAbierto = boton.querySelector<HTMLElement>('[data-icono="abierto"]');
+
+    function abrir(si: boolean) {
+      opciones!.hidden = !si;
+      boton!.setAttribute('aria-expanded', String(si));
+      boton!.setAttribute(
+        'aria-label',
+        si ? 'Cerrar opciones de contacto' : 'Abrir opciones de contacto'
+      );
+      iconoCerrado?.toggleAttribute('hidden', si);
+      iconoAbierto?.toggleAttribute('hidden', !si);
+    }
+
+    boton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      abrir(boton.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Tocar fuera o pulsar Escape lo cierra.
+    document.addEventListener('click', (e) => {
+      if (!caja.contains(e.target as Node)) abrir(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (boton.getAttribute('aria-expanded') !== 'true') return;
+      abrir(false);
+      boton.focus();
+    });
+  }
+
+  document.addEventListener('astro:page-load', montarFlotante);
+</script>

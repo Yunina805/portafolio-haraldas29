@@ -26,43 +26,40 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
 
 <Base titulo="">
   <!-- ======================================================== PORTADA -->
-  <section class="contenedor pt-16 pb-20 sm:pt-24 sm:pb-28 lg:pt-32">
+  {/* Todo el hero cabe en la primera pantalla, cifras incluidas: son la prueba
+      que sostiene la confianza y no sirven si hay que hacer scroll para verlas.
+      Por eso son tres grupos de animación y no seis — entran casi juntos. */}
+  <section class="contenedor pt-9 pb-12 sm:pt-12 sm:pb-16 lg:pt-14">
     <Revelar>
       <Rotulo>{SITIO.oficio} · {SITIO.ciudad}</Rotulo>
-    </Revelar>
 
-    <Revelar retraso={80}>
       <h1
-        class="mt-6 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
-               text-tinta sm:text-6xl lg:text-7xl"
+        class="mt-5 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
+               text-tinta sm:text-5xl lg:text-6xl"
       >
         Construyo el sistema que <span class="text-acento">tu negocio</span> necesita
       </h1>
     </Revelar>
 
-    <Revelar retraso={160}>
-      <p class="mt-8 max-w-2xl text-lg leading-relaxed text-cuerpo sm:text-xl">
+    <Revelar retraso={90}>
+      <p class="mt-6 max-w-2xl text-[17px] leading-relaxed text-cuerpo sm:text-lg">
         No vendo plantillas ni temas comprados. Entiendo cómo opera tu negocio y
         construyo exactamente lo que le hace falta — desde una tienda en línea
         hasta el ERP de un proveedor de internet.
       </p>
-    </Revelar>
 
-    <Revelar retraso={240}>
-      <div class="mt-10 flex flex-wrap items-center gap-3">
+      <div class="mt-7 flex flex-wrap items-center gap-3">
         <Boton href="/proyectos" tamano="lg" icono="arrow-right-line" iconoAlFinal>
           Ver proyectos
         </Boton>
-        <Boton href={wa} tamano="lg" variante="contorno" icono="whatsapp-line" externo>
-          Escríbeme por WhatsApp
+        <Boton href="/contacto" tamano="lg" variante="contorno" icono="chat-1-line">
+          Hablemos de tu proyecto
         </Boton>
       </div>
-    </Revelar>
 
-    {/* Los compromisos, arriba. Es lo que un cliente quiere saber antes de
-        escribir, y casi ningún portafolio lo dice. */}
-    <Revelar retraso={300}>
-      <ul class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-apagado">
+      {/* Los compromisos, arriba. Es lo que un cliente quiere saber antes de
+          escribir, y casi ningún portafolio lo dice. */}
+      <ul class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-apagado">
         {
           Object.values(COMPROMISOS).map((c) => (
             <li class="flex items-center gap-2">
@@ -75,16 +72,16 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
     </Revelar>
 
     {/* Sin foto, las cifras verificables son lo que sostiene la confianza */}
-    <Revelar retraso={380}>
-      <dl class="mt-20 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-borde pt-10 lg:grid-cols-4">
+    <Revelar retraso={180}>
+      <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 border-t border-borde pt-7 lg:grid-cols-4">
         {
           CIFRAS.map((c) => (
             <div>
-              <dt class="text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+              <dt class="text-2xl font-extrabold tracking-tight text-tinta sm:text-3xl">
                 {c.valor}
-                {c.unidad && <span class="ml-1.5 text-base font-bold text-tenue">{c.unidad}</span>}
+                {c.unidad && <span class="ml-1.5 text-sm font-bold text-tenue">{c.unidad}</span>}
               </dt>
-              <dd class="mt-2 text-sm text-apagado">{c.detalle}</dd>
+              <dd class="mt-1.5 text-sm text-apagado">{c.detalle}</dd>
             </div>
           ))
         }
@@ -204,12 +201,14 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
     </div>
   </Seccion>
 
-  <!-- ======================================================= CONTACTO -->
-  <Seccion id="contacto" aire="mucho">
+  {/* ====================================================== CONTACTO
+      Cierre de la portada. El detalle completo —vías, qué contarme, preguntas
+      frecuentes— vive en /contacto para no alargar esta página. */}
+  <Seccion id="contacto" aire="normal">
     <Revelar>
       <div
         class="overflow-hidden rounded-2xl border border-borde bg-superficie
-               px-8 py-14 text-center shadow-sm sm:px-12 sm:py-20"
+               px-8 py-14 text-center shadow-sm sm:px-12 sm:py-16"
       >
         <Rotulo>Contacto</Rotulo>
 
@@ -230,13 +229,8 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
           <Boton href={wa} tamano="lg" icono="whatsapp-line" externo>
             Escríbeme por WhatsApp
           </Boton>
-          <Boton
-            href={`mailto:${SITIO.correo}`}
-            tamano="lg"
-            variante="contorno"
-            icono="mail-line"
-          >
-            Mándame un correo
+          <Boton href="/contacto" tamano="lg" variante="contorno" icono="customer-service-2-line">
+            Ver todas las formas de contacto
           </Boton>
         </div>
 

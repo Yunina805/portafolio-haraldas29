@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Encabezado from '../components/Encabezado.astro';
 import PieDePagina from '../components/PieDePagina.astro';
+import BotonFlotante from '../components/BotonFlotante.astro';
 import { SITIO } from '../consts';
 
 interface Props {
@@ -143,5 +144,7 @@ const fichaPersona = {
     </main>
 
     <PieDePagina />
+
+    <BotonFlotante />
   </body>
 </html>

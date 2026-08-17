@@ -28,10 +28,13 @@ const {
   clase = '',
 } = Astro.props;
 
+// El aire es lo que separa un portafolio profesional de uno amateur, pero
+// pasarse lo vuelve una caminata. Estos son los valores del punto medio:
+// se siente holgado sin obligar a hacer scroll para encontrar la siguiente idea.
 const aires = {
-  poco: 'py-14 sm:py-20',
-  normal: 'py-20 sm:py-28 lg:py-32',
-  mucho: 'py-28 sm:py-36 lg:py-44',
+  poco: 'py-10 sm:py-14',
+  normal: 'py-14 sm:py-20 lg:py-24',
+  mucho: 'py-20 sm:py-28 lg:py-32',
 };
 ---
 
@@ -51,7 +54,7 @@ const aires = {
       )
     }
 
-    <div class={rotulo || titulo || entrada ? 'mt-12 sm:mt-16' : ''}>
+    <div class={rotulo || titulo || entrada ? 'mt-10 sm:mt-12' : ''}>
       <slot />
     </div>
   </div>

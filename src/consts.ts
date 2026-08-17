@@ -41,7 +41,84 @@ export const NAVEGACION = [
   { texto: 'Proyectos', href: '/proyectos' },
   { texto: 'Qué construyo', href: '/#servicios' },
   { texto: 'Cómo trabajo', href: '/#proceso' },
-  { texto: 'Contacto', href: '/#contacto' },
+  { texto: 'Contacto', href: '/contacto' },
+] as const;
+
+/**
+ * Qué conviene contar en el primer mensaje.
+ *
+ * Sirve para dos cosas: al cliente le quita el "no sé ni qué escribirle", y a
+ * ti te llega el mensaje con lo necesario para cotizar sin diez idas y vueltas.
+ */
+export const QUE_CONTAR = [
+  {
+    titulo: 'A qué se dedica tu negocio',
+    detalle: 'Con una o dos líneas basta. Lo que necesito entender es cómo opera.',
+    icono: 'store-2-line',
+  },
+  {
+    titulo: 'Qué te está costando trabajo hoy',
+    detalle:
+      'El problema concreto: se pierden los cobros, no sabes qué hay en inventario, ' +
+      'el sistema viejo ya no da.',
+    icono: 'error-warning-line',
+  },
+  {
+    titulo: 'Si ya tienes algo funcionando',
+    detalle: 'Un sistema, una página, hojas de Excel. Todo sirve, y cambia el plan.',
+    icono: 'archive-2-line',
+  },
+  {
+    titulo: 'Para cuándo lo necesitas',
+    detalle: 'Aunque sea aproximado. Si hay una fecha dura, mejor saberlo desde el principio.',
+    icono: 'calendar-check-line',
+  },
+] as const;
+
+/** Las dudas que aparecen siempre. Contestarlas antes de que las pregunten. */
+export const PREGUNTAS = [
+  {
+    pregunta: '¿Cuánto cuesta un sistema?',
+    respuesta:
+      'Depende de qué tan grande sea, y por eso lo primero que hago es la ' +
+      'especificación: un documento con cada módulo, el tiempo y el costo exacto. ' +
+      'Ese documento no tiene costo, y hasta que lo leas y lo firmes no hay ningún ' +
+      'compromiso de tu parte.',
+  },
+  {
+    pregunta: '¿Cuánto tarda?',
+    respuesta:
+      'También sale en la especificación, con fechas. Para darte una idea: una ' +
+      'página institucional son días, un sistema de gestión mediano son semanas, ' +
+      'y un ERP completo son meses. Entrego por partes, así que ves avances desde ' +
+      'el principio y no al final.',
+  },
+  {
+    pregunta: '¿Cómo se paga?',
+    respuesta:
+      '50% al inicio para arrancar y 50% contra entrega, cuando el sistema ya ' +
+      'está funcionando en línea. Nada por adelantado antes de firmar.',
+  },
+  {
+    pregunta: '¿Trabajas fuera de Oaxaca?',
+    respuesta:
+      'Sí, en remoto para todo México. Las juntas para platicar el proyecto y ' +
+      'aclarar dudas las hacemos por Zoom.',
+  },
+  {
+    pregunta: '¿Quién paga el dominio y el hosting?',
+    respuesta:
+      'El dominio se registra a tu nombre y lo pagas tú, porque es tuyo — si algún ' +
+      'día trabajas con alguien más, te lo llevas. Yo me encargo de subir el ' +
+      'proyecto y dejarlo funcionando.',
+  },
+  {
+    pregunta: '¿Y si después necesito algo que no estaba?',
+    respuesta:
+      'Si es una falla del sistema, se corrige sin costo: van 4 meses de soporte ' +
+      'incluidos. Si es una función nueva que no estaba en la especificación, se ' +
+      'cotiza aparte. Lo digo desde el principio para que nadie se lleve sorpresas.',
+  },
 ] as const;
 
 /** Los números que sostienen el portafolio. Verificables, no adjetivos. */

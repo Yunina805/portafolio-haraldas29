@@ -1,0 +1,269 @@
+---
+import Base from '../layouts/Base.astro';
+import Seccion from '../components/Seccion.astro';
+import Tarjeta from '../components/Tarjeta.astro';
+import Icono from '../components/Icono.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Revelar from '../components/Revelar.astro';
+import { COMPROMISOS, PREGUNTAS, PROCESO, QUE_CONTAR, SITIO } from '../consts';
+
+const wa = `https://wa.me/${SITIO.whatsapp}`;
+
+// Los tres primeros pasos: lo que pasa desde que escribes hasta que arrancamos.
+// El resto del proceso vive en la portada y no hace falta repetirlo entero.
+const primerosPasos = PROCESO.slice(0, 3);
+
+const vias = [
+  {
+    titulo: 'WhatsApp',
+    detalle: 'Lo más rápido. Me llega al teléfono y contesto el mismo día hábil.',
+    accion: 'Abrir el chat',
+    href: wa,
+    icono: 'whatsapp-line',
+    externo: true,
+    principal: true,
+  },
+  {
+    titulo: 'Correo',
+    detalle: 'Si prefieres escribir con calma o mandarme archivos y documentos.',
+    accion: SITIO.correo,
+    href: `mailto:${SITIO.correo}`,
+    icono: 'mail-line',
+    externo: false,
+    principal: false,
+  },
+  {
+    titulo: 'Videollamada',
+    detalle:
+      'Cuando el proyecto da para platicarlo. Agendamos por Zoom a la hora que te acomode.',
+    accion: 'Pídemela por WhatsApp',
+    href: wa,
+    icono: 'vidicon-line',
+    externo: true,
+    principal: false,
+  },
+];
+---
+
+<Base
+  titulo="Contacto"
+  descripcion="Cuéntame qué necesita tu negocio. Contesto el mismo día hábil, la especificación y la cotización no tienen costo, y trabajo en remoto para todo México."
+>
+  {/* ------------------------------------------------ ENCABEZADO */}
+  <section class="contenedor pt-12 pb-2 sm:pt-20">
+    <Revelar>
+      <Rotulo>Contacto</Rotulo>
+
+      <h1
+        class="mt-5 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
+               text-tinta sm:text-6xl"
+      >
+        Hablemos de <span class="text-acento">tu proyecto</span>
+      </h1>
+    </Revelar>
+
+    <Revelar retraso={90}>
+      <p class="mt-6 max-w-2xl text-[17px] leading-relaxed text-cuerpo sm:text-lg">
+        No necesitas tenerlo todo claro para escribirme. Con que me cuentes qué
+        hace tu negocio y qué te está costando trabajo, yo me encargo de
+        convertirlo en un plan con módulos, tiempo y costo.
+      </p>
+
+      <ul class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-apagado">
+        {
+          Object.values(COMPROMISOS).map((c) => (
+            <li class="flex items-center gap-2">
+              <Icono nombre="check-line" clase="size-4 shrink-0 text-acento" />
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+    </Revelar>
+  </section>
+
+  {/* ------------------------------------------------------- VÍAS */}
+  <Seccion aire="poco">
+    <div class="grid gap-6 md:grid-cols-3">
+      {
+        vias.map((v, i) => (
+          <Revelar retraso={i * 80}>
+            <a
+              href={v.href}
+              target={v.externo ? '_blank' : undefined}
+              rel={v.externo ? 'noopener noreferrer' : undefined}
+              class:list={[
+                'group flex h-full flex-col rounded-2xl border p-8 shadow-sm',
+                'transition-[transform,box-shadow,border-color] duration-200',
+                'hover:-translate-y-1 hover:shadow-lg',
+                v.principal
+                  ? 'border-acento bg-acento-tenue'
+                  : 'border-borde bg-superficie hover:border-acento',
+              ]}
+            >
+              <span
+                class:list={[
+                  'grid size-12 place-items-center rounded-xl',
+                  v.principal ? 'bg-acento text-acento-tinta' : 'bg-acento-tenue text-acento',
+                ]}
+              >
+                <Icono nombre={v.icono} clase="size-6" />
+              </span>
+
+              <h2 class="mt-6 text-xl font-bold tracking-tight text-tinta">{v.titulo}</h2>
+              <p class="mt-3 text-[15px] leading-relaxed text-apagado">{v.detalle}</p>
+
+              <div class="grow" />
+
+              <span class="mt-6 flex items-center gap-1.5 text-sm font-bold break-all text-acento">
+                {v.accion}
+                <Icono
+                  nombre="arrow-right-line"
+                  clase="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </span>
+            </a>
+          </Revelar>
+        ))
+      }
+    </div>
+  </Seccion>
+
+  {/* --------------------------------------------- QUÉ CONTARME */}
+  <Seccion
+    rotulo="Antes de escribir"
+    titulo="Qué me ayuda saber desde el primer mensaje"
+    entrada="No es un requisito: escríbeme aunque sólo tengas la idea. Pero si me cuentas esto de entrada, te puedo dar una respuesta útil en el primer mensaje en vez de en el quinto."
+    aire="normal"
+  >
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        QUE_CONTAR.map((q, i) => (
+          <Revelar retraso={(i % 2) * 80}>
+            <Tarjeta relleno="lg" clase="h-full">
+              <span class="grid size-11 place-items-center rounded-xl bg-acento-tenue">
+                <Icono nombre={q.icono} clase="size-5 text-acento" />
+              </span>
+              <h3 class="mt-6 text-lg font-bold tracking-tight text-tinta">{q.titulo}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed text-apagado">{q.detalle}</p>
+            </Tarjeta>
+          </Revelar>
+        ))
+      }
+    </div>
+  </Seccion>
+
+  {/* ------------------------------------------- QUÉ PASA DESPUÉS */}
+  <Seccion
+    rotulo="Qué pasa después"
+    titulo="De tu mensaje al arranque, en tres pasos"
+    entrada="Sin costo y sin compromiso hasta que firmes. Si la especificación no te convence, ahí se queda y no debes nada."
+    aire="normal"
+  >
+    <ol class="grid gap-6 md:grid-cols-3">
+      {
+        primerosPasos.map((paso, i) => (
+          <Revelar retraso={i * 80}>
+            <li class="flex h-full flex-col rounded-xl border border-borde bg-superficie p-7 shadow-sm">
+              <span
+                class="grid size-10 shrink-0 place-items-center rounded-xl bg-acento
+                       text-sm font-extrabold text-acento-tinta tabular-nums"
+                aria-hidden="true"
+              >
+                {i + 1}
+              </span>
+              <h3 class="mt-6 text-base font-bold tracking-tight text-tinta">{paso.titulo}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed text-apagado">{paso.detalle}</p>
+            </li>
+          </Revelar>
+        ))
+      }
+    </ol>
+  </Seccion>
+
+  {/* --------------------------------------------------- PREGUNTAS */}
+  <Seccion
+    rotulo="Preguntas frecuentes"
+    titulo="Lo que casi siempre me preguntan"
+    aire="normal"
+  >
+    <div class="mx-auto max-w-3xl space-y-3">
+      {
+        PREGUNTAS.map((p, i) => (
+          <Revelar retraso={Math.min(i, 3) * 60}>
+            <details class="group rounded-xl border border-borde bg-superficie px-6 shadow-sm">
+              <summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 py-5
+                       text-[15px] font-bold text-tinta marker:hidden"
+              >
+                {p.pregunta}
+                <Icono
+                  nombre="add-line"
+                  clase="size-5 shrink-0 text-acento transition-transform duration-200 group-open:rotate-45"
+                />
+              </summary>
+              <p class="pb-6 text-[15px] leading-relaxed text-apagado">{p.respuesta}</p>
+            </details>
+          </Revelar>
+        ))
+      }
+    </div>
+  </Seccion>
+
+  {/* ----------------------------------------------------- CIERRE */}
+  <Seccion aire="poco">
+    <Revelar>
+      <div
+        class="overflow-hidden rounded-2xl border border-borde bg-superficie
+               px-8 py-14 text-center shadow-sm sm:px-12 sm:py-16"
+      >
+        <h2 class="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+          ¿Empezamos?
+        </h2>
+        <p class="mx-auto mt-5 max-w-lg text-[15px] leading-relaxed text-apagado">
+          Un mensaje de dos líneas es suficiente para arrancar la conversación.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={wa}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-acento px-7
+                   text-[15px] font-bold text-acento-tinta shadow-sm hover:bg-acento-vivo"
+          >
+            <Icono nombre="whatsapp-line" clase="size-5" />
+            Escríbeme por WhatsApp
+          </a>
+          <a
+            href={`mailto:${SITIO.correo}`}
+            class="inline-flex h-13 items-center justify-center gap-2 rounded-xl border
+                   border-borde-fuerte bg-superficie px-7 text-[15px] font-bold text-tinta
+                   hover:border-tenue hover:bg-realce"
+          >
+            <Icono nombre="mail-line" clase="size-5" />
+            Mándame un correo
+          </a>
+        </div>
+
+        <ul
+          class="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3
+                 border-t border-borde pt-8 text-sm text-tenue"
+        >
+          <li class="flex items-center gap-2">
+            <Icono nombre="map-pin-line" clase="size-4 shrink-0" />
+            {SITIO.ciudad}
+          </li>
+          <li class="flex items-center gap-2">
+            <Icono nombre="global-line" clase="size-4 shrink-0" />
+            {SITIO.cobertura}
+          </li>
+          <li class="flex items-center gap-2">
+            <Icono nombre="time-line" clase="size-4 shrink-0" />
+            Lunes a viernes
+          </li>
+        </ul>
+      </div>
+    </Revelar>
+  </Seccion>
+</Base>
