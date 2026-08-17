@@ -13,8 +13,36 @@ interface Props {
 
 const { titulo, descripcion = SITIO.descripcion, sinIndexar = false } = Astro.props;
 
-const tituloCompleto = titulo ? `${titulo} · ${SITIO.nombreCorto}` : SITIO.nombre;
+const tituloCompleto = titulo
+  ? `${titulo} · ${SITIO.nombreCorto}`
+  : `${SITIO.nombre} — ${SITIO.oficio} en Oaxaca`;
+
 const canonica = new URL(Astro.url.pathname, Astro.site);
+
+// La imagen de vista previa TIENE que ser una URL absoluta: WhatsApp, Facebook
+// y LinkedIn la descargan desde su propio servidor, no desde el navegador del
+// visitante. Sale de `site` en astro.config.mjs — mientras ese dominio sea el
+// de relleno, la tarjeta va a salir sin imagen.
+const imagenOg = new URL('/og.png', Astro.site);
+
+// Ficha para buscadores: quién es, qué hace y dónde. Es lo que permite que
+// Google muestre algo mejor que un título azul.
+const fichaPersona = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITIO.nombre,
+  jobTitle: SITIO.oficio,
+  url: Astro.site?.toString(),
+  email: `mailto:${SITIO.correo}`,
+  sameAs: [SITIO.github],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Oaxaca de Juárez',
+    addressRegion: 'Oaxaca',
+    addressCountry: 'MX',
+  },
+  knowsAbout: ['Laravel', 'Livewire', 'PHP', 'Tailwind CSS', 'MySQL', 'Angular'],
+};
 ---
 
 <!doctype html>
@@ -29,21 +57,41 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonica} />
     {sinIndexar && <meta name="robots" content="noindex, nofollow" />}
 
-    <!-- Color de la barra del navegador en celular. El script de abajo lo ajusta
-         al tema real antes de que se vea nada. -->
+    {/* Color de la barra del navegador en celular. El script de abajo lo ajusta
+        al tema real antes de que se vea nada. */}
     <meta name="theme-color" id="color-tema" content="#f0f1f3" />
 
-    <!-- TODO(Fase 2): favicon propio y tarjeta Open Graph.
-         Sin og:image, la liga compartida por WhatsApp sale sin imagen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!--
-      Tema antes de pintar. Va aquí, en el <head> y sin type="module", para que
+    {/* Cómo se ve la liga al compartirla, que es el caso de uso principal. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content={SITIO.nombre} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagenOg} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITIO.nombre}, ${SITIO.oficio}`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={tituloCompleto} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagenOg} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(fichaPersona)} />
+
+    {/*
+      Tema antes de pintar. Va aquí, en el head y sin type="module", para que
       corra de forma síncrona: si esto se ejecutara al final del documento,
       quien tiene modo oscuro vería un destello blanco en cada carga.
 
       También marca <html class="js">, que es lo que permite que las animaciones
       de aparición sólo escondan contenido cuando hay JavaScript para revelarlo.
-    -->
+    */}
     <script is:inline>
       (() => {
         const raiz = document.documentElement;

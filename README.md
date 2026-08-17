@@ -17,7 +17,13 @@ npm run build    # genera dist/
 npm run preview  # sirve dist/ como en producción
 ```
 
-Requiere Node 18 o superior.
+Requiere Node 20 o superior (la versión de despliegue está fijada en `.nvmrc`).
+
+El favicon y la imagen de vista previa se generan a mano y se versionan:
+
+```bash
+node scripts/generar-imagenes.mjs
+```
 
 ---
 

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /sistema
+
+# El muestrario del sistema es referencia interna, no contenido del portafolio.

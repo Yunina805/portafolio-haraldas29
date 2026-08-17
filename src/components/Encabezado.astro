@@ -9,13 +9,12 @@ import { NAVEGACION, SITIO } from '../consts';
          supports-[not(backdrop-filter:blur(0))]:bg-fondo"
 >
   <div class="contenedor flex h-16 items-center justify-between gap-4 sm:h-18">
-    <!-- Monograma. Mientras no haya foto, esta es la marca. -->
+    {/* Sin foto, el monograma es la marca — y va en verde, que es el color. */}
     <a
       href="/"
       class="group flex items-center gap-3"
       aria-label={`${SITIO.nombre} — inicio`}
     >
-      <!-- Sin foto, el monograma es la marca — y va en verde, que es el color. -->
       <span
         class="grid size-9 place-items-center rounded-xl bg-acento text-[13px]
                font-extrabold tracking-tight text-acento-tinta"
@@ -63,7 +62,7 @@ import { NAVEGACION, SITIO } from '../consts';
     </div>
   </div>
 
-  <!-- Menú móvil -->
+  {/* Menú móvil */}
   <nav
     id="menu-movil"
     class="hidden border-t border-borde bg-superficie md:hidden"
