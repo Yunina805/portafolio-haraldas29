@@ -43,8 +43,7 @@ const activo = (href: string) => {
                 {/* La marca del activo: una línea corta abajo, no un bloque
                     de color. Se nota lo justo. */}
                 <span
-                  class="absolute inset-x-3 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full
-                         bg-acento transition-transform duration-200"
+                  class="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-acento"
                   aria-hidden="true"
                   data-subrayado
                 />
@@ -136,9 +135,8 @@ const activo = (href: string) => {
 
   <aside
     id="panel-menu"
-    class="absolute inset-y-0 right-0 flex w-[min(20rem,85vw)] translate-x-full flex-col
-           border-l border-borde bg-superficie shadow-2xl transition-transform duration-300
-           ease-[cubic-bezier(0.32,0.72,0,1)]"
+    class="absolute inset-y-0 right-0 flex w-[min(20rem,85vw)] flex-col border-l
+           border-borde bg-superficie shadow-2xl"
     role="dialog"
     aria-modal="true"
     aria-label="Menú"
@@ -212,12 +210,32 @@ const activo = (href: string) => {
 </div>
 
 <style>
-  /* El subrayado del activo, y el que sigue al puntero */
-  a[aria-current='page'] [data-subrayado] {
-    transform: scaleX(1);
+  /* OJO: Tailwind 4 compila translate-x-full y scale-x-0 a las propiedades
+     `translate` y `scale`, NO a `transform`. Sobrescribir `transform` no las
+     anula —son propiedades distintas y las dos se aplican—, así que aquí se
+     usan las mismas que usa Tailwind y el estado cerrado se declara acá. */
+
+  /* Subrayado del enlace: crece del centro hacia los lados */
+  [data-subrayado] {
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 200ms ease;
   }
-  a:hover [data-subrayado] {
-    transform: scaleX(1);
+  a:hover [data-subrayado],
+  a[aria-current='page'] [data-subrayado] {
+    scale: 1 1;
+  }
+
+  /* Panel móvil: entra desde la derecha */
+  #panel-menu {
+    translate: 100% 0;
+    transition: translate 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  #capa-menu.abierto #panel-menu {
+    translate: 0 0;
+  }
+  #capa-menu.abierto #velo-menu {
+    opacity: 1;
   }
 
   /* Una vez que bajas, el encabezado se despega del contenido */
@@ -226,15 +244,8 @@ const activo = (href: string) => {
     box-shadow: 0 1px 3px rgb(0 0 0 / 0.04);
   }
 
-  /* Abierto */
-  #capa-menu.abierto #velo-menu {
-    opacity: 1;
-  }
-  #capa-menu.abierto #panel-menu {
-    transform: translateX(0);
-  }
-
   @media (prefers-reduced-motion: reduce) {
+    [data-subrayado],
     #velo-menu,
     #panel-menu {
       transition: none;

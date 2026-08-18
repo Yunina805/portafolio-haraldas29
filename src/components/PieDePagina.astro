@@ -1,69 +1,114 @@
 ---
+/**
+ * Pie de página.
+ *
+ * Además de cerrar, hace dos trabajos: le da a quien llegó hasta abajo una
+ * salida a cualquier parte del sitio, y enlaza los cinco proyectos desde todas
+ * las páginas —que es lo que ayuda a que Google los encuentre y los indexe.
+ */
 import Icono from './Icono.astro';
 import LogoAllsan from './LogoAllsan.astro';
-import { SITIO } from '../consts';
+import { COMPROMISOS, NAVEGACION, PROYECTOS, REDES, SITIO } from '../consts';
 
 const anio = new Date().getFullYear();
-
-// Sólo se muestran los contactos que ya tienen dato. Un enlace vacío o un
-// "próximamente" hace más daño que no tener la sección.
-const contactos = [
-  SITIO.correo && {
-    texto: SITIO.correo,
-    href: `mailto:${SITIO.correo}`,
-    icono: 'mail-line',
-    externo: false,
-  },
-  SITIO.whatsapp && {
-    texto: 'WhatsApp',
-    href: `https://wa.me/${SITIO.whatsapp}`,
-    icono: 'whatsapp-line',
-    externo: true,
-  },
-  SITIO.github && {
-    texto: 'GitHub',
-    href: SITIO.github,
-    icono: 'github-fill',
-    externo: true,
-  },
-].filter(Boolean) as { texto: string; href: string; icono: string; externo: boolean }[];
 ---
 
 <footer class="border-t border-borde bg-superficie">
-  <div class="contenedor py-12 sm:py-16">
-    <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-      <div>
-        <LogoAllsan clase="h-8 w-auto" />
-        <p class="mt-4 text-sm font-extrabold tracking-tight text-tinta">{SITIO.nombre}</p>
-        <p class="mt-1.5 text-sm text-tenue">
-          {SITIO.oficio}{SITIO.ciudad && ` · ${SITIO.ciudad}`}
-        </p>
-      </div>
+  <div class="contenedor py-14 sm:py-16">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+      {/* --------------------------------------------------- MARCA */}
+      <div class="sm:col-span-2 lg:col-span-4">
+        <LogoAllsan clase="h-9 w-auto" />
 
-      {
-        contactos.length > 0 && (
-          <ul class="flex flex-wrap items-center gap-x-5 gap-y-3">
-            {contactos.map((c) => (
+        <p class="mt-5 max-w-xs text-sm leading-relaxed text-apagado">
+          Sistemas de gestión, tiendas en línea e integraciones, a la medida de
+          cómo opera tu negocio.
+        </p>
+
+        <ul class="mt-6 flex items-center gap-2">
+          {
+            REDES.map((r) => (
               <li>
                 <a
-                  href={c.href}
-                  target={c.externo ? '_blank' : undefined}
-                  rel={c.externo ? 'noopener noreferrer' : undefined}
-                  class="inline-flex items-center gap-2 text-sm font-semibold text-apagado hover:text-tinta"
+                  href={r.href}
+                  target={r.externo ? '_blank' : undefined}
+                  rel={r.externo ? 'noopener noreferrer' : undefined}
+                  class="grid size-11 place-items-center rounded-xl border border-borde
+                         bg-fondo text-apagado hover:border-acento hover:text-acento"
+                  aria-label={r.nombre}
                 >
-                  <Icono nombre={c.icono} clase="size-[18px]" />
-                  {c.texto}
+                  <Icono nombre={r.icono} clase="size-5" />
                 </a>
               </li>
-            ))}
-          </ul>
-        )
-      }
+            ))
+          }
+        </ul>
+      </div>
+
+      {/* ----------------------------------------------- NAVEGACIÓN */}
+      <nav class="lg:col-span-2" aria-label="Secciones del sitio">
+        <p class="rotulo">Sitio</p>
+        <ul class="mt-4 space-y-2.5">
+          {
+            NAVEGACION.map((e) => (
+              <li>
+                <a href={e.href} class="text-sm text-apagado hover:text-tinta">
+                  {e.texto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* ------------------------------------------------ PROYECTOS */}
+      <nav class="lg:col-span-3" aria-label="Proyectos">
+        <p class="rotulo">Proyectos</p>
+        <ul class="mt-4 space-y-2.5">
+          {
+            PROYECTOS.map((p) => (
+              <li>
+                <a
+                  href={`/proyectos/${p.slug}`}
+                  class="text-sm text-apagado hover:text-tinta"
+                >
+                  {p.nombreCorto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* ------------------------------------------------- CONTACTO */}
+      <div class="lg:col-span-3">
+        <p class="rotulo">Contacto</p>
+
+        <ul class="mt-4 space-y-3 text-sm text-apagado">
+          <li>
+            <a href={`mailto:${SITIO.correo}`} class="break-all hover:text-tinta">
+              {SITIO.correo}
+            </a>
+          </li>
+          <li class="flex items-start gap-2">
+            <Icono nombre="map-pin-line" clase="mt-0.5 size-4 shrink-0 text-tenue" />
+            <span>{SITIO.ciudad}<br />{SITIO.cobertura}</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <Icono nombre="time-line" clase="mt-0.5 size-4 shrink-0 text-acento" />
+            <span>{COMPROMISOS.respuesta}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <p class="mt-10 border-t border-borde pt-6 text-xs text-tenue">
-      © {anio} {SITIO.marca} — {SITIO.nombre}. Sitio construido con Astro y
-      Tailwind CSS.
-    </p>
+    {/* ------------------------------------------------------ BARRA */}
+    <div
+      class="mt-12 flex flex-col gap-3 border-t border-borde pt-6 text-xs text-tenue
+             sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {anio} {SITIO.marca} — {SITIO.nombre}</p>
+      <p>Construido con Astro y Tailwind CSS</p>
+    </div>
   </div>
 </footer>
