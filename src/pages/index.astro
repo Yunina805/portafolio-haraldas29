@@ -50,6 +50,29 @@ const barras = [...conteo.values()].sort(
   (a, b) => b.n - a.n || a.nombre.localeCompare(b.nombre)
 );
 
+/**
+ * Los pasos agrupados por fase, conservando su número global (01–06).
+ * El corte lo marcan los datos, no el diseño: si mañana entra un paso nuevo
+ * antes de la firma, se acomoda en la banda que le toca.
+ */
+const numerados = PROCESO.map((paso, i) => ({ ...paso, n: i + 1 }));
+
+const FASES = [
+  {
+    etiqueta: 'Antes de firmar',
+    insignia: 'No te cuesta nada',
+    detalle:
+      'Si la especificación no te convence, ahí se queda y no me debes nada.',
+    pasos: numerados.filter((p) => p.fase === 'antes'),
+  },
+  {
+    etiqueta: 'Ya trabajando',
+    insignia: null,
+    detalle: null,
+    pasos: numerados.filter((p) => p.fase === 'durante'),
+  },
+];
+
 // Servicios de terceros distintos con los que hablan los sistemas.
 const integraciones = [
   ...new Set(PROYECTOS.flatMap((p) => p.integraciones.map((i) => i.nombre))),
@@ -259,75 +282,77 @@ const integraciones = [
   </Seccion>
 
   {/* ======================================================== PROCESO
-      Una secuencia no se lee en rejilla: se lee en línea. Y el dato que más
-      vende estaba escondido dentro de los párrafos —que hasta la firma no se
-      paga nada—, así que aquí se saca a la superficie con una parada en medio. */}
+      Dos bandas de tres pasos. La división no es decorativa: arriba va todo
+      lo que pasa ANTES de firmar y no le cuesta nada al cliente, abajo va el
+      trabajo ya pagado. Ese corte era el argumento más fuerte de la sección
+      y estaba enterrado dentro de los párrafos. */}
   <Seccion
     id="proceso"
     rotulo="Cómo trabajo"
     titulo="Sabes el alcance, el tiempo y el costo antes de firmar"
     entrada="Aprendí esto por experiencia: cuando el proyecto no está escrito desde el principio, crece a media obra y alguien termina perdiendo. Por eso todo queda en un documento antes de empezar."
   >
-    <ol class="mx-auto max-w-3xl">
+    <div class="space-y-12">
       {
-        PROCESO.map((paso, i) => {
-          const ultimo = i === PROCESO.length - 1;
-          const cambiaFase = i > 0 && paso.fase !== PROCESO[i - 1].fase;
-          return (
-            <>
-              {/* La parada entre la firma y el trabajo: aquí es donde el
-                  visitante entiende que no arriesga nada por preguntar. */}
-              {cambiaFase && (
-                <li class="relative list-none pl-16 sm:pl-20">
-                  <Revelar>
-                    <div class="mb-10 flex items-start gap-3 rounded-2xl border border-acento/25 bg-acento-tenue p-5 sm:p-6">
-                      <Icono nombre="shield-check-line" clase="mt-0.5 size-5 shrink-0 text-acento" />
-                      <p class="text-[15px] leading-relaxed text-cuerpo">
-                        <strong class="font-extrabold text-tinta">
-                          Hasta aquí no has pagado nada.
-                        </strong>{' '}
-                        Si la especificación no te convence, ahí se queda y no me
-                        debes nada.
-                      </p>
+        FASES.map((fase) => (
+          <div>
+            <Revelar>
+              <div class="flex items-center gap-3">
+                <p class="rotulo shrink-0">{fase.etiqueta}</p>
+                {fase.insignia && (
+                  <span class="shrink-0 rounded-lg bg-acento-tenue px-2.5 py-1 text-[11px] font-extrabold text-acento">
+                    {fase.insignia}
+                  </span>
+                )}
+                <span class="h-px flex-1 bg-borde" aria-hidden="true" />
+              </div>
+
+              {fase.detalle && (
+                <p class="mt-3 max-w-2xl text-[15px] leading-relaxed text-apagado">
+                  {fase.detalle}
+                </p>
+              )}
+            </Revelar>
+
+            <ol class="mt-6 grid gap-6 md:grid-cols-3">
+              {fase.pasos.map((paso, i) => (
+                <li class="relative">
+                  {/* La flecha vive en el hueco entre tarjetas y sólo aparece
+                      cuando están en fila; apiladas, el orden ya se entiende. */}
+                  {i > 0 && (
+                    <Icono
+                      nombre="arrow-right-s-line"
+                      clase="absolute top-1/2 -left-[1.375rem] hidden size-5 -translate-y-1/2 text-tenue md:block"
+                    />
+                  )}
+
+                  <Revelar retraso={i * 80} clase="h-full">
+                    <div class="flex h-full flex-col rounded-xl border border-borde bg-superficie p-6 shadow-sm">
+                      <div class="flex items-start justify-between gap-4">
+                        <span class="grid size-11 place-items-center rounded-xl bg-acento-tenue">
+                          <Icono nombre={paso.icono} clase="size-5 text-acento" />
+                        </span>
+                        <span
+                          class="text-2xl font-extrabold tracking-tight text-borde-fuerte tabular-nums"
+                          aria-hidden="true"
+                        >
+                          {String(paso.n).padStart(2, '0')}
+                        </span>
+                      </div>
+
+                      <h3 class="mt-5 text-base font-bold tracking-tight text-tinta">
+                        {paso.titulo}
+                      </h3>
+                      <p class="mt-2.5 text-[15px] leading-relaxed text-apagado">{paso.detalle}</p>
                     </div>
                   </Revelar>
                 </li>
-              )}
-
-              <li class="relative list-none pl-16 sm:pl-20">
-                {/* El hilo que une los pasos. Se dibuja hacia abajo cuando el
-                    paso entra en pantalla, así que la línea avanza contigo. */}
-                {!ultimo && (
-                  <span
-                    class="hilo-paso absolute top-12 left-[22px] w-px bg-borde sm:top-14 sm:left-[26px]"
-                    style="bottom:-0.5rem"
-                    aria-hidden="true"
-                  />
-                )}
-
-                <Revelar clase="pb-10">
-                  <span
-                    class="absolute top-0 left-0 grid size-11 place-items-center rounded-2xl
-                           border border-borde bg-superficie shadow-sm sm:size-13"
-                    aria-hidden="true"
-                  >
-                    <Icono nombre={paso.icono} clase="size-5 text-acento" />
-                  </span>
-
-                  <p class="rotulo pt-1">Paso {String(i + 1).padStart(2, '0')}</p>
-
-                  <h3 class="mt-2.5 text-xl font-extrabold tracking-tight text-tinta sm:text-2xl">
-                    {paso.titulo}
-                  </h3>
-
-                  <p class="mt-3 text-[15px] leading-relaxed text-apagado">{paso.detalle}</p>
-                </Revelar>
-              </li>
-            </>
-          );
-        })
+              ))}
+            </ol>
+          </div>
+        ))
       }
-    </ol>
+    </div>
   </Seccion>
 
   {/* ====================================================== CONTACTO
