@@ -2,115 +2,322 @@
 import AlternarTema from './AlternarTema.astro';
 import Icono from './Icono.astro';
 import LogoAllsan from './LogoAllsan.astro';
-import { NAVEGACION, SITIO } from '../consts';
+import { NAVEGACION, REDES, SITIO } from '../consts';
+
+// Marcar en qué página estás es de las cosas que más se extrañan sin darse
+// cuenta: sin esto el menú se ve igual estés donde estés.
+const aqui = Astro.url.pathname.replace(/\/$/, '') || '/';
+const activo = (href: string) => {
+  const ruta = href.split('#')[0].replace(/\/$/, '') || '/';
+  return ruta === '/' ? aqui === '/' : aqui.startsWith(ruta);
+};
+
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-borde bg-fondo/80 backdrop-blur-lg
+  id="encabezado"
+  class="sticky top-0 z-50 border-b border-transparent bg-fondo/80 backdrop-blur-lg
+         transition-[border-color,box-shadow] duration-300
          supports-[not(backdrop-filter:blur(0))]:bg-fondo"
 >
   <div class="contenedor flex h-16 items-center justify-between gap-4 sm:h-18">
-    {/* El logo completo también en celular: a h-8 mide 91 px de ancho y cabe
-        de sobra. Meter además la variante de sólo icono duplicaría los trazos
-        en el HTML para esconder uno de los dos con CSS. */}
-    <a href="/" class="flex items-center" aria-label={`${SITIO.marca} — inicio`}>
+    {/* El logo completo también en celular: a h-8 mide 91 px y cabe de sobra. */}
+    <a href="/" class="shrink-0" aria-label={`${SITIO.marca} — inicio`}>
       <LogoAllsan clase="h-8 w-auto sm:h-9" titulo={null} />
     </a>
 
-    <div class="flex items-center gap-2">
-      <nav class="hidden md:block" aria-label="Principal">
-        <ul class="flex items-center gap-1">
-          {
-            NAVEGACION.map((enlace) => (
-              <li>
-                <a
-                  href={enlace.href}
-                  class="rounded-lg px-3 py-2 text-sm font-semibold text-apagado
-                         hover:bg-realce hover:text-tinta"
-                >
-                  {enlace.texto}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+    {/* ------------------------------------------------- ESCRITORIO */}
+    <nav class="hidden lg:block" aria-label="Principal">
+      <ul class="flex items-center gap-1">
+        {
+          NAVEGACION.map((e) => (
+            <li>
+              <a
+                href={e.href}
+                aria-current={activo(e.href) ? 'page' : undefined}
+                class="relative rounded-lg px-3 py-2 text-sm font-semibold text-apagado
+                       transition-colors hover:text-tinta
+                       aria-[current=page]:text-tinta"
+              >
+                {e.texto}
+                {/* La marca del activo: una línea corta abajo, no un bloque
+                    de color. Se nota lo justo. */}
+                <span
+                  class="absolute inset-x-3 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full
+                         bg-acento transition-transform duration-200"
+                  aria-hidden="true"
+                  data-subrayado
+                />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
 
-      <span class="mx-1 hidden h-6 w-px bg-borde md:block" aria-hidden="true"></span>
+    <div class="flex items-center gap-2">
+      {/* Redes, sólo en pantallas grandes: en celular van en el panel */}
+      <ul class="hidden items-center gap-1 lg:flex">
+        {
+          REDES.filter((r) => r.nombre !== 'Correo').map((r) => (
+            <li>
+              <a
+                href={r.href}
+                target={r.externo ? '_blank' : undefined}
+                rel={r.externo ? 'noopener noreferrer' : undefined}
+                class="grid size-11 place-items-center rounded-xl text-apagado
+                       hover:bg-realce hover:text-tinta"
+                aria-label={r.nombre}
+              >
+                <Icono nombre={r.icono} clase="size-[18px]" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <span class="mx-1 hidden h-6 w-px bg-borde lg:block" aria-hidden="true"></span>
 
       <AlternarTema />
+
+      {/* La acción principal, siempre visible en escritorio */}
+      <a
+        href="/contacto"
+        class="hidden h-11 items-center rounded-xl bg-acento px-5 text-sm font-bold
+               text-acento-tinta shadow-sm hover:bg-acento-vivo lg:inline-flex"
+      >
+        Hablemos
+      </a>
 
       <button
         id="abrir-menu"
         type="button"
         class="grid size-11 place-items-center rounded-xl border border-borde bg-superficie
-               text-apagado hover:bg-realce hover:text-tinta cursor-pointer md:hidden"
+               text-apagado hover:bg-realce hover:text-tinta cursor-pointer lg:hidden"
         aria-label="Abrir menú"
         aria-expanded="false"
-        aria-controls="menu-movil"
+        aria-controls="panel-menu"
       >
-        <Icono nombre="menu-line" clase="size-[18px]" />
+        <Icono nombre="menu-line" clase="size-5" />
       </button>
     </div>
   </div>
-
-  {/* Menú móvil */}
-  <nav
-    id="menu-movil"
-    class="hidden border-t border-borde bg-superficie md:hidden"
-    aria-label="Principal (móvil)"
-  >
-    <ul class="contenedor flex flex-col gap-1 py-4">
-      {
-        NAVEGACION.map((enlace) => (
-          <li>
-            <a
-              href={enlace.href}
-              class="block rounded-lg px-3 py-3 text-[15px] font-semibold text-cuerpo
-                     hover:bg-realce hover:text-tinta"
-            >
-              {enlace.texto}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
 </header>
 
-<script>
-  function cerrarMenu() {
-    document.getElementById('menu-movil')?.classList.add('hidden');
-    const boton = document.getElementById('abrir-menu');
-    boton?.setAttribute('aria-expanded', 'false');
-    boton?.setAttribute('aria-label', 'Abrir menú');
+{/* Sin JavaScript el panel no abre, así que los enlaces salen aquí en una
+    tira. Sólo se ve cuando falta el JS: la regla vive en global.css. */}
+<nav id="nav-respaldo" class="hidden border-b border-borde bg-superficie" aria-label="Principal (sin JavaScript)">
+  <ul class="contenedor flex flex-wrap items-center gap-x-1 gap-y-1 py-3">
+    {
+      NAVEGACION.map((e) => (
+        <li>
+          <a
+            href={e.href}
+            class="block rounded-lg px-3 py-2 text-sm font-semibold text-apagado hover:bg-realce hover:text-tinta"
+          >
+            {e.texto}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+{/* ============================================================ PANEL MÓVIL
+    Entra deslizándose desde la derecha; lo que queda a la izquierda se
+    difumina. El fondo difuminado no es adorno: separa el panel del contenido
+    y evita que se lea a través de él. */}
+<div id="capa-menu" class="fixed inset-0 z-60 lg:hidden" hidden>
+  <div
+    id="velo-menu"
+    class="absolute inset-0 bg-fondo/60 opacity-0 backdrop-blur-md transition-opacity duration-300"
+  >
+  </div>
+
+  <aside
+    id="panel-menu"
+    class="absolute inset-y-0 right-0 flex w-[min(20rem,85vw)] translate-x-full flex-col
+           border-l border-borde bg-superficie shadow-2xl transition-transform duration-300
+           ease-[cubic-bezier(0.32,0.72,0,1)]"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menú"
+  >
+    <div class="flex h-16 shrink-0 items-center justify-between border-b border-borde px-6 sm:h-18">
+      <LogoAllsan clase="h-7 w-auto" titulo={null} />
+      <button
+        id="cerrar-menu"
+        type="button"
+        class="grid size-11 place-items-center rounded-xl text-apagado hover:bg-realce
+               hover:text-tinta cursor-pointer"
+        aria-label="Cerrar menú"
+      >
+        <Icono nombre="close-line" clase="size-5" />
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-4 py-6" aria-label="Principal (móvil)">
+      <ul class="flex flex-col gap-1">
+        {
+          NAVEGACION.map((e) => (
+            <li>
+              <a
+                href={e.href}
+                aria-current={activo(e.href) ? 'page' : undefined}
+                class="flex items-center justify-between rounded-xl px-4 py-3.5 text-base
+                       font-bold text-cuerpo hover:bg-realce hover:text-tinta
+                       aria-[current=page]:bg-acento-tenue aria-[current=page]:text-acento"
+              >
+                {e.texto}
+                <Icono nombre="arrow-right-s-line" clase="size-5 opacity-40" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href="/contacto"
+        class="mt-6 flex h-13 items-center justify-center gap-2 rounded-xl bg-acento
+               text-[15px] font-bold text-acento-tinta shadow-sm"
+      >
+        <Icono nombre="chat-1-line" clase="size-5" />
+        Hablemos de tu proyecto
+      </a>
+    </nav>
+
+    <div class="shrink-0 border-t border-borde px-6 py-5">
+      <p class="rotulo">Escríbeme</p>
+      <ul class="mt-4 flex items-center gap-2">
+        {
+          REDES.map((r) => (
+            <li>
+              <a
+                href={r.href}
+                target={r.externo ? '_blank' : undefined}
+                rel={r.externo ? 'noopener noreferrer' : undefined}
+                class="grid size-12 place-items-center rounded-xl border border-borde
+                       bg-fondo text-apagado hover:border-acento hover:text-acento"
+                aria-label={r.nombre}
+              >
+                <Icono nombre={r.icono} clase="size-5" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-4 text-xs text-tenue">{SITIO.ciudad} · {SITIO.cobertura}</p>
+    </div>
+  </aside>
+</div>
+
+<style>
+  /* El subrayado del activo, y el que sigue al puntero */
+  a[aria-current='page'] [data-subrayado] {
+    transform: scaleX(1);
+  }
+  a:hover [data-subrayado] {
+    transform: scaleX(1);
   }
 
-  function montar() {
-    const boton = document.getElementById('abrir-menu');
-    const menu = document.getElementById('menu-movil');
-    if (!boton || !menu) return;
+  /* Una vez que bajas, el encabezado se despega del contenido */
+  #encabezado.pegado {
+    border-color: var(--color-borde);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.04);
+  }
 
-    boton.addEventListener('click', () => {
-      if (boton.getAttribute('aria-expanded') === 'true') return cerrarMenu();
-      menu.classList.remove('hidden');
-      boton.setAttribute('aria-expanded', 'true');
-      boton.setAttribute('aria-label', 'Cerrar menú');
+  /* Abierto */
+  #capa-menu.abierto #velo-menu {
+    opacity: 1;
+  }
+  #capa-menu.abierto #panel-menu {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #velo-menu,
+    #panel-menu {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const RETARDO_CIERRE = 300; // debe coincidir con la transición del panel
+
+  function montar() {
+    const encabezado = document.getElementById('encabezado');
+    const capa = document.getElementById('capa-menu');
+    const panel = document.getElementById('panel-menu');
+    const abrirBtn = document.getElementById('abrir-menu');
+    const cerrarBtn = document.getElementById('cerrar-menu');
+    const velo = document.getElementById('velo-menu');
+    if (!capa || !panel || !abrirBtn) return;
+
+    /* --- sombra al bajar --------------------------------------------- */
+    const alBajar = () => encabezado?.classList.toggle('pegado', window.scrollY > 8);
+    alBajar();
+    window.addEventListener('scroll', alBajar, { passive: true });
+
+    /* --- panel -------------------------------------------------------- */
+    let cerrando: ReturnType<typeof setTimeout> | undefined;
+
+    function abrir() {
+      clearTimeout(cerrando);
+      capa!.hidden = false;
+      // Un cuadro de espera para que el navegador registre el estado inicial
+      // antes de animar; si no, el panel aparece de golpe en su sitio.
+      requestAnimationFrame(() => capa!.classList.add('abierto'));
+      abrirBtn!.setAttribute('aria-expanded', 'true');
+      // Sin esto, el fondo se sigue desplazando detrás del panel abierto.
+      document.body.style.overflow = 'hidden';
+      panel!.querySelector<HTMLElement>('a, button')?.focus();
+    }
+
+    function cerrar(devolverFoco = true) {
+      capa!.classList.remove('abierto');
+      abrirBtn!.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      cerrando = setTimeout(() => {
+        capa!.hidden = true;
+      }, RETARDO_CIERRE);
+      if (devolverFoco) abrirBtn!.focus();
+    }
+
+    abrirBtn.addEventListener('click', abrir);
+    cerrarBtn?.addEventListener('click', () => cerrar());
+    velo?.addEventListener('click', () => cerrar());
+    panel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) cerrar(false);
     });
 
-    // Al tocar un enlace, el menú se va.
-    menu.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('a')) cerrarMenu();
+    document.addEventListener('keydown', (e) => {
+      if (capa!.hidden) return;
+
+      if (e.key === 'Escape') return cerrar();
+
+      // Encerrar el foco: con el panel abierto, tabular no debe llevarte al
+      // contenido de atrás, que está tapado y no se puede ver.
+      if (e.key !== 'Tab') return;
+      const focos = panel!.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      if (!focos.length) return;
+      const primero = focos[0];
+      const ultimo = focos[focos.length - 1];
+      if (e.shiftKey && document.activeElement === primero) {
+        e.preventDefault();
+        ultimo.focus();
+      } else if (!e.shiftKey && document.activeElement === ultimo) {
+        e.preventDefault();
+        primero.focus();
+      }
     });
   }
 
   document.addEventListener('astro:page-load', montar);
-
-  // Escape cierra el menú. Va en document y se registra una sola vez.
-  if (!(window as any).__escapeEnganchado) {
-    (window as any).__escapeEnganchado = true;
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') cerrarMenu();
-    });
-  }
+  // Al navegar, el <body> podría quedarse bloqueado si el panel estaba abierto.
+  document.addEventListener('astro:before-swap', () => {
+    document.body.style.overflow = '';
+  });
 </script>

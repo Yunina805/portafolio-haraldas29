@@ -268,8 +268,13 @@ html.dark {
   html:not(.js) #abrir-menu {
     display: none;
   }
-  html:not(.js) #menu-movil {
-    display: block;
+  /* Sin JavaScript el panel no se puede abrir, así que la navegación baja al
+     pie —que siempre está— y aquí no queda un botón muerto. */
+  html:not(.js) #capa-menu {
+    display: none;
+  }
+  html:not(.js) #nav-respaldo {
+    display: flex;
   }
 
   [role='tabpanel'] + [role='tabpanel'] {

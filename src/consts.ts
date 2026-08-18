@@ -32,6 +32,23 @@ export const SITIO = {
   github: 'https://github.com/Yunina805',
 } as const;
 
+/** Redes y contacto directo, para el encabezado y el panel móvil. */
+export const REDES = [
+  {
+    nombre: 'WhatsApp',
+    href: `https://wa.me/${'529617676260'}`,
+    icono: 'whatsapp-line',
+    externo: true,
+  },
+  { nombre: 'GitHub', href: 'https://github.com/Yunina805', icono: 'github-fill', externo: true },
+  {
+    nombre: 'Correo',
+    href: 'mailto:harald.as2901@gmail.com',
+    icono: 'mail-line',
+    externo: false,
+  },
+] as const;
+
 /**
  * Compromisos públicos. ⚠️ CONFÍRMALOS ANTES DE PUBLICAR: son promesas que
  * quedan por escrito y no cumplirlas cuesta más que no haberlas hecho.
