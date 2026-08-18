@@ -207,10 +207,15 @@ export const SERVICIOS = [
  * Esto es lo que más diferencia el portafolio: casi ningún portafolio junior
  * dice cómo se cotiza, cómo se paga y qué pasa si el proyecto crece. Decirlo
  * antes de que pregunten es lo que hace que un cliente confíe.
+ *
+ * `fase` parte el proceso en la firma: todo lo de "antes" no le cuesta nada al
+ * cliente. Ese dato estaba escondido dentro de los textos y es el argumento
+ * más fuerte de la sección, así que el diseño lo saca a la superficie.
  */
 export const PROCESO = [
   {
     titulo: 'Me cuentas tu idea',
+    fase: 'antes',
     detalle:
       'Una llamada por Zoom, o por escrito si lo prefieres. Aquí sólo escucho ' +
       'cómo opera tu negocio y qué necesitas resolver.',
@@ -218,6 +223,7 @@ export const PROCESO = [
   },
   {
     titulo: 'Te entrego la especificación',
+    fase: 'antes',
     detalle:
       'Un documento con el proyecto completo: cada módulo que se va a ' +
       'desarrollar, el tiempo y el costo. Sin costo y sin sorpresas a media obra.',
@@ -225,6 +231,7 @@ export const PROCESO = [
   },
   {
     titulo: 'Firmas y arrancamos',
+    fase: 'antes',
     detalle:
       'Tu firma en la especificación es el punto de partida, y deja por escrito ' +
       'qué incluye el proyecto y qué no.',
@@ -232,6 +239,7 @@ export const PROCESO = [
   },
   {
     titulo: '50% al inicio, 50% contra entrega',
+    fase: 'durante',
     detalle:
       'La mitad para empezar a trabajar, la otra mitad cuando el sistema está ' +
       'entregado y funcionando.',
@@ -239,6 +247,7 @@ export const PROCESO = [
   },
   {
     titulo: 'Lo dejo funcionando en producción',
+    fase: 'durante',
     detalle:
       'Yo subo el proyecto y lo dejo en línea. El dominio se registra a tu ' +
       'nombre y lo pagas tú, porque es tuyo.',
@@ -246,6 +255,7 @@ export const PROCESO = [
   },
   {
     titulo: '4 meses de soporte incluido',
+    fase: 'durante',
     detalle:
       'Cualquier falla del sistema se corrige sin costo durante cuatro meses. ' +
       'Las funciones nuevas que no estaban en la especificación se cotizan aparte.',

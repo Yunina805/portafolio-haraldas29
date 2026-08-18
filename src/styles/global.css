@@ -284,6 +284,17 @@ html.dark {
     margin-top: 0;
   }
 
+  /* El hilo de la línea de tiempo se dibuja hacia abajo cuando su paso entra
+     en pantalla, así que la línea avanza al mismo ritmo que vas leyendo.
+     Sin JavaScript nace completa. */
+  .hilo-paso {
+    transform-origin: top;
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.js li:has(.revelar:not(.visible)) .hilo-paso {
+    transform: scaleY(0);
+  }
+
   /* Las barras de uso crecen al entrar en pantalla. El ancho va en línea
      (sale del dato); esto sólo las arranca desde cero. Sin JavaScript nacen
      completas, porque nunca se revela nada. */

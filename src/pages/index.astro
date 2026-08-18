@@ -258,35 +258,74 @@ const integraciones = [
     </div>
   </Seccion>
 
-  {/* ======================================================== PROCESO */}
+  {/* ======================================================== PROCESO
+      Una secuencia no se lee en rejilla: se lee en línea. Y el dato que más
+      vende estaba escondido dentro de los párrafos —que hasta la firma no se
+      paga nada—, así que aquí se saca a la superficie con una parada en medio. */}
   <Seccion
     id="proceso"
     rotulo="Cómo trabajo"
     titulo="Sabes el alcance, el tiempo y el costo antes de firmar"
     entrada="Aprendí esto por experiencia: cuando el proyecto no está escrito desde el principio, crece a media obra y alguien termina perdiendo. Por eso todo queda en un documento antes de empezar."
   >
-    <ol class="grid gap-6 md:grid-cols-2">
+    <ol class="mx-auto max-w-3xl">
       {
-        PROCESO.map((paso, i) => (
-          <Revelar retraso={(i % 2) * 80}>
-            <li class="flex h-full gap-5 rounded-xl border border-borde bg-superficie p-6 shadow-sm">
-              <span
-                class="grid size-10 shrink-0 place-items-center rounded-xl bg-acento-tenue
-                       text-sm font-extrabold text-acento tabular-nums"
-                aria-hidden="true"
-              >
-                {i + 1}
-              </span>
-              <div>
-                <h3 class="flex items-center gap-2 text-base font-bold tracking-tight text-tinta">
-                  <Icono nombre={paso.icono} clase="size-[18px] text-acento shrink-0" />
-                  {paso.titulo}
-                </h3>
-                <p class="mt-2 text-[15px] leading-relaxed text-apagado">{paso.detalle}</p>
-              </div>
-            </li>
-          </Revelar>
-        ))
+        PROCESO.map((paso, i) => {
+          const ultimo = i === PROCESO.length - 1;
+          const cambiaFase = i > 0 && paso.fase !== PROCESO[i - 1].fase;
+          return (
+            <>
+              {/* La parada entre la firma y el trabajo: aquí es donde el
+                  visitante entiende que no arriesga nada por preguntar. */}
+              {cambiaFase && (
+                <li class="relative list-none pl-16 sm:pl-20">
+                  <Revelar>
+                    <div class="mb-10 flex items-start gap-3 rounded-2xl border border-acento/25 bg-acento-tenue p-5 sm:p-6">
+                      <Icono nombre="shield-check-line" clase="mt-0.5 size-5 shrink-0 text-acento" />
+                      <p class="text-[15px] leading-relaxed text-cuerpo">
+                        <strong class="font-extrabold text-tinta">
+                          Hasta aquí no has pagado nada.
+                        </strong>{' '}
+                        Si la especificación no te convence, ahí se queda y no me
+                        debes nada.
+                      </p>
+                    </div>
+                  </Revelar>
+                </li>
+              )}
+
+              <li class="relative list-none pl-16 sm:pl-20">
+                {/* El hilo que une los pasos. Se dibuja hacia abajo cuando el
+                    paso entra en pantalla, así que la línea avanza contigo. */}
+                {!ultimo && (
+                  <span
+                    class="hilo-paso absolute top-12 left-[22px] w-px bg-borde sm:top-14 sm:left-[26px]"
+                    style="bottom:-0.5rem"
+                    aria-hidden="true"
+                  />
+                )}
+
+                <Revelar clase="pb-10">
+                  <span
+                    class="absolute top-0 left-0 grid size-11 place-items-center rounded-2xl
+                           border border-borde bg-superficie shadow-sm sm:size-13"
+                    aria-hidden="true"
+                  >
+                    <Icono nombre={paso.icono} clase="size-5 text-acento" />
+                  </span>
+
+                  <p class="rotulo pt-1">Paso {String(i + 1).padStart(2, '0')}</p>
+
+                  <h3 class="mt-2.5 text-xl font-extrabold tracking-tight text-tinta sm:text-2xl">
+                    {paso.titulo}
+                  </h3>
+
+                  <p class="mt-3 text-[15px] leading-relaxed text-apagado">{paso.detalle}</p>
+                </Revelar>
+              </li>
+            </>
+          );
+        })
       }
     </ol>
   </Seccion>
