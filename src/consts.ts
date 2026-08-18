@@ -155,10 +155,15 @@ export const CIFRAS = [
 /**
  * Qué puedo construir — problemas resueltos, no tecnologías.
  * Nadie contrata "Laravel": contrata "que mis cobros dejen de perderse".
+ *
+ * `prueba` son los slugs de los proyectos donde eso ya está hecho. Convierte
+ * cada línea de "esto sé hacer" en "esto ya lo hice, aquí está" — que es la
+ * diferencia entre una lista de servicios y un portafolio.
  */
 export const SERVICIOS = [
   {
     titulo: 'Sistema de gestión para tu negocio',
+    prueba: ['tu-vision-telecable', 'erp-abib'],
     detalle:
       'Clientes, cobros, inventario, reportes y permisos por puesto. Lo que hoy ' +
       'llevas en Excel y en libretas, en un solo lugar y sin que se pierda nada.',
@@ -166,6 +171,7 @@ export const SERVICIOS = [
   },
   {
     titulo: 'Tienda en línea',
+    prueba: ['internet-del-bienestar'],
     detalle:
       'Productos con variantes y tallas, inventario que se descuenta solo, ' +
       'envíos y seguimiento de pedidos.',
@@ -173,6 +179,7 @@ export const SERVICIOS = [
   },
   {
     titulo: 'Cobros en línea',
+    prueba: ['erp-abib', 'portal-abib', 'internet-del-bienestar'],
     detalle:
       'Tarjeta de crédito y débito con Mercado Pago, Stripe o la pasarela que ' +
       'prefieras. El dinero llega a tu cuenta, no pasa por la mía.',
@@ -180,6 +187,7 @@ export const SERVICIOS = [
   },
   {
     titulo: 'Integración con lo que ya usas',
+    prueba: ['tu-vision-telecable', 'erp-abib'],
     detalle:
       'Que tu sistema le hable por API a tus equipos y a tus otros programas. ' +
       'Como el que corta y reconecta el internet de un cliente desde el panel.',
@@ -187,6 +195,7 @@ export const SERVICIOS = [
   },
   {
     titulo: 'Migración de tu sistema viejo',
+    prueba: ['tu-vision-telecable'],
     detalle:
       'Traigo tus datos al sistema nuevo: miles de registros, con la ' +
       'codificación reparada y sin detener tu operación.',
@@ -194,6 +203,7 @@ export const SERVICIOS = [
   },
   {
     titulo: 'Página institucional',
+    prueba: ['portal-abib'],
     detalle:
       'Un sitio que carga rápido, se ve bien en celular y aparece en Google ' +
       'cuando alguien busca lo que vendes.',
@@ -298,6 +308,9 @@ export const TECNOLOGIAS = [
 export const PROYECTOS = [
   {
     slug: 'tu-vision-telecable',
+    // Los dos proyectos de Abib comparten `nombre`; este los distingue
+    // cuando se nombran de corrido, como en la lista de servicios.
+    nombreCorto: 'Tu Visión',
     nombre: 'Tu Visión Telecable',
     titulo: 'ERP completo para un proveedor de TV e internet',
     gancho: 'Todo el ciclo del cliente de un ISP y la operación interna de la empresa.',
@@ -359,6 +372,9 @@ export const PROYECTOS = [
 
   {
     slug: 'erp-abib',
+    // Los dos proyectos de Abib comparten `nombre`; este los distingue
+    // cuando se nombran de corrido, como en la lista de servicios.
+    nombreCorto: 'ERP de Abib',
     nombre: 'Abib',
     titulo: 'ERP de un operador móvil',
     gancho: 'Activaciones, portabilidad, distribuidores y conciliación del dinero.',
@@ -420,6 +436,9 @@ export const PROYECTOS = [
 
   {
     slug: 'internet-del-bienestar',
+    // Los dos proyectos de Abib comparten `nombre`; este los distingue
+    // cuando se nombran de corrido, como en la lista de servicios.
+    nombreCorto: 'Internet del Bienestar',
     nombre: 'Internet del Bienestar',
     titulo: 'Plataforma pública y red de distribuidores',
     gancho: 'El cliente compra su SIM desde el celular; atrás opera una red de dos niveles.',
@@ -475,6 +494,9 @@ export const PROYECTOS = [
 
   {
     slug: 'portal-abib',
+    // Los dos proyectos de Abib comparten `nombre`; este los distingue
+    // cuando se nombran de corrido, como en la lista de servicios.
+    nombreCorto: 'Portal de Abib',
     nombre: 'Abib',
     titulo: 'Rediseño completo del portal de autoservicio',
     gancho: 'Un portal de 2021 rehecho por completo, sin detener el negocio.',
@@ -530,6 +552,9 @@ export const PROYECTOS = [
 
   {
     slug: 'rifas-qr',
+    // Los dos proyectos de Abib comparten `nombre`; este los distingue
+    // cuando se nombran de corrido, como en la lista de servicios.
+    nombreCorto: 'Rifas con QR',
     nombre: 'Sistema de Rifas con QR',
     titulo: 'Control de boletos de punta a punta',
     gancho: 'Boletos impresos con QR que cualquiera puede verificar con la cámara.',

@@ -1,9 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Seccion from '../components/Seccion.astro';
-import Tarjeta from '../components/Tarjeta.astro';
 import Boton from '../components/Boton.astro';
-import Chip from '../components/Chip.astro';
 import Icono from '../components/Icono.astro';
 import Rotulo from '../components/Rotulo.astro';
 import Revelar from '../components/Revelar.astro';
@@ -179,21 +177,55 @@ const integraciones = [
     titulo="Problemas que resuelvo, no tecnologías que uso"
     entrada="Nadie contrata Laravel. Se contrata que los cobros dejen de perderse, que el inventario cuadre, que el cliente pueda pagar en línea."
   >
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {/* Lista, no tarjetas. La portada ya tiene cuatro rejillas de tarjetas y
+        una quinta se lee como relleno; con títulos grandes y filas separadas
+        por una línea, esto se escanea más rápido y se ve menos de catálogo.
+        Cada fila cierra con los proyectos donde eso ya está hecho: convierte
+        "esto sé hacer" en "esto ya lo hice, aquí está". */}
+    <ul class="border-t border-borde">
       {
         SERVICIOS.map((s, i) => (
-          <Revelar retraso={(i % 3) * 80}>
-            <Tarjeta relleno="lg" clase="h-full">
-              <span class="grid size-11 place-items-center rounded-xl bg-acento-tenue">
-                <Icono nombre={s.icono} clase="size-5 text-acento" />
-              </span>
-              <h3 class="mt-6 text-lg font-bold tracking-tight text-tinta">{s.titulo}</h3>
-              <p class="mt-3 text-[15px] leading-relaxed text-apagado">{s.detalle}</p>
-            </Tarjeta>
-          </Revelar>
+          <li class="border-b border-borde">
+            <Revelar retraso={Math.min(i, 3) * 60}>
+              <div class="flex flex-col gap-5 py-7 sm:flex-row sm:gap-7">
+                <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-acento-tenue">
+                  <Icono nombre={s.icono} clase="size-6 text-acento" />
+                </span>
+
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-xl font-extrabold tracking-tight text-tinta sm:text-2xl">
+                    {s.titulo}
+                  </h3>
+                  <p class="mt-2.5 max-w-2xl text-[15px] leading-relaxed text-apagado">
+                    {s.detalle}
+                  </p>
+                </div>
+
+                <div class="shrink-0 sm:w-56 sm:text-right">
+                  <p class="text-xs font-bold text-tenue">Ya lo hice en</p>
+                  <ul class="mt-2 flex flex-wrap gap-x-3 gap-y-1 sm:justify-end">
+                    {s.prueba.map((slug) => {
+                      const proy = PROYECTOS.find((p) => p.slug === slug)!;
+                      return (
+                        <li>
+                          <a
+                            href={`/proyectos/${proy.slug}`}
+                            class="text-sm font-bold text-acento underline decoration-acento/30
+                                   underline-offset-4 hover:decoration-acento"
+                          >
+                            {proy.nombreCorto}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </Revelar>
+          </li>
         ))
       }
-    </div>
+    </ul>
 
     {/* ------------------------------------------- LA PRUEBA */}
     <div class="mt-16 grid gap-10 border-t border-borde pt-14 lg:grid-cols-2 lg:gap-16">
@@ -356,55 +388,106 @@ const integraciones = [
   </Seccion>
 
   {/* ====================================================== CONTACTO
-      Cierre de la portada. El detalle completo —vías, qué contarme, preguntas
-      frecuentes— vive en /contacto para no alargar esta página. */}
+      Es lo último de la página y tiene que sentirse como destino, no como
+      una tarjeta más. Panel destacado, en dos columnas: a la izquierda el
+      mensaje, a la derecha los dos caminos —el rápido y el completo. */}
   <Seccion id="contacto" aire="normal">
     <Revelar>
       <div
-        class="overflow-hidden rounded-2xl border border-borde bg-superficie
-               px-8 py-14 text-center shadow-sm sm:px-12 sm:py-16"
+        class="overflow-hidden rounded-2xl border border-acento/25 bg-acento-tenue
+               px-8 py-12 sm:px-12 sm:py-14"
       >
-        <Rotulo>Contacto</Rotulo>
+        <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <div>
+            <Rotulo>Contacto</Rotulo>
 
-        <h2
-          class="mx-auto mt-4 max-w-2xl text-3xl font-extrabold tracking-tight
-                 text-tinta sm:text-4xl"
-        >
-          Cuéntame qué necesitas y te digo si puedo resolverlo
-        </h2>
+            <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+              Cuéntame qué necesitas y te digo si puedo resolverlo
+            </h2>
 
-        <p class="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-apagado">
-          {COMPROMISOS.respuesta}. Si el proyecto tiene sentido, te entrego la
-          especificación completa con módulos, tiempo y costo — sin costo y sin
-          compromiso.
-        </p>
+            <p class="mt-5 max-w-lg text-[15px] leading-relaxed text-cuerpo">
+              No necesitas tenerlo todo claro. Con que me digas qué hace tu
+              negocio y qué te está costando trabajo, yo lo convierto en un plan
+              con módulos, tiempo y costo.
+            </p>
 
-        <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Boton href={wa} tamano="lg" icono="whatsapp-line" externo>
-            Escríbeme por WhatsApp
-          </Boton>
-          <Boton href="/contacto" tamano="lg" variante="contorno" icono="customer-service-2-line">
-            Ver todas las formas de contacto
-          </Boton>
+            <ul class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-apagado">
+              {
+                Object.values(COMPROMISOS).map((c) => (
+                  <li class="flex items-center gap-2">
+                    <Icono nombre="check-line" clase="size-4 shrink-0 text-acento" />
+                    {c}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          {/* Los dos caminos: quien quiere resolver ya, y quien prefiere leer
+              antes de escribir. */}
+          <div class="space-y-4">
+            <a
+              href={wa}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-center gap-5 rounded-xl border border-borde bg-superficie
+                     p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-200
+                     hover:-translate-y-0.5 hover:border-acento hover:shadow-lg"
+            >
+              <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-acento text-acento-tinta">
+                <Icono nombre="whatsapp-line" clase="size-6" />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-base font-bold text-tinta">Escríbeme por WhatsApp</span>
+                <span class="mt-1 block text-sm text-apagado">
+                  Lo más rápido. Me llega al teléfono.
+                </span>
+              </span>
+              <Icono
+                nombre="arrow-right-line"
+                clase="size-5 shrink-0 text-acento transition-transform duration-200 group-hover:translate-x-1"
+              />
+            </a>
+
+            <a
+              href="/contacto"
+              class="group flex items-center gap-5 rounded-xl border border-borde bg-superficie
+                     p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-200
+                     hover:-translate-y-0.5 hover:border-acento hover:shadow-lg"
+            >
+              <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-acento-tenue text-acento">
+                <Icono nombre="customer-service-2-line" clase="size-6" />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-base font-bold text-tinta">Centro de contacto</span>
+                <span class="mt-1 block text-sm text-apagado">
+                  Correo, videollamada y preguntas frecuentes.
+                </span>
+              </span>
+              <Icono
+                nombre="arrow-right-line"
+                clase="size-5 shrink-0 text-acento transition-transform duration-200 group-hover:translate-x-1"
+              />
+            </a>
+
+            <ul
+              class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-sm text-tenue"
+            >
+              <li class="flex items-center gap-2">
+                <Icono nombre="map-pin-line" clase="size-4 shrink-0" />
+                {SITIO.ciudadCorta}
+              </li>
+              <li class="flex items-center gap-2">
+                <Icono nombre="global-line" clase="size-4 shrink-0" />
+                {SITIO.cobertura}
+              </li>
+              <li class="flex items-center gap-2">
+                <Icono nombre="vidicon-line" clase="size-4 shrink-0" />
+                Sesiones por Zoom
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <ul
-          class="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3
-                 border-t border-borde pt-8 text-sm text-tenue"
-        >
-          <li class="flex items-center gap-2">
-            <Icono nombre="map-pin-line" clase="size-4 shrink-0" />
-            {SITIO.ciudad}
-          </li>
-          <li class="flex items-center gap-2">
-            <Icono nombre="global-line" clase="size-4 shrink-0" />
-            {SITIO.cobertura}
-          </li>
-          <li class="flex items-center gap-2">
-            <Icono nombre="vidicon-line" clase="size-4 shrink-0" />
-            Sesiones por Zoom
-          </li>
-        </ul>
       </div>
     </Revelar>
   </Seccion>
