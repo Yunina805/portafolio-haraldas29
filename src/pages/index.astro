@@ -15,13 +15,45 @@ import {
   PROYECTOS,
   SERVICIOS,
   SITIO,
-  TECNOLOGIAS,
 } from '../consts';
 
 const wa = `https://wa.me/${SITIO.whatsapp}`;
 
 // El de portada se marca en consts.ts, no se elige aquí por posición.
 const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
+
+/**
+ * En cuántos sistemas uso cada tecnología.
+ *
+ * Sale de los proyectos, no de una lista escrita a mano: nadie se autocalifica
+ * y cualquiera puede verificarlo entrando a /proyectos y contando. Dice algo
+ * que un porcentaje no puede — qué uso todos los días y qué toqué una vez.
+ *
+ * "Laravel 12" y "Laravel" son lo mismo, así que se quita la versión del final.
+ */
+const familia = (n: string) => n.replace(/\s+\d+$/, '');
+
+const conteo = new Map<string, { nombre: string; icono: string; n: number }>();
+for (const proy of PROYECTOS) {
+  const yaContadas = new Set<string>();
+  for (const t of proy.stack) {
+    const base = familia(t.nombre);
+    if (yaContadas.has(base)) continue;
+    yaContadas.add(base);
+    const fila = conteo.get(base) ?? { nombre: base, icono: t.icono, n: 0 };
+    fila.n += 1;
+    conteo.set(base, fila);
+  }
+}
+
+const barras = [...conteo.values()].sort(
+  (a, b) => b.n - a.n || a.nombre.localeCompare(b.nombre)
+);
+
+// Servicios de terceros distintos con los que hablan los sistemas.
+const integraciones = [
+  ...new Set(PROYECTOS.flatMap((p) => p.integraciones.map((i) => i.nombre))),
+].sort((a, b) => a.localeCompare(b));
 ---
 
 <Base titulo="">
@@ -114,7 +146,10 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
     </Revelar>
   </Seccion>
 
-  <!-- ====================================================== SERVICIOS -->
+  {/* ====================================================== QUÉ CONSTRUYO
+      Antes eran dos secciones —"Qué construyo" y "Herramientas"— que decían
+      casi lo mismo. Ahora es una sola en tres capas: lo que le vendes al
+      cliente, la prueba de que lo has hecho, y con qué habla lo que construiste. */}
   <Seccion
     id="servicios"
     rotulo="Qué construyo"
@@ -136,9 +171,94 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
         ))
       }
     </div>
+
+    {/* ------------------------------------------- LA PRUEBA */}
+    <div class="mt-16 grid gap-10 border-t border-borde pt-14 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <Revelar>
+          <h3 class="text-2xl font-extrabold tracking-tight text-tinta">Con qué lo construyo</h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-apagado">
+            En cuántos de mis cinco sistemas uso cada herramienta. No es una
+            autoevaluación: sale de los proyectos, y cualquiera puede contarlo
+            entrando a la página de proyectos.
+          </p>
+        </Revelar>
+
+        <Revelar retraso={80}>
+          <ul class="mt-8 space-y-4">
+            {
+              barras.map((t, i) => (
+                <li class="flex items-center gap-4">
+                  <Icono nombre={t.icono} clase="size-5 shrink-0 text-apagado" />
+                  <span class="w-28 shrink-0 text-sm font-bold text-tinta">{t.nombre}</span>
+
+                  <span
+                    class="h-2 flex-1 overflow-hidden rounded-full bg-realce"
+                    role="img"
+                    aria-label={`${t.nombre}: ${t.n} de ${PROYECTOS.length} sistemas`}
+                  >
+                    <span
+                      class="barra-relleno block h-full rounded-full bg-acento"
+                      style={`width:${(t.n / PROYECTOS.length) * 100}%;transition-delay:${i * 60}ms`}
+                    />
+                  </span>
+
+                  <span class="w-14 shrink-0 text-right text-xs font-bold text-tenue tabular-nums">
+                    {t.n} de {PROYECTOS.length}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </Revelar>
+
+        <Revelar retraso={160}>
+          <p class="mt-8 text-[15px] leading-relaxed text-apagado">
+            Elijo la herramienta según lo que el proyecto necesita, no al revés.
+            Este mismo sitio está hecho con Astro y no con Laravel, porque es
+            una página de contenido y no una aplicación.
+          </p>
+        </Revelar>
+      </div>
+
+      {/* ------------------------------- MURO DE INTEGRACIONES */}
+      <div>
+        <Revelar>
+          <h3 class="text-2xl font-extrabold tracking-tight text-tinta">
+            Y con qué hablan mis sistemas
+          </h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-apagado">
+            Un sistema aislado sirve de poco. Estos son los
+            <strong class="font-bold text-tinta">{integraciones.length} servicios</strong>
+            de terceros que mis proyectos consumen hoy en producción: pasarelas
+            de pago, facturación ante el SAT, validación de identidad y equipos
+            de red.
+          </p>
+        </Revelar>
+
+        <Revelar retraso={80}>
+          <ul class="mt-8 flex flex-wrap gap-2.5">
+            {
+              integraciones.map((n) => (
+                <li class="flex items-center gap-2 rounded-xl border border-borde bg-superficie px-3.5 py-2.5 shadow-sm">
+                  <Icono nombre="plug-line" clase="size-4 shrink-0 text-acento" />
+                  <span class="text-sm font-bold text-tinta">{n}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </Revelar>
+
+        <Revelar retraso={160}>
+          <Boton href="/proyectos" variante="contorno" icono="arrow-right-line" iconoAlFinal clase="mt-8">
+            Ver en qué proyecto va cada una
+          </Boton>
+        </Revelar>
+      </div>
+    </div>
   </Seccion>
 
-  <!-- ======================================================== PROCESO -->
+  {/* ======================================================== PROCESO */}
   <Seccion
     id="proceso"
     rotulo="Cómo trabajo"
@@ -169,36 +289,6 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
         ))
       }
     </ol>
-  </Seccion>
-
-  <!-- ==================================================== TECNOLOGÍAS -->
-  <Seccion
-    id="tecnologias"
-    rotulo="Herramientas"
-    titulo="Con qué lo construyo"
-    entrada="Elijo la herramienta según lo que el proyecto necesita, no al revés. Este mismo sitio está hecho con Astro, no con Laravel, porque es una página de contenido y no una aplicación."
-  >
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {
-        TECNOLOGIAS.map((g, i) => (
-          <Revelar retraso={i * 80}>
-            <Tarjeta relleno="lg" clase="h-full">
-              <span class="grid size-11 place-items-center rounded-xl bg-acento-tenue">
-                <Icono nombre={g.icono} clase="size-5 text-acento" />
-              </span>
-              <h3 class="mt-6 text-base font-bold tracking-tight text-tinta">{g.grupo}</h3>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {g.items.map((t) => (
-                  <li>
-                    <Chip>{t}</Chip>
-                  </li>
-                ))}
-              </ul>
-            </Tarjeta>
-          </Revelar>
-        ))
-      }
-    </div>
   </Seccion>
 
   {/* ====================================================== CONTACTO

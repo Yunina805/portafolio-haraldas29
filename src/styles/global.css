@@ -284,6 +284,17 @@ html.dark {
     margin-top: 0;
   }
 
+  /* Las barras de uso crecen al entrar en pantalla. El ancho va en línea
+     (sale del dato); esto sólo las arranca desde cero. Sin JavaScript nacen
+     completas, porque nunca se revela nada. */
+  .barra-relleno {
+    transform-origin: left;
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.js .revelar:not(.visible) .barra-relleno {
+    transform: scaleX(0);
+  }
+
   /* Aparecer al hacer scroll. Sin JS el contenido se ve siempre: la clase .js
      la pone el script del <head>, así que si el script no corre no se oculta. */
   .revelar {
