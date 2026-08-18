@@ -15,6 +15,9 @@ export const SITIO = {
     'Trabajo en remoto para todo México.',
 
   ciudad: 'Oaxaca de Juárez, Oaxaca',
+  // Para el rótulo del hero: "Oaxaca de Juárez, Oaxaca" repite la palabra dos
+  // veces y a quien lee desde otro estado le dice menos que "Oaxaca, México".
+  ciudadCorta: 'Oaxaca, México',
   cobertura: 'En remoto para todo México',
 
   // TODO(Fase 5): cambiar a hola@<dominio> cuando esté comprado. Un correo con

@@ -92,14 +92,14 @@ const resumen = [
     <div class="grid gap-6 lg:grid-cols-2">
       <div class="lg:col-span-2">
         <Revelar>
-          <TarjetaProyecto proyecto={destacado} destacada />
+          <TarjetaProyecto proyecto={destacado} destacada nivel={2} />
         </Revelar>
       </div>
 
       {
         resto.map((p, i) => (
           <Revelar retraso={(i % 2) * 80}>
-            <TarjetaProyecto proyecto={p} />
+            <TarjetaProyecto proyecto={p} nivel={2} />
           </Revelar>
         ))
       }

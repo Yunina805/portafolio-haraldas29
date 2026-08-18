@@ -261,6 +261,17 @@ html.dark {
     display: none;
   }
 
+  /* Sin JavaScript, un botón que no hace nada es peor que no tenerlo.
+     El flotante se esconde —hay contacto en el menú y en el pie— y el menú
+     móvil se queda abierto, para que la navegación siga funcionando. */
+  html:not(.js) #flotante,
+  html:not(.js) #abrir-menu {
+    display: none;
+  }
+  html:not(.js) #menu-movil {
+    display: block;
+  }
+
   [role='tabpanel'] + [role='tabpanel'] {
     margin-top: 3.5rem;
   }

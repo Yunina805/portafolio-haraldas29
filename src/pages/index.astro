@@ -31,7 +31,7 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
       Por eso son tres grupos de animación y no seis — entran casi juntos. */}
   <section class="contenedor pt-9 pb-12 sm:pt-12 sm:pb-16 lg:pt-14">
     <Revelar>
-      <Rotulo>{SITIO.oficio} · {SITIO.ciudad}</Rotulo>
+      <Rotulo>{SITIO.oficio} · {SITIO.ciudadCorta}</Rotulo>
 
       <h1
         class="mt-5 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
@@ -96,7 +96,7 @@ const destacado = PROYECTOS.find((p) => p.portada) ?? PROYECTOS[0];
     id="proyectos"
     rotulo="Proyectos"
     titulo="El sistema más grande que he construido"
-    entrada="Un ERP completo para un proveedor de internet, en producción y creciendo. Lo desarrollé solo y lo opero todos los días."
+    entrada="Un ERP completo para un proveedor de internet: en producción, creciendo, y sosteniendo la operación de la empresa todos los días."
   >
     <Revelar>
       <TarjetaProyecto proyecto={destacado} destacada />

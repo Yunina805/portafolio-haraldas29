@@ -24,9 +24,16 @@ interface Proyecto {
 interface Props {
   proyecto: Proyecto;
   destacada?: boolean;
+  /**
+   * Nivel del encabezado. En la portada las tarjetas cuelgan del <h2> de la
+   * sección, así que van en h3; en /proyectos cuelgan directo del <h1>, y
+   * saltarse el h2 rompe la jerarquía para quien navega con lector de pantalla.
+   */
+  nivel?: 2 | 3;
 }
 
-const { proyecto: p, destacada = false } = Astro.props;
+const { proyecto: p, destacada = false, nivel = 3 } = Astro.props;
+const Titulo = `h${nivel}` as 'h2' | 'h3';
 const enProduccion = p.estado === 'En producción' || p.estado === 'En línea';
 ---
 
@@ -51,14 +58,14 @@ const enProduccion = p.estado === 'En producción' || p.estado === 'En línea';
 
   <p class="rotulo mt-6">{p.nombre}</p>
 
-  <h3
+  <Titulo
     class:list={[
       'mt-3 font-extrabold tracking-tight text-tinta',
       destacada ? 'text-2xl sm:text-3xl' : 'text-xl',
     ]}
   >
     {p.titulo}
-  </h3>
+  </Titulo>
 
   <p
     class:list={[

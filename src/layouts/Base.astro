@@ -1,6 +1,12 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+
+// El subconjunto latino de Plus Jakarta Sans, con la URL con hash que le pone
+// Vite. Sirve para precargarlo: sin esto el navegador tiene que leer el HTML,
+// bajar el CSS, parsearlo y hasta entonces descubrir que necesita la fuente.
+// Son dos viajes de ida y vuelta antes de que el texto se vea como debe.
+import fuenteLatina from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import Encabezado from '../components/Encabezado.astro';
 import PieDePagina from '../components/PieDePagina.astro';
 import BotonFlotante from '../components/BotonFlotante.astro';
@@ -62,6 +68,14 @@ const fichaPersona = {
     {/* Color de la barra del navegador en celular. El script de abajo lo ajusta
         al tema real antes de que se vea nada. */}
     <meta name="theme-color" id="color-tema" content="#f0f1f3" />
+
+    <link
+      rel="preload"
+      href={fuenteLatina}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" />
