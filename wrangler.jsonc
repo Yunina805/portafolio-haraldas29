@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Cloudflare despliega este proyecto como Worker con archivos estáticos
+  // (no como Pages). Sin este archivo, `wrangler deploy` no sabe qué subir.
+  "name": "portafolio-harald-allerhand",
+  "compatibility_date": "2026-08-18",
+
+  "assets": {
+    // Lo que genera `npm run build`.
+    "directory": "./dist",
+
+    // Sirve dist/404.html cuando la ruta no existe, en vez de un error pelón
+    // del servidor.
+    "not_found_handling": "404-page"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

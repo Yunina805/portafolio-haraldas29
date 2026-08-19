@@ -1,0 +1,59 @@
+---
+/**
+ * Página de error 404.
+ *
+ * Vale la pena tenerla: quien llega aquí lo hace por un enlace viejo o un
+ * dedazo, y la pantalla en blanco del servidor lo manda de regreso a Google.
+ * Esta lo devuelve al sitio.
+ */
+import Base from '../layouts/Base.astro';
+import Boton from '../components/Boton.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Icono from '../components/Icono.astro';
+import { NAVEGACION } from '../consts';
+---
+
+<Base titulo="Página no encontrada" sinIndexar>
+  <section class="contenedor flex min-h-[60vh] flex-col justify-center py-20">
+    <Rotulo>Error 404</Rotulo>
+
+    <h1
+      class="mt-5 max-w-3xl text-4xl leading-[1.05] font-extrabold tracking-tighter
+             text-tinta sm:text-6xl"
+    >
+      Esta página no existe
+    </h1>
+
+    <p class="mt-6 max-w-xl text-lg leading-relaxed text-cuerpo">
+      Puede que el enlace esté viejo o que se haya colado un error al
+      escribirlo. Nada grave — por aquí sigues.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center gap-3">
+      <Boton href="/" tamano="lg" icono="home-4-line">Ir al inicio</Boton>
+      <Boton href="/proyectos" tamano="lg" variante="contorno" icono="arrow-right-line" iconoAlFinal>
+        Ver los proyectos
+      </Boton>
+    </div>
+
+    <nav class="mt-12 border-t border-borde pt-8" aria-label="Secciones del sitio">
+      <p class="rotulo">O ve directo a</p>
+      <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+        {
+          NAVEGACION.map((e) => (
+            <li>
+              <a
+                href={e.href}
+                class="inline-flex items-center gap-1.5 text-sm font-bold text-acento
+                       underline decoration-acento/30 underline-offset-4 hover:decoration-acento"
+              >
+                {e.texto}
+                <Icono nombre="arrow-right-up-line" clase="size-3.5" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </section>
+</Base>
