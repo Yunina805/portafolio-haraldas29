@@ -1,0 +1,24 @@
+# Cabeceras para Cloudflare Pages.
+# Cloudflare lee este archivo al desplegar; no hace nada en local.
+
+/*
+  # Impide que el navegador adivine el tipo de un archivo y lo ejecute como
+  # algo que no es.
+  X-Content-Type-Options: nosniff
+  # Al salir del sitio sólo se manda el dominio, no la URL completa.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Nadie puede meter el sitio en un iframe para suplantarlo.
+  Content-Security-Policy: frame-ancestors 'none'
+  # Se apagan permisos que este sitio nunca usa.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+# Todo lo de /_astro lleva hash en el nombre: si el contenido cambia, cambia
+# el nombre. Por eso se puede cachear un año sin riesgo de servir algo viejo.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# El favicon y la imagen de vista previa cambian poco pero no llevan hash.
+/*.png
+  Cache-Control: public, max-age=86400
+/*.svg
+  Cache-Control: public, max-age=86400

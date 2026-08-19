@@ -5,9 +5,9 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO(Fase 5): cambiar por el dominio real cuando esté comprado.
-  // De esto salen las URL canónicas y el sitemap.
-  site: 'https://harald.example.com',
+  // De aquí salen las URL canónicas, el sitemap, el robots.txt y la URL
+  // absoluta de la imagen que se ve al compartir la liga.
+  site: 'https://allsansystems.com',
 
   // El muestrario es referencia interna y va marcado noindex: fuera del mapa.
   integrations: [sitemap({ filter: (p) => !p.includes('/sistema') })],

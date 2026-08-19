@@ -20,8 +20,9 @@ export const SITIO = {
   ciudadCorta: 'Oaxaca, México',
   cobertura: 'En remoto para todo México',
 
-  // TODO(Fase 5): cambiar a hola@<dominio> cuando esté comprado. Un correo con
-  // dominio propio pesa distinto que un Gmail, y sale gratis con Email Routing.
+  // TODO: cambiar a 'hola@allsansystems.com' EN CUANTO Email Routing de
+  // Cloudflare esté verificado y probado. Antes no: si el reenvío todavía no
+  // funciona, cada correo que te manden desde el sitio se pierde.
   correo: 'harald.as2901@gmail.com',
 
   // Nunca en texto plano: sólo detrás del botón, para que no lo cosechen.
