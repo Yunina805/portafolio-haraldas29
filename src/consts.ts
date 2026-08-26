@@ -20,10 +20,10 @@ export const SITIO = {
   ciudadCorta: 'Oaxaca, México',
   cobertura: 'En remoto para todo México',
 
-  // TODO: cambiar a 'hola@allsansystems.com' EN CUANTO Email Routing de
-  // Cloudflare esté verificado y probado. Antes no: si el reenvío todavía no
-  // funciona, cada correo que te manden desde el sitio se pierde.
-  correo: 'harald.as2901@gmail.com',
+  // Reenvía a harald.as2901@gmail.com por Email Routing de Cloudflare.
+  // Hay regla catch-all, así que cualquier dirección @allsansystems.com llega
+  // igual — un dedazo del cliente no se pierde.
+  correo: 'hola@allsansystems.com',
 
   // Nunca en texto plano: sólo detrás del botón, para que no lo cosechen.
   // TODO: Harald confirma desde el celular que este formato abre el chat.
@@ -31,23 +31,23 @@ export const SITIO = {
   whatsapp: '529617676260',
 
   github: 'https://github.com/Yunina805',
+  linkedin: 'https://www.linkedin.com/in/harald-allerhand-santaella-1a5889293/',
 } as const;
 
-/** Redes y contacto directo, para el encabezado y el panel móvil. */
+/**
+ * Redes y contacto directo, para el encabezado, el panel móvil y el pie.
+ * Todo sale de SITIO: si cambia un dato allá, cambia aquí solo.
+ */
 export const REDES = [
   {
     nombre: 'WhatsApp',
-    href: `https://wa.me/${'529617676260'}`,
+    href: `https://wa.me/${SITIO.whatsapp}`,
     icono: 'whatsapp-line',
     externo: true,
   },
-  { nombre: 'GitHub', href: 'https://github.com/Yunina805', icono: 'github-fill', externo: true },
-  {
-    nombre: 'Correo',
-    href: 'mailto:harald.as2901@gmail.com',
-    icono: 'mail-line',
-    externo: false,
-  },
+  { nombre: 'LinkedIn', href: SITIO.linkedin, icono: 'linkedin-box-fill', externo: true },
+  { nombre: 'GitHub', href: SITIO.github, icono: 'github-fill', externo: true },
+  { nombre: 'Correo', href: `mailto:${SITIO.correo}`, icono: 'mail-line', externo: false },
 ] as const;
 
 /**
