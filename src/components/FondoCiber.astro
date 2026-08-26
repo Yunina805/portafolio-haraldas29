@@ -1,0 +1,125 @@
+---
+/**
+ * Fondo animado — rejilla en perspectiva y resplandores que derivan.
+ *
+ * Tres reglas que lo mantienen del lado correcto de la línea entre "se ve
+ * técnico" y "se ve disfrazado":
+ *
+ *  1. Sólo anima `transform` y `opacity`. Nada de repintar fondos en cada
+ *     cuadro: eso calienta el celular y gasta batería en una página que
+ *     alguien va a tener abierta treinta segundos.
+ *  2. Se desvanece hacia abajo con una máscara, para que nunca compita con
+ *     el texto que tiene encima.
+ *  3. Se apaga por completo con `prefers-reduced-motion`. La rejilla se
+ *     queda quieta, no desaparece — el adorno se conserva, el mareo no.
+ *
+ * Los colores salen de los tokens, así que cambia solo con el tema.
+ */
+interface Props {
+  /** Altura del efecto. Por defecto cubre el alto de la ventana. */
+  clase?: string;
+}
+
+const { clase = '' } = Astro.props;
+---
+
+<div class:list={['fondo-ciber', clase]} aria-hidden="true">
+  <div class="rejilla"></div>
+  <div class="brillo brillo-a"></div>
+  <div class="brillo brillo-b"></div>
+</div>
+
+<style>
+  .fondo-ciber {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    pointer-events: none;
+    /* Se desvanece hacia abajo: arriba se ve, donde empieza el texto ya no. */
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 95%);
+    mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 95%);
+  }
+
+  /* --- La rejilla ------------------------------------------------------ */
+  .rejilla {
+    position: absolute;
+    inset: -50% -50% 0 -50%;
+    background-image:
+      linear-gradient(to right, var(--color-borde) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-borde) 1px, transparent 1px);
+    background-size: 56px 56px;
+    /* La inclinación es lo que da la sensación de profundidad */
+    transform: perspective(520px) rotateX(58deg) translateY(0);
+    transform-origin: top center;
+    opacity: 0.5;
+    animation: correr 14s linear infinite;
+    will-change: transform;
+  }
+
+  /* Sube exactamente una celda y vuelve a empezar: el salto es invisible */
+  @keyframes correr {
+    to {
+      transform: perspective(520px) rotateX(58deg) translateY(-56px);
+    }
+  }
+
+  /* --- Los resplandores ------------------------------------------------ */
+  .brillo {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    will-change: transform;
+  }
+
+  .brillo-a {
+    top: -18%;
+    left: -8%;
+    width: 42rem;
+    height: 42rem;
+    background: radial-gradient(circle, var(--color-acento) 0%, transparent 70%);
+    opacity: 0.1;
+    animation: derivar-a 22s ease-in-out infinite alternate;
+  }
+
+  .brillo-b {
+    top: -30%;
+    right: -12%;
+    width: 34rem;
+    height: 34rem;
+    background: radial-gradient(circle, var(--color-acento-brillante) 0%, transparent 70%);
+    opacity: 0.08;
+    animation: derivar-b 28s ease-in-out infinite alternate;
+  }
+
+  @keyframes derivar-a {
+    to {
+      transform: translate(6rem, 3rem) scale(1.15);
+    }
+  }
+  @keyframes derivar-b {
+    to {
+      transform: translate(-5rem, 4rem) scale(0.9);
+    }
+  }
+
+  /* En oscuro la rejilla puede marcarse más: hay más contraste con el fondo */
+  :global(html.dark) .rejilla {
+    opacity: 0.75;
+  }
+  :global(html.dark) .brillo-a {
+    opacity: 0.16;
+  }
+  :global(html.dark) .brillo-b {
+    opacity: 0.13;
+  }
+
+  /* --- Movimiento reducido: se queda, pero quieto ---------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .rejilla,
+    .brillo-a,
+    .brillo-b {
+      animation: none;
+    }
+  }
+</style>

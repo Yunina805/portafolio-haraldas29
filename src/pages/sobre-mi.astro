@@ -15,6 +15,7 @@ import Boton from '../components/Boton.astro';
 import Icono from '../components/Icono.astro';
 import Rotulo from '../components/Rotulo.astro';
 import Revelar from '../components/Revelar.astro';
+import FondoCiber from '../components/FondoCiber.astro';
 import { PROYECTOS, SITIO } from '../consts';
 
 const enProduccion = PROYECTOS.filter(
@@ -66,7 +67,9 @@ const principios = [
   descripcion="Harald Allerhand Santaella, desarrollador full-stack en Oaxaca. Empecé a los 17 con HTML y CSS; hoy construyo y opero sistemas de gestión en producción."
 >
   {/* ------------------------------------------------ ENCABEZADO */}
-  <section class="contenedor pt-12 pb-4 sm:pt-20">
+  <section class="relative contenedor pt-12 pb-4 sm:pt-20">
+    <FondoCiber />
+
     <Revelar>
       <Rotulo>Sobre mí</Rotulo>
 
