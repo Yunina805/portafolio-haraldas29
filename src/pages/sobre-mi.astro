@@ -1,0 +1,283 @@
+---
+/**
+ * Sobre mí.
+ *
+ * La página que más trabaja para alguien de 20 años sin foto. No compite por
+ * adjetivos: cuenta una trayectoria con fechas y números verificables, que es
+ * lo único que convierte "es joven" en "empezó temprano".
+ *
+ * Primera versión — pensada para crecer. Lo que falta está marcado abajo.
+ */
+import Base from '../layouts/Base.astro';
+import Seccion from '../components/Seccion.astro';
+import Tarjeta from '../components/Tarjeta.astro';
+import Boton from '../components/Boton.astro';
+import Icono from '../components/Icono.astro';
+import Rotulo from '../components/Rotulo.astro';
+import Revelar from '../components/Revelar.astro';
+import { PROYECTOS, SITIO } from '../consts';
+
+const enProduccion = PROYECTOS.filter(
+  (p) => p.estado === 'En producción' || p.estado === 'En línea'
+).length;
+
+const integraciones = new Set(
+  PROYECTOS.flatMap((p) => p.integraciones.map((i) => i.nombre))
+).size;
+
+const cifras = [
+  { valor: '3', unidad: 'años', detalle: 'desarrollando, desde los 17' },
+  { valor: String(PROYECTOS.length), unidad: 'sistemas', detalle: 'construidos' },
+  { valor: String(enProduccion), unidad: '', detalle: 'operando en producción hoy' },
+  { valor: String(integraciones), unidad: '', detalle: 'servicios de terceros integrados' },
+];
+
+const principios = [
+  {
+    titulo: 'Entender la operación antes de programar',
+    detalle:
+      'Lo difícil de un sistema no es escribirlo: es entender cómo trabaja el ' +
+      'negocio que lo va a usar. Un módulo de cobros que no refleja cómo cobran ' +
+      'de verdad es código que nadie va a usar.',
+    icono: 'search-eye-line',
+  },
+  {
+    titulo: 'Dejarlo todo por escrito antes de empezar',
+    detalle:
+      'Esto lo aprendí por las malas. Cuando el alcance no está escrito, el ' +
+      'proyecto crece a media obra y alguien termina perdiendo — normalmente los ' +
+      'dos. Por eso ahora entrego la especificación completa antes de la primera ' +
+      'línea de código.',
+    icono: 'file-list-3-line',
+  },
+  {
+    titulo: 'Vivir con el código en producción',
+    detalle:
+      'No entrego y desaparezco. El ERP más grande que he construido lo opero yo ' +
+      'todos los días, y eso cambia cómo se programa: cuando tú vas a ser quien ' +
+      'reciba la llamada si algo falla, escribes distinto.',
+    icono: 'server-line',
+  },
+];
+---
+
+<Base
+  titulo="Sobre mí"
+  descripcion="Harald Allerhand Santaella, desarrollador full-stack en Oaxaca. Empecé a los 17 con HTML y CSS; hoy construyo y opero sistemas de gestión en producción."
+>
+  {/* ------------------------------------------------ ENCABEZADO */}
+  <section class="contenedor pt-12 pb-4 sm:pt-20">
+    <Revelar>
+      <Rotulo>Sobre mí</Rotulo>
+
+      <h1
+        class="mt-5 max-w-4xl text-4xl leading-[1.05] font-extrabold tracking-tighter
+               text-tinta sm:text-6xl"
+      >
+        Empecé a los 17 con HTML y CSS. Hoy opero el <span class="text-acento">ERP de un
+        proveedor de internet</span>.
+      </h1>
+    </Revelar>
+
+    <Revelar retraso={90}>
+      <p class="mt-8 max-w-2xl text-lg leading-relaxed text-cuerpo">
+        Me llamo Harald Allerhand Santaella, tengo 20 años y vivo en Oaxaca.
+        Construyo software a la medida para negocios que ya operan y necesitan un
+        sistema que les siga el paso.
+      </p>
+    </Revelar>
+
+    <Revelar retraso={180}>
+      <dl class="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-borde pt-10 lg:grid-cols-4">
+        {
+          cifras.map((c) => (
+            <div>
+              <dt class="text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+                {c.valor}
+                {c.unidad && <span class="ml-1.5 text-base font-bold text-tenue">{c.unidad}</span>}
+              </dt>
+              <dd class="mt-2 text-sm text-apagado">{c.detalle}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Revelar>
+  </section>
+
+  {/* --------------------------------------------------- LA HISTORIA */}
+  <Seccion rotulo="Cómo llegué aquí" titulo="Tres años, contados en corto" aire="normal">
+    <div class="max-w-2xl space-y-6 text-[17px] leading-relaxed text-cuerpo">
+      <Revelar>
+        <p>
+          Empecé a los diecisiete con una curiosidad simple: quería entender cómo
+          estaba hecho lo que veía en el navegador. HTML y CSS primero, páginas
+          que no le servían a nadie más que a mí para aprender.
+        </p>
+      </Revelar>
+
+      <Revelar retraso={60}>
+        <p>
+          Lo que cambió todo no fue aprender un framework nuevo. Fue la primera
+          vez que alguien dependió de algo que yo había escrito — que si mi código
+          fallaba, un negocio no podía cobrar ese día. Ahí se acaba el
+          experimento y empieza el oficio.
+        </p>
+      </Revelar>
+
+      <Revelar retraso={120}>
+        <p>
+          Hoy construyo y opero sistemas de gestión completos: el ciclo de vida
+          del cliente de un proveedor de internet, la activación de líneas de un
+          operador móvil, redes de distribuidores con sus comisiones, cobros con
+          tarjeta y facturación ante el SAT. El más grande son
+          <strong class="font-bold text-tinta"> 58,000 líneas de PHP</strong> que
+          sostienen la operación de una empresa todos los días.
+        </p>
+      </Revelar>
+
+      <Revelar retraso={180}>
+        <p>
+          Tengo veinte años y tres desarrollando. No lo escondo, porque el dato
+          que importa no es mi edad: es que empecé temprano y que lo que he
+          construido está en producción, con gente real usándolo.
+        </p>
+      </Revelar>
+    </div>
+  </Seccion>
+
+  {/* --------------------------------------------------- PRINCIPIOS */}
+  <Seccion
+    rotulo="Cómo pienso el trabajo"
+    titulo="Tres cosas que aprendí construyendo"
+    entrada="Ninguna es teoría. Las tres me costaron algo aprenderlas."
+    aire="normal"
+  >
+    <div class="grid gap-6 lg:grid-cols-3">
+      {
+        principios.map((p, i) => (
+          <Revelar retraso={i * 80}>
+            <Tarjeta relleno="lg" clase="h-full">
+              <span class="grid size-11 place-items-center rounded-xl bg-acento-tenue">
+                <Icono nombre={p.icono} clase="size-5 text-acento" />
+              </span>
+              <h3 class="mt-6 text-lg font-bold tracking-tight text-tinta">{p.titulo}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed text-apagado">{p.detalle}</p>
+            </Tarjeta>
+          </Revelar>
+        ))
+      }
+    </div>
+  </Seccion>
+
+  {/* ------------------------------------------------ DÓNDE ESTOY */}
+  <Seccion rotulo="Hoy" titulo="Dónde estoy y qué sigue" aire="normal">
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <Revelar>
+        <div class="max-w-xl space-y-5 text-[17px] leading-relaxed text-cuerpo">
+          <p>
+            Trabajo desde <strong class="font-bold text-tinta">{SITIO.ciudad}</strong>,
+            en remoto para todo México, bajo el nombre de
+            <strong class="font-bold text-tinta"> {SITIO.marca}</strong>.
+          </p>
+          <p>
+            Sigo desarrollando y operando el ERP de Tu Visión Telecable, que está
+            en producción y creciendo. Y voy tomando proyectos propios: tiendas en
+            línea, sistemas de gestión y las integraciones que casi nadie quiere
+            hacer.
+          </p>
+          <p>
+            Si tu negocio necesita un sistema y no sabes por dónde empezar, ese es
+            justo el punto donde entro.
+          </p>
+        </div>
+      </Revelar>
+
+      <Revelar retraso={80}>
+        <div class="space-y-4">
+          <Tarjeta relleno="lg">
+            <div class="flex items-start gap-4">
+              <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-acento-tenue">
+                <Icono nombre="map-pin-line" clase="size-5 text-acento" />
+              </span>
+              <div>
+                <h3 class="text-base font-bold tracking-tight text-tinta">Dónde</h3>
+                <p class="mt-1.5 text-[15px] text-apagado">
+                  {SITIO.ciudad} · {SITIO.cobertura}
+                </p>
+              </div>
+            </div>
+          </Tarjeta>
+
+          <Tarjeta relleno="lg">
+            <div class="flex items-start gap-4">
+              <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-acento-tenue">
+                <Icono nombre="stack-line" clase="size-5 text-acento" />
+              </span>
+              <div>
+                <h3 class="text-base font-bold tracking-tight text-tinta">Con qué</h3>
+                <p class="mt-1.5 text-[15px] text-apagado">
+                  Laravel · Livewire · PHP · MySQL · Tailwind · Alpine · Angular ·
+                  TypeScript · Astro
+                </p>
+              </div>
+            </div>
+          </Tarjeta>
+
+          <Tarjeta relleno="lg">
+            <div class="flex items-start gap-4">
+              <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-acento-tenue">
+                <Icono nombre="linkedin-box-fill" clase="size-5 text-acento" />
+              </span>
+              <div>
+                <h3 class="text-base font-bold tracking-tight text-tinta">En línea</h3>
+                <p class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[15px]">
+                  <a
+                    href={SITIO.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-bold text-acento underline decoration-acento/30 underline-offset-4 hover:decoration-acento"
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                    href={SITIO.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-bold text-acento underline decoration-acento/30 underline-offset-4 hover:decoration-acento"
+                  >
+                    GitHub
+                  </a>
+                </p>
+              </div>
+            </div>
+          </Tarjeta>
+        </div>
+      </Revelar>
+    </div>
+  </Seccion>
+
+  {/* ----------------------------------------------------- CIERRE */}
+  <Seccion aire="poco">
+    <Revelar>
+      <div
+        class="overflow-hidden rounded-2xl border border-acento/25 bg-acento-tenue
+               px-8 py-12 text-center sm:px-12 sm:py-14"
+      >
+        <h2 class="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight text-tinta sm:text-4xl">
+          ¿Te late cómo trabajo?
+        </h2>
+        <p class="mx-auto mt-5 max-w-lg text-[15px] leading-relaxed text-cuerpo">
+          Cuéntame qué necesita tu negocio y te digo si puedo resolverlo.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Boton href="/contacto" tamano="lg" icono="chat-1-line">
+            Hablemos de tu proyecto
+          </Boton>
+          <Boton href="/proyectos" tamano="lg" variante="contorno" icono="arrow-right-line" iconoAlFinal>
+            Ver lo que he construido
+          </Boton>
+        </div>
+      </div>
+    </Revelar>
+  </Seccion>
+</Base>

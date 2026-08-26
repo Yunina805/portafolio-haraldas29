@@ -27,7 +27,7 @@ const activo = (href: string) => {
     </a>
 
     {/* ------------------------------------------------- ESCRITORIO */}
-    <nav class="hidden lg:block" aria-label="Principal">
+    <nav class="hidden xl:block" aria-label="Principal">
       <ul class="flex items-center gap-1">
         {
           NAVEGACION.map((e) => (
@@ -56,7 +56,7 @@ const activo = (href: string) => {
 
     <div class="flex items-center gap-2">
       {/* Redes, sólo en pantallas grandes: en celular van en el panel */}
-      <ul class="hidden items-center gap-1 lg:flex">
+      <ul class="hidden items-center gap-1 xl:flex">
         {
           REDES.filter((r) => r.nombre !== 'Correo').map((r) => (
             <li>
@@ -75,7 +75,7 @@ const activo = (href: string) => {
         }
       </ul>
 
-      <span class="mx-1 hidden h-6 w-px bg-borde lg:block" aria-hidden="true"></span>
+      <span class="mx-1 hidden h-6 w-px bg-borde xl:block" aria-hidden="true"></span>
 
       <AlternarTema />
 
@@ -83,7 +83,7 @@ const activo = (href: string) => {
       <a
         href="/contacto"
         class="hidden h-11 items-center rounded-xl bg-acento px-5 text-sm font-bold
-               text-acento-tinta shadow-sm hover:bg-acento-vivo lg:inline-flex"
+               text-acento-tinta shadow-sm hover:bg-acento-vivo xl:inline-flex"
       >
         Hablemos
       </a>
@@ -92,7 +92,7 @@ const activo = (href: string) => {
         id="abrir-menu"
         type="button"
         class="grid size-11 place-items-center rounded-xl border border-borde bg-superficie
-               text-apagado hover:bg-realce hover:text-tinta cursor-pointer lg:hidden"
+               text-apagado hover:bg-realce hover:text-tinta cursor-pointer xl:hidden"
         aria-label="Abrir menú"
         aria-expanded="false"
         aria-controls="panel-menu"
@@ -126,7 +126,7 @@ const activo = (href: string) => {
     Entra deslizándose desde la derecha; lo que queda a la izquierda se
     difumina. El fondo difuminado no es adorno: separa el panel del contenido
     y evita que se lea a través de él. */}
-<div id="capa-menu" class="fixed inset-0 z-60 lg:hidden" hidden>
+<div id="capa-menu" class="fixed inset-0 z-60 xl:hidden" hidden>
   <div
     id="velo-menu"
     class="absolute inset-0 bg-fondo/60 opacity-0 backdrop-blur-md transition-opacity duration-300"

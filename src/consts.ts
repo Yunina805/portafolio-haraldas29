@@ -65,6 +65,7 @@ export const NAVEGACION = [
   { texto: 'Proyectos', href: '/proyectos' },
   { texto: 'Qué construyo', href: '/#servicios' },
   { texto: 'Cómo trabajo', href: '/#proceso' },
+  { texto: 'Sobre mí', href: '/sobre-mi' },
   { texto: 'Contacto', href: '/contacto' },
 ] as const;
 
