@@ -2,58 +2,106 @@
 /**
  * Página de error 404.
  *
- * Vale la pena tenerla: quien llega aquí lo hace por un enlace viejo o un
- * dedazo, y la pantalla en blanco del servidor lo manda de regreso a Google.
- * Esta lo devuelve al sitio.
+ * Aquí sí cabe personalidad: quien llega es porque se equivocó de liga, no
+ * porque venga a cotizar. Una 404 con carácter se comparte; una 404 genérica
+ * manda al visitante de regreso a Google.
+ *
+ * ── PARA AGREGAR TU IMAGEN ──────────────────────────────────────────────
+ * Pon el archivo en `public/sello/404.webp` y descomenta el bloque marcado
+ * más abajo. Arte original o con licencia: este es un sitio comercial.
+ * ────────────────────────────────────────────────────────────────────────
  */
 import Base from '../layouts/Base.astro';
 import Boton from '../components/Boton.astro';
 import Rotulo from '../components/Rotulo.astro';
 import Icono from '../components/Icono.astro';
+import FondoCiber from '../components/FondoCiber.astro';
 import { NAVEGACION } from '../consts';
 ---
 
 <Base titulo="Página no encontrada" sinIndexar>
-  <section class="contenedor flex min-h-[60vh] flex-col justify-center py-20">
-    <Rotulo>Error 404</Rotulo>
+  <section class="relative contenedor flex min-h-[70vh] flex-col justify-center py-20">
+    <FondoCiber />
 
-    <h1
-      class="mt-5 max-w-3xl text-4xl leading-[1.05] font-extrabold tracking-tighter
-             text-tinta sm:text-6xl"
-    >
-      Esta página no existe
-    </h1>
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div>
+        <Rotulo>Error 404</Rotulo>
 
-    <p class="mt-6 max-w-xl text-lg leading-relaxed text-cuerpo">
-      Puede que el enlace esté viejo o que se haya colado un error al
-      escribirlo. Nada grave — por aquí sigues.
-    </p>
+        <h1
+          class="mt-5 text-5xl leading-[0.95] font-extrabold tracking-tighter
+                 text-tinta sm:text-7xl"
+        >
+          Aquí no hay<br />nada.
+        </h1>
 
-    <div class="mt-10 flex flex-wrap items-center gap-3">
-      <Boton href="/" tamano="lg" icono="home-4-line">Ir al inicio</Boton>
-      <Boton href="/proyectos" tamano="lg" variante="contorno" icono="arrow-right-line" iconoAlFinal>
-        Ver los proyectos
-      </Boton>
+        <p class="mt-7 max-w-lg text-lg leading-relaxed text-cuerpo">
+          O el enlace ya no existe, o se coló un dedazo al escribirlo. Las dos
+          se arreglan igual: regresando.
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <Boton href="/" tamano="lg" icono="home-4-line">Ir al inicio</Boton>
+          <Boton
+            href="/proyectos"
+            tamano="lg"
+            variante="contorno"
+            icono="arrow-right-line"
+            iconoAlFinal
+          >
+            Ver los proyectos
+          </Boton>
+        </div>
+
+        <nav class="mt-12 border-t border-borde pt-8" aria-label="Secciones del sitio">
+          <p class="rotulo">O ve directo a</p>
+          <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+            {
+              NAVEGACION.map((e) => (
+                <li>
+                  <a
+                    href={e.href}
+                    class="inline-flex items-center gap-1.5 text-sm font-bold text-acento
+                           underline decoration-acento/30 underline-offset-4 hover:decoration-acento"
+                  >
+                    {e.texto}
+                    <Icono nombre="arrow-right-up-line" clase="size-3.5" />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      {/* ------------------------------------------------ EL SELLO
+          Mientras no haya imagen, va una terminal falsa: mismo guiño,
+          cero peso, y encaja con el fondo. Cuando tengas tu arte,
+          descomenta el <img> y borra el bloque de la terminal. */}
+      <div class="hidden lg:block">
+        {/*
+        <img
+          src="/sello/404.webp"
+          alt=""
+          width="480"
+          height="640"
+          class="mx-auto w-full max-w-sm"
+        />
+        */}
+
+        <div
+          class="overflow-hidden rounded-2xl border border-borde bg-superficie font-mono
+                 text-[13px] leading-relaxed shadow-lg"
+        >
+          <div class="flex items-center gap-2 border-b border-borde px-4 py-3">
+            <span class="size-2.5 rounded-full bg-mal" aria-hidden="true"></span>
+            <span class="size-2.5 rounded-full bg-aviso" aria-hidden="true"></span>
+            <span class="size-2.5 rounded-full bg-acento" aria-hidden="true"></span>
+            <span class="ml-2 text-[11px] tracking-widest text-tenue">allsan@systems</span>
+          </div>
+
+          <pre class="overflow-x-auto p-5 text-tenue"><code>{`$ curl -I allsansystems.com`}{'\n'}<span class="text-mal">{`HTTP/2 404`}</span>{'\n\n'}{`$ whereis pagina`}{'\n'}{`pagina: no encontrada`}{'\n\n'}{`$ whoami`}{'\n'}<span class="text-tinta">{`harald`}</span>{'\n\n'}{`$ `}<span class="text-acento">{`sudo volver --inicio`}</span>{'\n'}<span class="text-acento">{`↑ ↑ ↓ ↓ ← → ← → B A`}</span></code></pre>
+        </div>
+      </div>
     </div>
-
-    <nav class="mt-12 border-t border-borde pt-8" aria-label="Secciones del sitio">
-      <p class="rotulo">O ve directo a</p>
-      <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-        {
-          NAVEGACION.map((e) => (
-            <li>
-              <a
-                href={e.href}
-                class="inline-flex items-center gap-1.5 text-sm font-bold text-acento
-                       underline decoration-acento/30 underline-offset-4 hover:decoration-acento"
-              >
-                {e.texto}
-                <Icono nombre="arrow-right-up-line" clase="size-3.5" />
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
   </section>
 </Base>

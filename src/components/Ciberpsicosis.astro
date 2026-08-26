@@ -1,0 +1,224 @@
+---
+/**
+ * Easter egg — modo ciberpsicosis.
+ *
+ * Se activa con el código Konami: ↑ ↑ ↓ ↓ ← → ← → B A
+ * (o tocando el logo cinco veces seguidas, para quien anda en celular).
+ *
+ * Por qué aquí y no en la página de "Sobre mí": el portafolio existe para que
+ * un dueño de negocio confíe un proyecto. Un easter egg lo encuentra quien
+ * anda husmeando —casi siempre otro desarrollador— y a ése sí le suma. Quien
+ * viene a cotizar nunca se topa con él.
+ *
+ * Cuesta ~1 KB y no corre nada hasta que alguien lo dispara.
+ *
+ * ── PARA AGREGAR TU IMAGEN ──────────────────────────────────────────────
+ * Pon el archivo en `public/sello/sello.webp` y descomenta el <img> de abajo.
+ * Que sea arte original o con licencia: este es un sitio comercial.
+ * ────────────────────────────────────────────────────────────────────────
+ */
+---
+
+<div id="ciber" hidden>
+  <div class="lineas" aria-hidden="true"></div>
+
+  <div class="aviso" role="status">
+    <span class="punto" aria-hidden="true"></span>
+    <span class="txt">MODO CIBERPSICOSIS</span>
+    <span class="tecla">ESC</span>
+  </div>
+
+  {/*
+  <img src="/sello/sello.webp" alt="" class="sello" width="320" height="480" />
+  */}
+</div>
+
+<style>
+  #ciber {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  /* Líneas de barrido, como monitor viejo */
+  .lineas {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0 2px,
+      rgb(0 0 0 / 0.06) 2px 4px
+    );
+    animation: bajar 8s linear infinite;
+  }
+
+  @keyframes bajar {
+    to {
+      transform: translateY(4px);
+    }
+  }
+
+  .aviso {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--color-acento);
+    border-radius: 0.75rem;
+    background: var(--color-superficie);
+    box-shadow: 0 0 24px -4px var(--color-acento);
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--color-acento);
+  }
+
+  .punto {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: var(--color-acento);
+    animation: latir 1.2s ease-in-out infinite;
+  }
+
+  @keyframes latir {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .tecla {
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: 0.3rem;
+    color: var(--color-tenue);
+    letter-spacing: 0.1em;
+  }
+
+  .sello {
+    position: absolute;
+    right: 1.5rem;
+    bottom: 0;
+    width: min(18rem, 34vw);
+    height: auto;
+    animation: entrar 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes entrar {
+    from {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+  }
+
+  /* --- Lo que le hace al resto del sitio ------------------------------- */
+
+  /* El acento se vuelve neón */
+  :global(html.ciberpsicosis) {
+    --color-acento: #00ff9c;
+    --color-acento-brillante: #00ff9c;
+    --color-foco: #00ff9c;
+  }
+
+  /* La rejilla del fondo se marca y corre más rápido */
+  :global(html.ciberpsicosis) :global(.rejilla) {
+    opacity: 1 !important;
+    animation-duration: 4s !important;
+  }
+  :global(html.ciberpsicosis) :global(.brillo-a),
+  :global(html.ciberpsicosis) :global(.brillo-b) {
+    opacity: 0.3 !important;
+  }
+
+  /* Aberración cromática en los títulos grandes */
+  :global(html.ciberpsicosis) :global(h1) {
+    text-shadow:
+      2px 0 rgb(255 0 90 / 0.55),
+      -2px 0 rgb(0 200 255 / 0.55);
+    animation: temblar 3.5s steps(1) infinite;
+  }
+
+  @keyframes temblar {
+    0%, 92%, 100% { transform: translate(0); }
+    93% { transform: translate(-2px, 1px); }
+    95% { transform: translate(2px, -1px); }
+    97% { transform: translate(-1px, 0); }
+  }
+
+  /* Nada de esto se mueve si el visitante pidió movimiento reducido.
+     El efecto se ve igual, sólo que quieto. */
+  @media (prefers-reduced-motion: reduce) {
+    .lineas,
+    .punto,
+    .sello,
+    :global(html.ciberpsicosis) :global(h1) {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const CLAVE = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'b', 'a',
+  ];
+
+  function montar() {
+    const capa = document.getElementById('ciber');
+    if (!capa) return;
+
+    const raiz = document.documentElement;
+    let paso = 0;
+    let toques = 0;
+    let reloj: ReturnType<typeof setTimeout> | undefined;
+
+    const encender = () => {
+      raiz.classList.add('ciberpsicosis');
+      capa.hidden = false;
+    };
+
+    const apagar = () => {
+      raiz.classList.remove('ciberpsicosis');
+      capa.hidden = true;
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && raiz.classList.contains('ciberpsicosis')) return apagar();
+
+      // El código Konami, con B y A sin distinguir mayúsculas
+      const esperada = CLAVE[paso];
+      const tecla = esperada.length === 1 ? e.key.toLowerCase() : e.key;
+      paso = tecla === esperada ? paso + 1 : 0;
+
+      if (paso === CLAVE.length) {
+        paso = 0;
+        raiz.classList.contains('ciberpsicosis') ? apagar() : encender();
+      }
+    });
+
+    // En celular no hay flechas: cinco toques al logo hacen lo mismo.
+    document.querySelector('header a[href="/"]')?.addEventListener('click', (e) => {
+      toques += 1;
+      clearTimeout(reloj);
+      reloj = setTimeout(() => (toques = 0), 800);
+
+      if (toques >= 5) {
+        e.preventDefault();
+        toques = 0;
+        raiz.classList.contains('ciberpsicosis') ? apagar() : encender();
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', montar);
+  // Al cambiar de página se apaga: es un guiño, no un estado del sitio.
+  document.addEventListener('astro:before-swap', () =>
+    document.documentElement.classList.remove('ciberpsicosis')
+  );
+</script>
