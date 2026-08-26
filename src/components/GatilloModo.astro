@@ -1,0 +1,60 @@
+---
+/**
+ * El gatillo del modo secreto.
+ *
+ * Vive en el layout, así que escucha en todo el sitio — pero no enciende nada
+ * aquí: guarda una marca y te manda a /sobre-mi, que es donde vive el modo.
+ * El easter egg es una puerta, no un interruptor.
+ *
+ *   Teclado:  ↑ ↑ ↓ ↓ ← → ← → B A
+ *   Celular:  cinco toques seguidos al logo
+ */
+---
+
+<script>
+  const CLAVE = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'b', 'a',
+  ];
+
+  function entrar() {
+    // sessionStorage y no localStorage: el modo dura lo que dure la visita.
+    sessionStorage.setItem('neo', '1');
+    if (location.pathname.replace(/\/$/, '') === '/sobre-mi') {
+      document.documentElement.classList.add('neo');
+      window.dispatchEvent(new Event('neo:encender'));
+    } else {
+      location.href = '/sobre-mi';
+    }
+  }
+
+  function montar() {
+    let paso = 0;
+    let toques = 0;
+    let reloj: ReturnType<typeof setTimeout> | undefined;
+
+    document.addEventListener('keydown', (e) => {
+      const esperada = CLAVE[paso];
+      const tecla = esperada.length === 1 ? e.key.toLowerCase() : e.key;
+      paso = tecla === esperada ? paso + 1 : 0;
+      if (paso === CLAVE.length) {
+        paso = 0;
+        entrar();
+      }
+    });
+
+    document.querySelector('header a[href="/"]')?.addEventListener('click', (e) => {
+      toques += 1;
+      clearTimeout(reloj);
+      reloj = setTimeout(() => (toques = 0), 800);
+      if (toques >= 5) {
+        e.preventDefault();
+        toques = 0;
+        entrar();
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', montar);
+</script>
