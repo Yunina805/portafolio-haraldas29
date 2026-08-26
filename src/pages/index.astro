@@ -5,7 +5,6 @@ import Boton from '../components/Boton.astro';
 import Icono from '../components/Icono.astro';
 import Rotulo from '../components/Rotulo.astro';
 import Revelar from '../components/Revelar.astro';
-import FondoCiber from '../components/FondoCiber.astro';
 import TarjetaProyecto from '../components/TarjetaProyecto.astro';
 import {
   CIFRAS,
@@ -83,8 +82,7 @@ const integraciones = [
   {/* Todo el hero cabe en la primera pantalla, cifras incluidas: son la prueba
       que sostiene la confianza y no sirven si hay que hacer scroll para verlas.
       Por eso son tres grupos de animación y no seis — entran casi juntos. */}
-  <section class="relative contenedor pt-9 pb-12 sm:pt-12 sm:pb-16 lg:pt-14">
-    <FondoCiber />
+  <section class="contenedor pt-9 pb-12 sm:pt-12 sm:pb-16 lg:pt-14">
 
     <Revelar>
       <Rotulo>{SITIO.oficio} · {SITIO.ciudadCorta}</Rotulo>

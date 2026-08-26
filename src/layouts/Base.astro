@@ -10,6 +10,7 @@ import fuenteLatina from '@fontsource-variable/plus-jakarta-sans/files/plus-jaka
 import Encabezado from '../components/Encabezado.astro';
 import PieDePagina from '../components/PieDePagina.astro';
 import BotonFlotante from '../components/BotonFlotante.astro';
+import FondoCiber from '../components/FondoCiber.astro';
 import GatilloModo from '../components/GatilloModo.astro';
 import { SITIO } from '../consts';
 
@@ -142,7 +143,10 @@ const fichaPersona = {
     <ClientRouter />
   </head>
 
-  <body class="min-h-dvh bg-fondo font-sans text-cuerpo antialiased">
+  <body class="min-h-dvh font-sans text-cuerpo antialiased">
+    {/* Una sola atmósfera para todo el sitio, fija detrás del contenido */}
+    <FondoCiber />
+
     <a
       href="#contenido"
       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100

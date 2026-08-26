@@ -132,13 +132,18 @@ html.dark {
    BASE
    -------------------------------------------------------------------------- */
 @layer base {
+  /* El color vive en <html> y el <body> va transparente: así el fondo animado,
+     que va fijo con z-index negativo, se pinta encima del color y debajo del
+     contenido. Si el body tuviera color propio, lo taparía. */
   html {
+    background-color: var(--color-fondo);
     scrollbar-width: thin;
     scrollbar-color: var(--color-barra) transparent;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
+    background-color: transparent;
     text-wrap: pretty;
   }
 
