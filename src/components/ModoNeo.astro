@@ -29,9 +29,38 @@ const archivos = import.meta.glob<ImageMetadata>(
   '../assets/sello/**/*.{png,webp,jpg,jpeg,avif}',
   { eager: true, import: 'default' }
 );
-const ilustraciones = Object.values(archivos).sort((a, b) =>
-  a.src.localeCompare(b.src)
-);
+
+/**
+ * Dónde se para cada una.
+ *
+ * El nombre manda: g* van grandes en las esquinas, c* van chicas de acento.
+ * Ninguna cae en el centro, que es donde vive el texto.
+ *
+ * `tope` es el ancho máximo en px, pero abajo se recorta al 60% del ancho
+ * nativo de cada imagen. Ese es el arreglo del borroso: una de 221 px de
+ * ancho jamás se estira a 300 aunque su hueco lo permita.
+ */
+const HUECOS: Record<string, { pos: string; tope: number; movil: boolean }> = {
+  g1: { pos: 'right:-1rem;bottom:0',              tope: 400, movil: true  },
+  g2: { pos: 'left:-2rem;bottom:0',               tope: 300, movil: false },
+  g3: { pos: 'right:6%;top:5rem',                 tope: 240, movil: false },
+  g4: { pos: 'left:12%;bottom:-1rem',             tope: 230, movil: false },
+  c1: { pos: 'left:-1.5rem;top:35%',              tope: 170, movil: false },
+  c2: { pos: 'right:2%;top:42%',                  tope: 150, movil: false },
+  c3: { pos: 'left:34%;top:8rem',                 tope: 140, movil: false },
+  c4: { pos: 'right:26%;bottom:1rem',             tope: 120, movil: false },
+  c5: { pos: 'left:6%;top:12%',                   tope: 130, movil: false },
+};
+
+const ilustraciones = Object.entries(archivos)
+  .map(([ruta, img]) => {
+    const clave = ruta.split('/').pop()!.replace(/\.\w+$/, '');
+    const hueco = HUECOS[clave] ?? { pos: 'right:1rem;bottom:0', tope: 200, movil: false };
+    // Nunca por encima del 60% del ancho nativo: ahí empieza a verse suave.
+    const ancho = Math.round(Math.min(hueco.tope, img.width * 0.6));
+    return { img, clave, ancho, ...hueco };
+  })
+  .sort((a, b) => a.clave.localeCompare(b.clave));
 
 // Los destellos de ambiente se dibujan de una vez, con posiciones y colores
 // repartidos. Van en el HTML para que no los tenga que crear el navegador.
@@ -65,21 +94,23 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
     }
   </div>
 
-  {/* Las ilustraciones */}
+  {/* Las ilustraciones, repartidas */}
   {
     ilustraciones.length > 0 && (
       <div id="neo-arte" aria-hidden="true">
-        {ilustraciones.map((img, i) => (
+        {ilustraciones.map((it, i) => (
           <Image
-            src={img}
+            src={it.img}
             alt=""
-            widths={[420, 840]}
-            sizes="(max-width: 640px) 45vw, 22rem"
+            width={it.ancho}
+            height={Math.round((it.ancho * it.img.height) / it.img.width)}
+            densities={[1, 2]}
             format="webp"
-            quality={82}
-            hidden={i !== 0}
+            quality={84}
             loading="lazy"
             decoding="async"
+            data-movil={it.movil ? 'si' : 'no'}
+            style={`${it.pos};width:${it.ancho}px;animation-delay:${i * 90}ms`}
           />
         ))}
       </div>
@@ -90,17 +121,6 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
   <div class="hud" role="status">
     <span class="latido" aria-hidden="true"></span>
     <span class="nombre">{NOMBRE}</span>
-
-    {
-      ilustraciones.length > 1 && (
-        <>
-          <span class="sep" aria-hidden="true" />
-          <button type="button" id="neo-otra" class="btn">
-            otra ✦ <span id="neo-cuenta">1/{ilustraciones.length}</span>
-          </button>
-        </>
-      )
-    }
 
     <span class="sep" aria-hidden="true"></span>
     <button type="button" id="neo-salir" class="btn">salir · esc</button>
@@ -172,17 +192,18 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
   /* ------------------------------------------------------ ARTE */
   #neo-arte img {
     position: absolute;
-    right: 1rem;
-    bottom: 0;
-    width: min(20rem, 40vw);
     height: auto;
-    pointer-events: auto;
-    cursor: pointer;
-    filter: drop-shadow(0 0 34px rgb(255 110 199 / 0.55));
-    animation: llegar 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 0 26px rgb(255 110 199 / 0.45));
+    animation: llegar 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
   @keyframes llegar {
-    from { opacity: 0; transform: translateY(2.5rem) scale(0.94); }
+    from { opacity: 0; transform: translateY(1.8rem) scale(0.94); }
+  }
+
+  /* En celular no caben nueve repartidas: sólo la marcada para móvil. */
+  @media (max-width: 900px) {
+    #neo-arte img[data-movil='no'] { display: none; }
+    #neo-arte img[data-movil='si'] { width: 46vw !important; }
   }
 
   /* ----------------------------------------------------------- HUD */
@@ -315,32 +336,18 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
     if (!capa) return;
 
     const raiz = document.documentElement;
-    const arte = document.getElementById('neo-arte');
-    const imgs = arte ? [...arte.querySelectorAll('img')] : [];
-    const cuenta = document.getElementById('neo-cuenta');
-    let actual = 0;
-    let ultima = 0;
-
     const quietito = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* --- las ilustraciones ------------------------------------------ */
-    function mostrar(i: number) {
-      if (!imgs.length) return;
-      actual = (i + imgs.length) % imgs.length;
-      imgs.forEach((im, j) => (im.hidden = j !== actual));
-      if (cuenta) cuenta.textContent = `${actual + 1}/${imgs.length}`;
-    }
-
-    document.getElementById('neo-otra')?.addEventListener('click', () => mostrar(actual + 1));
-    arte?.addEventListener('click', () => mostrar(actual + 1));
-
-    /* --- destellos que siguen al cursor ------------------------------ */
-    function chispa(x: number, y: number, fuerza = 1) {
+    /* --- estallido al hacer clic --------------------------------------
+       El rastro que seguía al puntero se quitó: crear y animar un elemento
+       en cada movimiento del mouse pone al compositor a trabajar sin parar
+       y se siente pesado. El estallido se queda porque ocurre una vez y ya. */
+    function chispa(x: number, y: number) {
       const s = document.createElement('span');
       const t = TONOS[(Math.random() * TONOS.length) | 0];
-      const tam = (3 + Math.random() * 5) * fuerza;
+      const tam = 4 + Math.random() * 7;
       const ang = Math.random() * Math.PI * 2;
-      const dist = (18 + Math.random() * 46) * fuerza;
+      const dist = 26 + Math.random() * 66;
 
       s.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${tam}px;height:${tam}px;
         border-radius:9999px;background:${t};box-shadow:0 0 ${tam * 3}px ${t};
@@ -351,41 +358,29 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
         [
           { transform: 'scale(1)', opacity: 1 },
           {
-            transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist + 24}px) scale(0)`,
+            transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist + 26}px) scale(0)`,
             opacity: 0,
           },
         ],
-        { duration: 620 + Math.random() * 420, easing: 'cubic-bezier(.22,1,.36,1)' }
+        { duration: 640 + Math.random() * 420, easing: 'cubic-bezier(.22,1,.36,1)' }
       ).onfinish = () => s.remove();
     }
 
-    function alMover(e: PointerEvent) {
-      const ahora = performance.now();
-      if (ahora - ultima < 45) return; // no una por cada píxel: mata la batería
-      ultima = ahora;
-      chispa(e.clientX, e.clientY, 0.7);
-    }
-
     function alTocar(e: PointerEvent) {
-      for (let i = 0; i < 14; i++) chispa(e.clientX, e.clientY, 1.5);
+      for (let i = 0; i < 16; i++) chispa(e.clientX, e.clientY);
     }
 
-    /* --- encender y apagar ------------------------------------------- */
+    /* --- encender y apagar --------------------------------------------- */
     function encender() {
       raiz.classList.add('neo');
       capa!.hidden = false;
-      mostrar(Math.floor(Math.random() * Math.max(imgs.length, 1)));
-      if (!quietito) {
-        window.addEventListener('pointermove', alMover, { passive: true });
-        window.addEventListener('pointerdown', alTocar, { passive: true });
-      }
+      if (!quietito) window.addEventListener('pointerdown', alTocar, { passive: true });
     }
 
     function apagar() {
       raiz.classList.remove('neo');
       capa!.hidden = true;
       sessionStorage.removeItem('neo');
-      window.removeEventListener('pointermove', alMover);
       window.removeEventListener('pointerdown', alTocar);
     }
 
