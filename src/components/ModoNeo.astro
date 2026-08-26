@@ -18,15 +18,20 @@
  * Aparecen solas, sin tocar código. Vertical se ve mejor (600 × 900).
  * ────────────────────────────────────────────────────────────────────────
  */
+import { Image } from 'astro:assets';
+
 const NOMBRE = 'NEO OAXACA';
 
-// Astro las encuentra al compilar. Si la carpeta está vacía, no pasa nada:
-// el modo funciona igual, sólo sin ilustraciones.
-const archivos = import.meta.glob<string>(
-  '../assets/sello/*.{png,webp,jpg,jpeg,avif}',
-  { eager: true, query: '?url', import: 'default' }
+// Astro las encuentra al compilar. El `**` incluye subcarpetas, así que da
+// igual cómo estén organizadas dentro de sello/. Si no hay ninguna, el modo
+// funciona igual — sólo sin ilustraciones.
+const archivos = import.meta.glob<ImageMetadata>(
+  '../assets/sello/**/*.{png,webp,jpg,jpeg,avif}',
+  { eager: true, import: 'default' }
 );
-const ilustraciones = Object.values(archivos);
+const ilustraciones = Object.values(archivos).sort((a, b) =>
+  a.src.localeCompare(b.src)
+);
 
 // Los destellos de ambiente se dibujan de una vez, con posiciones y colores
 // repartidos. Van en el HTML para que no los tenga que crear el navegador.
@@ -64,8 +69,18 @@ const chispas = Array.from({ length: 22 }, (_, i) => ({
   {
     ilustraciones.length > 0 && (
       <div id="neo-arte" aria-hidden="true">
-        {ilustraciones.map((src, i) => (
-          <img src={src} alt="" hidden={i !== 0} loading="lazy" decoding="async" />
+        {ilustraciones.map((img, i) => (
+          <Image
+            src={img}
+            alt=""
+            widths={[420, 840]}
+            sizes="(max-width: 640px) 45vw, 22rem"
+            format="webp"
+            quality={82}
+            hidden={i !== 0}
+            loading="lazy"
+            decoding="async"
+          />
         ))}
       </div>
     )

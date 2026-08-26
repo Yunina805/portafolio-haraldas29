@@ -29,3 +29,6 @@ Thumbs.db
 # logs
 *.log
 npm-debug.log*
+
+# Originales con fondo, antes de recortar. No se publican.
+arte-original/
